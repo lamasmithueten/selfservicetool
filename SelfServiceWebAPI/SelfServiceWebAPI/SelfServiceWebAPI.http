@@ -1,6 +1,0 @@
-@SelfServiceWebAPI_HostAddress = http://localhost:5195
-
-GET {{SelfServiceWebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
