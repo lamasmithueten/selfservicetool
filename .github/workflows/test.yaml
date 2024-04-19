@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
   webfrontend:
-    runs-on: ubuntu-latest
+    runs-on: webserver
     steps:
       - run: ls -la /
 
