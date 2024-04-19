@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
   webfrontend:
-    runs-on: debian-12
+    runs-on: ubuntu-latest
     steps:
       - run: sed -i 's/apache2/httpd/g' /var/www/html
 
