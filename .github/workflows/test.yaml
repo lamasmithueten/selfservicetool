@@ -5,5 +5,5 @@ jobs:
   webfrontend:
     runs-on: ubuntu-latest
     steps:
-      - run: sed -i 's/apache2/httpd/g' /webserver/selfservicetool/index.html
+      - run: ls -la /
 
