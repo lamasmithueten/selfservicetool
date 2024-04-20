@@ -1,6 +1,9 @@
 name: selfservicetool
 run-name: ${{ github.actor }} fragt sich warum in der Demo so viele Emojis gespammt werden
-on: [push]
+on: 
+  push:
+    branches:
+      - main
 jobs:
   webfrontend:
     runs-on: self-hosted
