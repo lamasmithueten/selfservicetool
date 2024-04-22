@@ -1,0 +1,16 @@
+name: selfservicetool
+run-name: ${{ github.actor }} fragt sich warum in der Demo so viele Emojis gespammt werden
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  webfrontend:
+    runs-on: self-hosted
+    steps:
+#      - run: docker compose -f /home/git/docker-compose.yml down
+#      - run: docker-compose -f /home/git/docker-compose.yml build
+#      - run: docker compose -f /home/git/docker-compose.yml up -d
+       - run: docker ps -q | xargs docker stop; docker ps -aq | xargs docker rm
+       - run: docker run -dp 80:80 nginx
+       - run: docker run -dp 3306:3306 -e MYSQL_ROOT_PASSWORD=linux mariadb
