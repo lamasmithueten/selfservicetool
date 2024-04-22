@@ -1,0 +1,71 @@
+/* App.css */
+.App {
+  text-align: center;
+}
+
+.auth-container {
+  position: relative;
+  background-image: url("./resources/background4.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-text {
+  color: white;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.registration-container {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.login-container {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #db8937;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #ebc38f;
+}
+
+.registration-form *,
+.login-form * {
+  color: white;
+}
+
+.registration-form a:visited,
+.login-form a:visited {
+  color: white;
+  text-decoration: underline; 
+}

@@ -1,5 +1,5 @@
-// App.js
 import React, { useState } from "react";
+import AuthContainer from "./AuthContainer";
 import RegistrationForm from "./RegistrationForm";
 import LoginForm from "./LoginForm";
 import "./App.css"; // Import the CSS file for styling
@@ -13,14 +13,13 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Welcome</h1>
-      <div className="login-container">
+      <AuthContainer>
         {showLoginForm ? (
           <LoginForm toggleForm={toggleForm} />
         ) : (
           <RegistrationForm toggleForm={toggleForm} />
         )}
-      </div>
+      </AuthContainer>
     </div>
   );
 }
