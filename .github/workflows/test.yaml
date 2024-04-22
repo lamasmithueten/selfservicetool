@@ -8,7 +8,6 @@ jobs:
   webfrontend:
     runs-on: self-hosted
     steps:
-      - run: bash -c "[ ! $(docker ps -a | awk 'NR!=1' | wc -l)  ] && docker stop $(docker ps -aq) && docker rm $(docker ps -aq) || true"
-      - run: docker run -dp 80:80 nginx
-      - run: docker run -dp 3306:3306 -v mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=linux mariadb
-      - run: env
+      - run: docker-compose -f /home/git/docker-compose.yml down
+#      - run: docker-compose -f /home/git/docker-compose.yml build
+      - run: docker-compose -f /home/git/docker-compose.yml up -d
