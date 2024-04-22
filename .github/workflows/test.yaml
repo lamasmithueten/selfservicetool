@@ -8,6 +8,6 @@ jobs:
   webfrontend:
     runs-on: self-hosted
     steps:
-      - run: docker-compose -f /home/git/docker-compose.yml down
+      - run: docker compose -f /home/git/docker-compose.yml down
 #      - run: docker-compose -f /home/git/docker-compose.yml build
-      - run: docker-compose -f /home/git/docker-compose.yml up -d
+      - run: docker compose -f /home/git/docker-compose.yml up -d
