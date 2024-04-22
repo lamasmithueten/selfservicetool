@@ -8,6 +8,7 @@ jobs:
   webfrontend:
     runs-on: self-hosted
     steps:
-      - run: echo $USER
-      - run: sed -i 's/httpd/apache2/g' /webserver/selfservicetool/index.html
-      - run: echo lul
+      - run: docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
+      - run: docker run -dp 80:80 nginx
+      - run: docker run -dp 3306:3306 -v mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=linux mariadb
+      - run: env
