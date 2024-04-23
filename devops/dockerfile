@@ -1,0 +1,15 @@
+FROM node
+
+RUN mkdir -p /srv/frontend
+
+COPY selfservicetool/frontend /srv/frontend
+
+WORKDIR /srv/frontend
+
+RUN npm ci && npm cache clean --force
+
+RUN chown -R node: ./
+
+USER node
+
+ENTRYPOINT npm start
