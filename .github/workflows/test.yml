@@ -8,6 +8,7 @@ jobs:
   webfrontend:
     runs-on: self-hosted
     steps:
+# ich muss was ändern damit ich commiten kann
 #      - run: docker compose -f /home/git/docker-compose.yml down
 #      - run: docker-compose -f /home/git/docker-compose.yml build
 #      - run: docker compose -f /home/git/docker-compose.yml up -d
