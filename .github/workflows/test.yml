@@ -8,6 +8,9 @@ jobs:
   webfrontend:
     runs-on: self-hosted
     steps:
-      - run: docker compose -f /home/git/docker-compose.yml down
+#      - run: docker compose -f /home/git/docker-compose.yml down
 #      - run: docker-compose -f /home/git/docker-compose.yml build
-      - run: docker compose -f /home/git/docker-compose.yml up -d
+#      - run: docker compose -f /home/git/docker-compose.yml up -d
+       - run: if [[ $(docker ps | awk 'NR!=1' | wc -l) -gt 0 ]] docker stop $(docker ps -q) && docker rm $(docker ps -aq)
+       - run: docker run -dp 80:80 --name webfrontend nginx
+       - run: docker run -dp 3306:3306 -e MYSQL_ROOT_PASSWORD=linux -v mysql:/var/lib/mysql --name database mariadb
