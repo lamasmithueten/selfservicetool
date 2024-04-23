@@ -14,6 +14,6 @@ jobs:
 #      - run: docker compose -f /home/git/docker-compose.yml up -d
        - run: if [[ $(docker ps | awk 'NR!=1' | wc -l) -gt 0 ]] then docker stop $(docker ps -q) && docker rm $(docker ps -aq); fi
        - run: git -C /home/git/frontend pull
-       - run: docker build /home/git/frontend -t frontend
+       - run: docker build /home/git/frontend/selfservicetool -t frontend
        - run: docker run -dp 80:3000 --name frontend frontend
        - run: docker run -dp 3306:3306 -e MYSQL_ROOT_PASSWORD=linux -v mysql:/var/lib/mysql --name database mariadb
