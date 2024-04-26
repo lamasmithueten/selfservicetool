@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI.Models;
 
 namespace SelfServiceWebAPI.Controllers
@@ -12,10 +16,12 @@ namespace SelfServiceWebAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IConfiguration _config;
 
-        public UserController(AppDbContext context)
+        public UserController(AppDbContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         /// <summary>
@@ -23,11 +29,18 @@ namespace SelfServiceWebAPI.Controllers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
+        [Authorize]
         [HttpPost("Login")]
-        //[Route("Login")]
-        public String Login(String name)
+        public String Login()
         {
-            return name;
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var x = "";
+            if (identity != null)
+            {
+                x = identity.FindFirst("Username").Value;
+            }
+
+            return x;
         }
 
         /// <summary>
@@ -51,6 +64,12 @@ namespace SelfServiceWebAPI.Controllers
             return CreatedAtAction("GetUser", new { id = user.ID }, user);
         }
 
+        [HttpPost("GenerateJWTToken")]
+        public string GenerateJWTToken(UserModel user)
+        {
+            return GenerateToken(user);
+        }
+
         [HttpGet("GetUser")]
         public IActionResult GetUser(Guid id)
         {
@@ -62,6 +81,26 @@ namespace SelfServiceWebAPI.Controllers
             }
 
             return Ok(user);
+        }
+
+        private string GenerateToken(UserModel user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+                new Claim("Username",user.username),
+                new Claim("Role",user.role),
+                new Claim("Email",user.email),
+                new Claim("UserID", user.ID.ToString())
+            };
+            var token = new JwtSecurityToken(_config["JwtSettings:Issuer"],
+                _config["JwtSettings:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(15),
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
