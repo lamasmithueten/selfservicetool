@@ -1,0 +1,6 @@
+@sstWebAPI_HostAddress = http://localhost:5279
+
+GET {{sstWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

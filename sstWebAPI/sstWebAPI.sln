@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sstWebAPI", "sstWebAPI\sstWebAPI.csproj", "{AD212658-07A9-4B14-830D-19AE96D092DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD212658-07A9-4B14-830D-19AE96D092DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD212658-07A9-4B14-830D-19AE96D092DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD212658-07A9-4B14-830D-19AE96D092DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD212658-07A9-4B14-830D-19AE96D092DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {150699D5-3B9A-430A-9840-825CCB933E12}
+	EndGlobalSection
+EndGlobal
