@@ -45,7 +45,7 @@ namespace SelfServiceWebAPI.Controllers
         public IActionResult CreateUser(UserModel user)
         {
             user.ID = Guid.NewGuid();
-            _context.User.Add(user);
+            _context.user.Add(user);
             _context.SaveChanges();
 
             return CreatedAtAction("GetUser", new { id = user.ID }, user);
@@ -54,7 +54,7 @@ namespace SelfServiceWebAPI.Controllers
         [HttpGet("GetUser")]
         public IActionResult GetUser(Guid id)
         {
-            UserModel user = _context.User.Find(id);
+            UserModel user = _context.user.Find(id);
 
             if (user == null)
             {
