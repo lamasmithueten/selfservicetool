@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI.Models;
@@ -32,24 +31,15 @@ namespace SelfServiceWebAPI.Controllers
         }
 
         /// <summary>
-        /// Test method for controller without the need of authorization
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("Info")]
-        public string Info()
-        {
-            return "WebApi by Lukas and Nicolas for Sofware Engineering";
-        }
-
-        /// <summary>
-        /// login request
+        /// logins the user
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpPost("Login")]
         public IActionResult Login(UserLoginModel loginUser)
         {
-            UserModel? user = _context.user.Where(x=> x.username == loginUser.username).FirstOrDefault();
+            //gets the whole record of the user with the username specified in loginUser
+            UserModel? user = _context.user.Where(x => x.username == loginUser.username).FirstOrDefault();
 
             if (user == null)
             {
@@ -57,8 +47,11 @@ namespace SelfServiceWebAPI.Controllers
             }
             else
             {
-                if (user.password != null && loginUser.password != null && GetHashString(loginUser.password).Equals(GetHashString(user.password))) // TODO: Change after Register function is implemented
+                //checks if the hashes of both passwords are matching
+                if (!String.IsNullOrWhiteSpace(user.password) && !String.IsNullOrWhiteSpace(loginUser.password)
+                    && GetHashString(loginUser.password).Equals(user.password)) // TODO: Check if hashing is nescessary if frontend already hashes?
                 {
+                    //Generates JWT Token for the User and returns it
                     return Ok(GenerateToken(user));
                 }
                 else
@@ -68,42 +61,46 @@ namespace SelfServiceWebAPI.Controllers
             }
         }
 
-        //ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
-
-        //if (identity != null)
-        //{
-        //    var claims = identity.Claims;
-        //    return claims.FirstOrDefault(O => O.Type == ClaimTypes.Name)?.Value ?? string.Empty;
-        //}
-
-
         /// <summary>
-        /// register user
+        /// registers the user
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpPost("Register")]
-        public String Register(String name)
-        {
-            return name.ToString();
-        }
+        public IActionResult Register(UserRegistrationModel registrationUser)
+        { 
+            //after this check every parameter of registrationUser is not null or consists of only whitespaces
+            if(!registrationUser.IsValid(out string alertMessage)) 
+            { 
+                return BadRequest(alertMessage);
+            }
 
-        [HttpPost("CreateUser")]
-        public IActionResult CreateUser(UserModel user)
-        {
-            user.ID = Guid.NewGuid();
+            //checks if account or username already exists in db
+            if (_context.user.Any(x => x.email == registrationUser.email || x.username == registrationUser.username))
+            {
+                if (_context.user.Any(x => x.email == registrationUser.email))
+                {
+                    return BadRequest("Account already exists.");
+                }
+                else
+                {
+                    return BadRequest("Username already exists.");
+                }
+            }
+
+            //all requirements met to save the user in db
+            registrationUser.password = GetHashString(registrationUser.password); // TODO: Check if hashing is nescessary
+            UserModel user = new(registrationUser);
             _context.user.Add(user);
             _context.SaveChanges();
-
             return CreatedAtAction("GetUser", new { id = user.ID }, user);
         }
 
-        [HttpPost("GenerateJWTToken")]
-        public string GenerateJWTToken(UserModel user)
-        {
-            return GenerateToken(user);
-        }
-
+        /// <summary>
+        /// gets the user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("GetUser")]
         public IActionResult GetUser(Guid id)
         {
@@ -117,6 +114,13 @@ namespace SelfServiceWebAPI.Controllers
             return Ok(user);
         }
 
+        #region private helper funtions
+
+        /// <summary>
+        /// generates a JWT for session handling
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         private string GenerateToken(UserModel user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]));
@@ -137,6 +141,11 @@ namespace SelfServiceWebAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        /// <summary>
+        /// hashes the given string
+        /// </summary>
+        /// <param name="inputString"></param>
+        /// <returns></returns>
         private static string GetHashString(string inputString)
         {
             StringBuilder sb = new StringBuilder();
@@ -145,15 +154,28 @@ namespace SelfServiceWebAPI.Controllers
 
             return sb.ToString();
         }
+
+        /// <summary>
+        /// get the hash byte array
+        /// </summary>
+        /// <param name="inputString"></param>
+        /// <returns></returns>
         private static byte[] GetHash(string inputString)
         {
             using (HashAlgorithm algorithm = SHA256.Create())
                 return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
         }
 
+        /// <summary>
+        /// gets the current user with its ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private UserModel? getCurrentUser(Guid id)
         {
             return _context.user.Find(id);
         }
+
+        #endregion
     }
 }
