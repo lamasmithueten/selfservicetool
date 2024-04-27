@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,11 @@ namespace SelfServiceWebAPI.Controllers
         private readonly AppDbContext _context;
         private readonly IConfiguration _config;
 
+        /// <summary>
+        /// constructor for the user controller
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="config"></param>
         public UserController(AppDbContext context, IConfiguration config)
         {
             _context = context;
@@ -26,24 +32,50 @@ namespace SelfServiceWebAPI.Controllers
         }
 
         /// <summary>
+        /// Test method for controller without the need of authorization
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("Info")]
+        public string Info()
+        {
+            return "WebApi by Lukas and Nicolas for Sofware Engineering";
+        }
+
+        /// <summary>
         /// login request
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost("Login")]
-        public String Login()
+        public IActionResult Login(UserLoginModel loginUser)
         {
-            ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+            UserModel? user = _context.user.Where(x=> x.username == loginUser.username).FirstOrDefault();
 
-            if (identity != null)
+            if (user == null)
             {
-                var claims = identity.Claims;
-                return claims.FirstOrDefault(O => O.Type == ClaimTypes.Name)?.Value ?? string.Empty;
+                return NotFound($"{loginUser.username} not found in database");
             }
-
-            return "";
+            else
+            {
+                if (user.password != null && loginUser.password != null && GetHashString(loginUser.password).Equals(GetHashString(user.password))) // TODO: Change after Register function is implemented
+                {
+                    return Ok(GenerateToken(user));
+                }
+                else
+                {
+                    return BadRequest($"wrong password for user {loginUser.username}");
+                }
+            }
         }
+
+        //ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+
+        //if (identity != null)
+        //{
+        //    var claims = identity.Claims;
+        //    return claims.FirstOrDefault(O => O.Type == ClaimTypes.Name)?.Value ?? string.Empty;
+        //}
+
 
         /// <summary>
         /// register user
@@ -103,6 +135,20 @@ namespace SelfServiceWebAPI.Controllers
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private static string GetHashString(string inputString)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in GetHash(inputString))
+                sb.Append(b.ToString("X2"));
+
+            return sb.ToString();
+        }
+        private static byte[] GetHash(string inputString)
+        {
+            using (HashAlgorithm algorithm = SHA256.Create())
+                return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
         }
 
         private UserModel? getCurrentUser(Guid id)
