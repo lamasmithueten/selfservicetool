@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI.Models;
+using sstWebAPI.Models;
 
 namespace SelfServiceWebAPI.Controllers
 {
@@ -29,18 +30,19 @@ namespace SelfServiceWebAPI.Controllers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        [Authorize]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost("Login")]
         public String Login()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var x = "";
+            ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+
             if (identity != null)
             {
-                x = identity.FindFirst("Username").Value;
+                var claims = identity.Claims;
+                return claims.FirstOrDefault(O => O.Type == ClaimTypes.Name)?.Value ?? string.Empty;
             }
 
-            return x;
+            return "";
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace SelfServiceWebAPI.Controllers
         [HttpGet("GetUser")]
         public IActionResult GetUser(Guid id)
         {
-            UserModel user = _context.user.Find(id);
+            UserModel? user = getCurrentUser(id);
 
             if (user == null)
             {
@@ -89,18 +91,23 @@ namespace SelfServiceWebAPI.Controllers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim("Username",user.username),
-                new Claim("Role",user.role),
-                new Claim("Email",user.email),
-                new Claim("UserID", user.ID.ToString())
+                new Claim(ClaimTypes.Name,user.username ?? ""),
+                new Claim(ClaimTypes.Role,user.role ?? ""),
+                new Claim(ClaimTypes.Email,user.email ?? ""),
+                new Claim(ClaimTypes.NameIdentifier, user.ID.ToString())
             };
             var token = new JwtSecurityToken(_config["JwtSettings:Issuer"],
                 _config["JwtSettings:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private UserModel? getCurrentUser(Guid id)
+        {
+            return _context.user.Find(id);
         }
     }
 }
