@@ -32,6 +32,30 @@ namespace sstWebAPI.Swagger
                     Array.Empty<String>()
                 }
             });
+
+            options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "The API Key to access the API",
+                Name = "x-api-key",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "ApiKeyScheme"
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "ApiKey"
+                        }
+                    },
+                    Array.Empty<String>()
+                }
+            });
         }
     }
 }
