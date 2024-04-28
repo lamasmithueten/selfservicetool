@@ -5,11 +5,11 @@
         /// <summary>
         /// username of user for login
         /// </summary>
-        public string? username { get; set; } = null;
+        public string username { get; set; } = String.Empty;
 
         /// <summary>
         /// password of user for login
         /// </summary>
-        public string? password { get; set; } = null;
+        public string password { get; set; } = String.Empty;
     }
 }

@@ -9,27 +9,32 @@ namespace sstWebAPI.Models
         /// <summary>
         /// email of user for registration
         /// </summary>
-        public string? email { get; set; } = null;
+        public string Email { get; set; } = string.Empty;
 
         /// <summary>
         /// username of user for registration
         /// </summary>
-        public string? username { get; set; } = null;
+        public string Username { get; set; } = string.Empty;
 
         /// <summary>
         /// password of user for registration
         /// </summary>
-        public string? password { get; set; } = null;
+        public string Password { get; set; } = string.Empty;
 
         /// <summary>
         /// firstname of user for registration
         /// </summary>
-        public string? firstname { get; set; } = null;
+        public string Firstname { get; set; } = string.Empty;
 
         /// <summary>
         /// lastname of user for registration
         /// </summary>
-        public string? lastname { get; set; } = null;
+        public string Lastname { get; set; } = string.Empty;
+
+        /// <summary>
+        /// username of user for registration
+        /// </summary>
+        public string Role { get; set; } = UserRoles.Employee;
 
         #endregion
 
@@ -63,16 +68,18 @@ namespace sstWebAPI.Models
                 return false;
             }
 
+            //checks if the email is a valid email
             if (!IsEmailValid(out string isEmailValidMessage))
             {
                 alertMessage = isEmailValidMessage;
                 return false;
             }
 
-            //if the password isnt valid the object isnt valid
-            if (!IsPasswordValid(out string isPasswordValidMessage)) //TODO: Abklären wer das passwort hasht frontend / backend
+            //checks if the given role is valid
+            string[] roles = [UserRoles.Admin, UserRoles.Management, UserRoles.Admin];
+            if (!roles.Contains(Role))
             {
-                alertMessage = isPasswordValidMessage;
+                alertMessage = "The role is not valid.";
                 return false;
             }
 
@@ -86,74 +93,6 @@ namespace sstWebAPI.Models
         #region private helper functions
 
         /// <summary>
-        /// checks if the passowrd of this object is valid
-        /// </summary>
-        /// <param name="alertMessage"></param>
-        /// <returns></returns>
-        private bool IsPasswordValid(out string alertMessage)
-        {
-            //check if the password is null or empty
-            if (String.IsNullOrWhiteSpace(password))
-            {
-                alertMessage = "The password only contains whitespaces or is null";
-                return false;
-            }
-
-            //check if the password length is at least 8 characters
-            if (password.Length < 8)
-            {
-                alertMessage = "The password does not have the minimum of 8 characters";
-                return false;
-            }
-
-            //check if the password contains at least one uppercase letter
-            if (!password.Any(char.IsUpper))
-            {
-                alertMessage = "The password should contain at least one upper character";
-                return false;
-            }
-
-            //check if the password contains at least one lowercase letter
-            if (!password.Any(char.IsLower))
-            {
-                alertMessage = "The password should contain at least one lower character";
-                return false;
-            }
-
-            //check if the password contains at least one digit
-            if (!password.Any(char.IsDigit))
-            {
-                alertMessage = "The password should contain at least one digit";
-                return false;
-            }
-
-            //check if the password contains at least one special character
-            if (!password.Any(IsSpecialCharacter))
-            {
-                alertMessage = "The password should contain at least one special character";
-                return false;
-            }
-
-            //all requirements met
-            alertMessage = "";
-            return true;
-        }
-
-        /// <summary>
-        /// checks if a character is a special character
-        /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        private static bool IsSpecialCharacter(char c)
-        {
-            //define all special characters
-            string specialCharacters = "!@#$%^&*()-_=+[{]}|;:'\",.?/";
-
-            //check if the char is a special character
-            return specialCharacters.Contains(c);
-        }
-
-        /// <summary>
         /// checks if the email is valid
         /// </summary>
         /// <param name="email"></param>
@@ -161,7 +100,7 @@ namespace sstWebAPI.Models
         private bool IsEmailValid(out string alertMessage)
         {
             //check if the password is null or empty
-            if (email == null)
+            if (Email == null)
             {
                 alertMessage = "The email cannot be null.";
                 return false;
@@ -171,7 +110,7 @@ namespace sstWebAPI.Models
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
 
             //check if email matches the pattern
-            if(!Regex.IsMatch(email, pattern))
+            if (!Regex.IsMatch(Email, pattern))
             {
                 alertMessage = "The email is not an email.";
                 return false;

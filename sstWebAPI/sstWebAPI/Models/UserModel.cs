@@ -9,7 +9,7 @@ namespace SelfServiceWebAPI.Models
         /// <summary>
         /// base constructor | this is needed!
         /// </summary>
-        public UserModel() 
+        public UserModel()
         {
 
         }
@@ -18,22 +18,21 @@ namespace SelfServiceWebAPI.Models
         /// constructor to build a registrationUser to db user
         /// </summary>
         /// <param name="userRegistrationModel"></param>
-        public UserModel(UserRegistrationModel userRegistrationModel) 
+        public UserModel(UserRegistrationModel userRegistrationModel)
         {
             ID = Guid.NewGuid();
-            ID_supervisor = Guid.NewGuid(); // TODO: think about how to set ID of the supervisor
-            role = UserRoles.Employee; // TODO: think about how to set roles
-            email = userRegistrationModel.email;
-            username = userRegistrationModel.username;
-            password = userRegistrationModel.password;
-            firstname = userRegistrationModel.firstname;
-            lastname = userRegistrationModel.lastname;
+            role = userRegistrationModel.Role;
+            email = userRegistrationModel.Email;
+            username = userRegistrationModel.Username;
+            password = userRegistrationModel.Password;
+            firstname = userRegistrationModel.Firstname;
+            lastname = userRegistrationModel.Lastname;
             number_of_vacations = 30; // TODO: think about how to set number of vacation
         }
 
         #endregion
 
-        #region parameters
+        #region properties
 
         /// <summary>
         /// ID of user
@@ -41,39 +40,34 @@ namespace SelfServiceWebAPI.Models
         public Guid ID { get; set; }
 
         /// <summary>
-        /// ID_supervisor of user
-        /// </summary>
-        public Guid? ID_supervisor { get; set; } = Guid.Empty;
-
-        /// <summary>
         /// role of user
         /// </summary>
-        public string? role { get; set; } = null;
+        public string role { get; set; }
 
         /// <summary>
         /// email of user
         /// </summary>
-        public string? email { get; set; } = null;
+        public string email { get; set; }
 
         /// <summary>
         /// username of user
         /// </summary>
-        public string? username { get; set; } = null;
+        public string username { get; set; }
 
         /// <summary>
         /// password of user
         /// </summary>
-        public string? password { get; set; } = null;
+        public string password { get; set; }
 
         /// <summary>
         /// firstname of user
         /// </summary>
-        public string? firstname { get; set; } = null;
+        public string firstname { get; set; }
 
         /// <summary>
         /// lastname of user
         /// </summary>
-        public string? lastname { get; set; } = null;
+        public string lastname { get; set; }
 
         /// <summary>
         /// number_of_vacations of user

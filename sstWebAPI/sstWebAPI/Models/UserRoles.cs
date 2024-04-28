@@ -1,6 +1,6 @@
 ﻿namespace sstWebAPI.Models
 {
-    interface UserRoles
+    public static class UserRoles
     {
         public const string Admin = "admin";
         public const string Management = "management";
