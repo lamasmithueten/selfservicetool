@@ -36,26 +36,24 @@ namespace sstWebAPI.Controllers
         [HttpPost("Login")]
         public IActionResult Login(UserLoginModel loginUser)
         {
-            //gets the whole record of the user with the username specified in loginUser
-            UserModel? user = _context.user.Where(x => x.username == loginUser.username).FirstOrDefault();
+            //gets the whole record of the user with the username/email specified in loginUser
+            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail).FirstOrDefault();
 
             if (user == null)
             {
-                return NotFound($"{loginUser.username} not found in database");
+                return NotFound($"{loginUser.usernameOrEmail} not found in database");
+            }
+
+            //checks if the hashes of both passwords are matching
+            if (!String.IsNullOrWhiteSpace(user.password) && !String.IsNullOrWhiteSpace(loginUser.password)
+                && loginUser.password.Equals(user.password))
+            {
+                //Generates JWT Token for the User and returns it
+                return Ok(GenerateToken(user));
             }
             else
             {
-                //checks if the hashes of both passwords are matching
-                if (!String.IsNullOrWhiteSpace(user.password) && !String.IsNullOrWhiteSpace(loginUser.password)
-                    && loginUser.password.Equals(user.password))
-                {
-                    //Generates JWT Token for the User and returns it
-                    return Ok(GenerateToken(user));
-                }
-                else
-                {
-                    return BadRequest($"wrong password for user {loginUser.username}");
-                }
+                return BadRequest($"wrong password for user {loginUser.usernameOrEmail}");
             }
         }
 

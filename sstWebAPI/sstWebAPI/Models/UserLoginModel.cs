@@ -3,9 +3,9 @@
     public class UserLoginModel
     {
         /// <summary>
-        /// username of user for login
+        /// username/email of user for login
         /// </summary>
-        public string username { get; set; } = String.Empty;
+        public string usernameOrEmail { get; set; } = String.Empty;
 
         /// <summary>
         /// password of user for login
