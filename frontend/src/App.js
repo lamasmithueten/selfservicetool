@@ -1,27 +1,20 @@
-import React, { useState } from "react";
-import AuthContainer from "./AuthContainer";
-import RegistrationForm from "./RegistrationForm";
-import LoginForm from "./LoginForm";
-import "./App.css"; // Import the CSS file for styling
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginForm from "./Components/LoginForm/LoginForm";
+import RegisterForm from "./Components/RegisterForm/RegisterForm";
+import Home from "./Components/Home";
 
-function App() {
-  const [showLoginForm, setShowLoginForm] = useState(true);
-
-  const toggleForm = () => {
-    setShowLoginForm(!showLoginForm);
-  };
-
+const App = () => {
   return (
-    <div className="App">
-      <AuthContainer>
-        {showLoginForm ? (
-          <LoginForm toggleForm={toggleForm} />
-        ) : (
-          <RegistrationForm toggleForm={toggleForm} />
-        )}
-      </AuthContainer>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
