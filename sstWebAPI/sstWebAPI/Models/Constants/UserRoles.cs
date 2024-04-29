@@ -1,4 +1,4 @@
-﻿namespace sstWebAPI.Models
+﻿namespace sstWebAPI.Models.Constants
 {
     public static class UserRoles
     {
@@ -6,4 +6,4 @@
         public const string Management = "management";
         public const string Employee = "employee";
     }
- }
+}

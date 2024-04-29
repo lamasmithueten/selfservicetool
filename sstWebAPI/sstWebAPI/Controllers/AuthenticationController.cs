@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Models;
+using sstWebAPI.Models.DTO;
 
 namespace sstWebAPI.Controllers
 {
@@ -89,6 +90,51 @@ namespace sstWebAPI.Controllers
             _context.user.Add(user);
             _context.SaveChanges();
             return CreatedAtAction("GetUser", new { id = user.ID }, user);
+        }
+
+        /// <summary>
+        /// registers the user
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpPost("RegistrationApplication")]
+        public IActionResult RegistrationApplication(UserRegistrationModel registrationUser)
+        {
+            if (!registrationUser.IsValid(out string alertMessage))
+            {
+                return BadRequest(alertMessage);
+            }
+
+            //checks if account or username already exists in db
+            if (_context.user.Any(x => x.email == registrationUser.Email || x.username == registrationUser.Username))
+            {
+                if (_context.user.Any(x => x.email == registrationUser.Email))
+                {
+                    return BadRequest("Account already exists.");
+                }
+                else
+                {
+                    return BadRequest("Username already exists.");
+                }
+            }
+
+            if (_context.register_application.Any(y => y.email == registrationUser.Email || y.username == registrationUser.Username))
+            {
+                if (_context.register_application.Any(y => y.email == registrationUser.Email))
+                {
+                    return BadRequest("Application was already send for this email");
+                }
+                else
+                {
+                    return BadRequest("Username already exists.");
+                }
+            }
+
+            //all requirements met to save the application in db
+            RegistrationApplicationModel application = new(registrationUser);
+            _context.register_application.Add(application);
+            _context.SaveChanges();
+            return CreatedAtAction("GetApplication", new { id = application.ID }, application);
         }
 
         #region private helper funtions
