@@ -91,24 +91,6 @@ namespace sstWebAPI.Controllers
             return CreatedAtAction("GetUser", new { id = user.ID }, user);
         }
 
-        /// <summary>
-        /// gets the user
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("GetUser")]
-        public IActionResult GetUser(Guid id)
-        {
-            UserModel? user = getCurrentUser(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
-        }
-
         #region private helper funtions
 
         /// <summary>
@@ -134,16 +116,6 @@ namespace sstWebAPI.Controllers
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        /// <summary>
-        /// gets the current user with its ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        private UserModel? getCurrentUser(Guid id)
-        {
-            return _context.user.Find(id);
         }
 
         #endregion
