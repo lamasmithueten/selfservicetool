@@ -41,15 +41,6 @@ CREATE TABLE `existing_environment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `existing_environment`
---
-
-LOCK TABLES `existing_environment` WRITE;
-/*!40000 ALTER TABLE `existing_environment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `existing_environment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `hardware`
 --
 
@@ -72,15 +63,6 @@ CREATE TABLE `hardware` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `hardware`
---
-
-LOCK TABLES `hardware` WRITE;
-/*!40000 ALTER TABLE `hardware` DISABLE KEYS */;
-/*!40000 ALTER TABLE `hardware` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `number_of_vacation_days`
 --
 
@@ -96,15 +78,6 @@ CREATE TABLE `number_of_vacation_days` (
   CONSTRAINT `number_of_vacation_days_ibfk_1` FOREIGN KEY (`ID_User`) REFERENCES `user` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `number_of_vacation_days`
---
-
-LOCK TABLES `number_of_vacation_days` WRITE;
-/*!40000 ALTER TABLE `number_of_vacation_days` DISABLE KEYS */;
-/*!40000 ALTER TABLE `number_of_vacation_days` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `provisioning_request`
@@ -126,13 +99,24 @@ CREATE TABLE `provisioning_request` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `provisioning_request`
+-- Table structure for table `registration_application`
 --
 
-LOCK TABLES `provisioning_request` WRITE;
-/*!40000 ALTER TABLE `provisioning_request` DISABLE KEYS */;
-/*!40000 ALTER TABLE `provisioning_request` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `registration_application`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `registration_application` (
+  `ID` uuid NOT NULL,
+  `role` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `firstname` varchar(255) NOT NULL,
+  `lastname` varchar(255) NOT NULL,
+  `application_date` date NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `user`
@@ -143,7 +127,6 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `ID` uuid NOT NULL,
-  `ID_supervisor` uuid NOT NULL,
   `role` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
@@ -154,15 +137,6 @@ CREATE TABLE `user` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `vacation_request`
@@ -183,15 +157,6 @@ CREATE TABLE `vacation_request` (
   CONSTRAINT `vacation_request_ibfk_1` FOREIGN KEY (`ID_user`) REFERENCES `user` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vacation_request`
---
-
-LOCK TABLES `vacation_request` WRITE;
-/*!40000 ALTER TABLE `vacation_request` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vacation_request` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -202,4 +167,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-13 15:19:18
+-- Dump completed on 2024-04-29 20:03:32
