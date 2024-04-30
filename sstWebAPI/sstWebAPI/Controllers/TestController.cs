@@ -40,7 +40,7 @@ namespace sstWebAPI.Controllers
             UserModel? user = _context.user.Find(name);
             if (user == null)
             {
-                return NotFound("Found no user with that id");
+                return NotFound("Found no user with that name");
             }
             return Ok(user);
         }
