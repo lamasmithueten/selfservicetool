@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI.Models;
 
 namespace SelfServiceWebAPI.Controllers
@@ -12,49 +11,28 @@ namespace SelfServiceWebAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IConfiguration _config;
 
-        public UserController(AppDbContext context)
+        /// <summary>
+        /// constructor for the user controller
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="config"></param>
+        public UserController(AppDbContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         /// <summary>
-        /// login request
+        /// gets the user
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost("Login")]
-        //[Route("Login")]
-        public String Login(String name)
-        {
-            return name;
-        }
-
-        /// <summary>
-        /// register user
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        [HttpPost("Register")]
-        public String Register(String name)
-        {
-            return name.ToString();
-        }
-
-        [HttpPost("CreateUser")]
-        public IActionResult CreateUser(UserModel user)
-        {
-            user.ID = Guid.NewGuid();
-            _context.User.Add(user);
-            _context.SaveChanges();
-
-            return CreatedAtAction("GetUser", new { id = user.ID }, user);
-        }
-
         [HttpGet("GetUser")]
         public IActionResult GetUser(Guid id)
         {
-            UserModel user = _context.User.Find(id);
+            UserModel? user = getCurrentUser(id);
 
             if (user == null)
             {
@@ -62,6 +40,16 @@ namespace SelfServiceWebAPI.Controllers
             }
 
             return Ok(user);
+        }
+
+        /// <summary>
+        /// gets the current user with its ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private UserModel? getCurrentUser(Guid id)
+        {
+            return _context.user.Find(id);
         }
     }
 }

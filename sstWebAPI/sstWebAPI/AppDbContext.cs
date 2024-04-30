@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SelfServiceWebAPI.Models;
+using sstWebAPI.Models;
 
 namespace SelfServiceWebAPI
 {
@@ -7,6 +8,8 @@ namespace SelfServiceWebAPI
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<UserModel> User { get; set; }
+        public DbSet<UserModel> user { get; set; }
+
+        public DbSet<RegistrationModel> register_application { get; set; }
     }
 }
