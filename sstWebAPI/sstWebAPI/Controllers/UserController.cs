@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SelfServiceWebAPI.Models;
 
 namespace SelfServiceWebAPI.Controllers
 {
@@ -23,5 +24,32 @@ namespace SelfServiceWebAPI.Controllers
             _config = config;
         }
 
+        /// <summary>
+        /// gets the user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetUser")]
+        public IActionResult GetUser(Guid id)
+        {
+            UserModel? user = getCurrentUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        /// <summary>
+        /// gets the current user with its ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private UserModel? getCurrentUser(Guid id)
+        {
+            return _context.user.Find(id);
+        }
     }
 }

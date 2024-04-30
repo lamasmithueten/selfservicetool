@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Models;
+using sstWebAPI.Models.DTO;
 
 namespace sstWebAPI.Controllers
 {
@@ -36,28 +37,60 @@ namespace sstWebAPI.Controllers
         [HttpPost("Login")]
         public IActionResult Login(UserLoginModel loginUser)
         {
-            //gets the whole record of the user with the username specified in loginUser
-            UserModel? user = _context.user.Where(x => x.username == loginUser.username).FirstOrDefault();
+            //gets the whole record of the user with the username/email specified in loginUser
+            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail).SingleOrDefault();
 
             if (user == null)
             {
-                return NotFound($"{loginUser.username} not found in database");
+                return NotFound($"{loginUser.usernameOrEmail} not found in database");
+            }
+
+            //checks if the hashes of both passwords are matching
+            if (!String.IsNullOrWhiteSpace(user.password) && !String.IsNullOrWhiteSpace(loginUser.password)
+                && loginUser.password.Equals(user.password))
+            {
+                //Generates JWT Token for the User and returns it
+                return Ok(GenerateToken(user));
             }
             else
             {
-                //checks if the hashes of both passwords are matching
-                if (!String.IsNullOrWhiteSpace(user.password) && !String.IsNullOrWhiteSpace(loginUser.password)
-                    && loginUser.password.Equals(user.password))
-                {
-                    //Generates JWT Token for the User and returns it
-                    return Ok(GenerateToken(user));
-                }
-                else
-                {
-                    return BadRequest($"wrong password for user {loginUser.username}");
-                }
+                return BadRequest($"wrong password for user {loginUser.usernameOrEmail}");
             }
         }
+
+        /// <summary>
+        /// registers the user
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        //[HttpPost("Register")]
+        //public IActionResult Register(UserRegistrationModel registrationUser)
+        //{
+        //    //after this check every parameter of registrationUser is not null or consists of only whitespaces
+        //    if (!registrationUser.IsValid(out string alertMessage))
+        //    {
+        //        return BadRequest(alertMessage);
+        //    }
+
+        //    //checks if account or username already exists in db
+        //    if (_context.user.Any(x => x.email == registrationUser.Email || x.username == registrationUser.Username))
+        //    {
+        //        if (_context.user.Any(x => x.email == registrationUser.Email))
+        //        {
+        //            return BadRequest("Account already exists.");
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("Username already exists.");
+        //        }
+        //    }
+
+        //    //all requirements met to save the user in db
+        //    UserModel user = new(registrationUser);
+        //    _context.user.Add(user);
+        //    _context.SaveChanges();
+        //    return CreatedAtAction("GetUser", new { id = user.ID }, user);
+        //}
 
         /// <summary>
         /// registers the user
@@ -67,7 +100,6 @@ namespace sstWebAPI.Controllers
         [HttpPost("Register")]
         public IActionResult Register(UserRegistrationModel registrationUser)
         {
-            //after this check every parameter of registrationUser is not null or consists of only whitespaces
             if (!registrationUser.IsValid(out string alertMessage))
             {
                 return BadRequest(alertMessage);
@@ -86,29 +118,23 @@ namespace sstWebAPI.Controllers
                 }
             }
 
-            //all requirements met to save the user in db
-            UserModel user = new(registrationUser);
-            _context.user.Add(user);
-            _context.SaveChanges();
-            return CreatedAtAction("GetUser", new { id = user.ID }, user);
-        }
-
-        /// <summary>
-        /// gets the user
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("GetUser")]
-        public IActionResult GetUser(Guid id)
-        {
-            UserModel? user = getCurrentUser(id);
-
-            if (user == null)
+            if (_context.register_application.Any(y => y.email == registrationUser.Email || y.username == registrationUser.Username))
             {
-                return NotFound();
+                if (_context.register_application.Any(y => y.email == registrationUser.Email))
+                {
+                    return BadRequest("Application was already send for this email");
+                }
+                else
+                {
+                    return BadRequest("Username already exists.");
+                }
             }
 
-            return Ok(user);
+            //all requirements met to save the application in db
+            RegistrationModel application = new(registrationUser);
+            _context.register_application.Add(application);
+            _context.SaveChanges();
+            return Created(); //CreatedAtAction("GetApplication", new { id = application.ID }, application);
         }
 
         #region private helper funtions
@@ -136,16 +162,6 @@ namespace sstWebAPI.Controllers
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        /// <summary>
-        /// gets the current user with its ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        private UserModel? getCurrentUser(Guid id)
-        {
-            return _context.user.Find(id);
         }
 
         #endregion

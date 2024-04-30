@@ -1,24 +1,25 @@
-﻿using sstWebAPI.Models;
+﻿using sstWebAPI.Models.DTO;
+using System.Data;
 
-namespace SelfServiceWebAPI.Models
+namespace sstWebAPI.Models
 {
-    public class UserModel
+    public class RegistrationModel
     {
         #region constructors
 
         /// <summary>
         /// base constructor | this is needed!
         /// </summary>
-        public UserModel()
+        public RegistrationModel()
         {
 
         }
 
         /// <summary>
-        /// constructor to build a registrationUser to db user
+        /// constructor to build a  to db user
         /// </summary>
         /// <param name="userRegistrationModel"></param>
-        public UserModel(UserRegistrationModel userRegistrationModel)
+        public RegistrationModel(UserRegistrationModel userRegistrationModel)
         {
             ID = Guid.NewGuid();
             role = userRegistrationModel.Role;
@@ -27,7 +28,7 @@ namespace SelfServiceWebAPI.Models
             password = userRegistrationModel.Password;
             firstname = userRegistrationModel.Firstname;
             lastname = userRegistrationModel.Lastname;
-            number_of_vacations = 30; // TODO: think about how to set number of vacation
+            application_date = DateTime.Now;
         }
 
         #endregion
@@ -35,7 +36,7 @@ namespace SelfServiceWebAPI.Models
         #region properties
 
         /// <summary>
-        /// ID of user
+        /// ID of entry
         /// </summary>
         public Guid ID { get; set; }
 
@@ -70,9 +71,9 @@ namespace SelfServiceWebAPI.Models
         public string lastname { get; set; }
 
         /// <summary>
-        /// number_of_vacations of user
+        /// creation date of application
         /// </summary>
-        public int? number_of_vacations { get; set; } = null;
+        public DateTime application_date { get; set; }
 
         #endregion
     }

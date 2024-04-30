@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using sstWebAPI.Models.Constants;
 
-namespace sstWebAPI.Models
+namespace sstWebAPI.Models.DTO
 {
     public class UserRegistrationModel
     {
