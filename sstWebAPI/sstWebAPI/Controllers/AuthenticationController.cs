@@ -63,42 +63,42 @@ namespace sstWebAPI.Controllers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        [HttpPost("Register")]
-        public IActionResult Register(UserRegistrationModel registrationUser)
-        {
-            //after this check every parameter of registrationUser is not null or consists of only whitespaces
-            if (!registrationUser.IsValid(out string alertMessage))
-            {
-                return BadRequest(alertMessage);
-            }
+        //[HttpPost("Register")]
+        //public IActionResult Register(UserRegistrationModel registrationUser)
+        //{
+        //    //after this check every parameter of registrationUser is not null or consists of only whitespaces
+        //    if (!registrationUser.IsValid(out string alertMessage))
+        //    {
+        //        return BadRequest(alertMessage);
+        //    }
 
-            //checks if account or username already exists in db
-            if (_context.user.Any(x => x.email == registrationUser.Email || x.username == registrationUser.Username))
-            {
-                if (_context.user.Any(x => x.email == registrationUser.Email))
-                {
-                    return BadRequest("Account already exists.");
-                }
-                else
-                {
-                    return BadRequest("Username already exists.");
-                }
-            }
+        //    //checks if account or username already exists in db
+        //    if (_context.user.Any(x => x.email == registrationUser.Email || x.username == registrationUser.Username))
+        //    {
+        //        if (_context.user.Any(x => x.email == registrationUser.Email))
+        //        {
+        //            return BadRequest("Account already exists.");
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("Username already exists.");
+        //        }
+        //    }
 
-            //all requirements met to save the user in db
-            UserModel user = new(registrationUser);
-            _context.user.Add(user);
-            _context.SaveChanges();
-            return CreatedAtAction("GetUser", new { id = user.ID }, user);
-        }
+        //    //all requirements met to save the user in db
+        //    UserModel user = new(registrationUser);
+        //    _context.user.Add(user);
+        //    _context.SaveChanges();
+        //    return CreatedAtAction("GetUser", new { id = user.ID }, user);
+        //}
 
         /// <summary>
         /// registers the user
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        [HttpPost("RegistrationApplication")]
-        public IActionResult RegistrationApplication(UserRegistrationModel registrationUser)
+        [HttpPost("Register")]
+        public IActionResult Register(UserRegistrationModel registrationUser)
         {
             if (!registrationUser.IsValid(out string alertMessage))
             {
@@ -131,10 +131,10 @@ namespace sstWebAPI.Controllers
             }
 
             //all requirements met to save the application in db
-            RegistrationApplicationModel application = new(registrationUser);
+            RegistrationModel application = new(registrationUser);
             _context.register_application.Add(application);
             _context.SaveChanges();
-            return CreatedAtAction("GetApplication", new { id = application.ID }, application);
+            return Created(); //CreatedAtAction("GetApplication", new { id = application.ID }, application);
         }
 
         #region private helper funtions

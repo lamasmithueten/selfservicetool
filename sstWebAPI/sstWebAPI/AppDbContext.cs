@@ -10,6 +10,6 @@ namespace SelfServiceWebAPI
 
         public DbSet<UserModel> user { get; set; }
 
-        public DbSet<RegistrationApplicationModel> register_application { get; set; }
+        public DbSet<RegistrationModel> register_application { get; set; }
     }
 }

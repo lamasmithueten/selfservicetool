@@ -3,14 +3,14 @@ using System.Data;
 
 namespace sstWebAPI.Models
 {
-    public class RegistrationApplicationModel
+    public class RegistrationModel
     {
         #region constructors
 
         /// <summary>
         /// base constructor | this is needed!
         /// </summary>
-        public RegistrationApplicationModel()
+        public RegistrationModel()
         {
 
         }
@@ -19,7 +19,7 @@ namespace sstWebAPI.Models
         /// constructor to build a  to db user
         /// </summary>
         /// <param name="userRegistrationModel"></param>
-        public RegistrationApplicationModel(UserRegistrationModel userRegistrationModel)
+        public RegistrationModel(UserRegistrationModel userRegistrationModel)
         {
             ID = Guid.NewGuid();
             role = userRegistrationModel.Role;
