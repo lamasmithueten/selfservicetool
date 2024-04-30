@@ -3,6 +3,7 @@ import { CiUser, CiLock, CiMail } from "react-icons/ci";
 import "./RegisterForm.css";
 import axios from "axios";
 import { validateForm } from "./RegisterValidation";
+import { message } from "react-message-popup";
 
 function RegistrationForm({ toggleForm }) {
   const [formData, setFormData] = useState({
@@ -37,6 +38,7 @@ function RegistrationForm({ toggleForm }) {
     const errors = validateForm(formData); // Validate form data
     if (Object.values(errors).some((error) => error !== "")) {
       setFormErrors(errors);
+      message.error("Ein Fehler ist bei der Registrierung aufgetreten", 4000);
       return;
     }
     try {
@@ -45,18 +47,23 @@ function RegistrationForm({ toggleForm }) {
         formData
       );
       console.log("User registered successfully:", response.data);
+      message.success(
+        "Registrierung ist erfolgreich, Sie können sich jetzt anmelden",
+        4000
+      );
+
       // Reset form data and errors
       setFormData({
         username: "",
         email: "",
         password: "",
-        role: "",
+        role: "Mitarbeiter",
       });
       setFormErrors({
         username: "",
         email: "",
         password: "",
-        role: "",
+        role: "Mitarbeiter",
       });
     } catch (error) {
       console.error("Error registering user:", error);

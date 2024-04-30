@@ -62,6 +62,41 @@
       "email": "hallo@welt.com",
       "password": "HalloWelt!2",
       "role": "Mitarbeiter"
+    },
+    {
+      "id": "ce31",
+      "username": "testmest",
+      "email": "test@mest.com",
+      "password": "Testmest!2",
+      "role": "Mitarbeiter"
+    },
+    {
+      "id": "db64",
+      "username": "skeep",
+      "email": "s@d.e",
+      "password": "$2a$10$sXcZYSdr/WnFMSNTsCQzRek6EJv9KSZX1clvX9j8L/8OLu83ATGMq",
+      "role": "Mitarbeiter"
+    },
+    {
+      "id": "479b",
+      "username": "nochmal",
+      "email": "t@w.d",
+      "password": "$2a$10$aySAHi1VYWsH8mSkJKIZhu.ZPxa//bzd1yk1FLGJCPy5MFmFGDm62",
+      "role": ""
+    },
+    {
+      "id": "5cfc",
+      "username": "testus",
+      "email": "t@t.t",
+      "password": "$2a$10$8EwEDK3oJEUmxfmJ3lybQOVz5vcTgB3Vq3RcgUCarFIDvLQSx90li",
+      "role": "Mitarbeiter"
+    },
+    {
+      "id": "d911",
+      "username": "klop",
+      "email": "k@k.k",
+      "password": "$2a$10$tix/OqjLqXagQp6WYJtDQO1q7RpKSQUYudog6CphJIUl9YcM9NGji",
+      "role": "Mitarbeiter"
     }
   ]
 }
