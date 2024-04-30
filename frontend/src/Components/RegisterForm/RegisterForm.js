@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { CiUser, CiLock, CiMail } from "react-icons/ci";
-import "./RegisterForm.css";
 import axios from "axios";
+import React, { useState } from "react";
+import { CiLock, CiMail, CiUser } from "react-icons/ci";
+import { message } from "react-message-popup";
+import "./RegisterForm.css";
 import { validateForm } from "./RegisterValidation";
 
 function RegistrationForm({ toggleForm }) {
@@ -37,20 +38,26 @@ function RegistrationForm({ toggleForm }) {
     const errors = validateForm(formData); // Validate form data
     if (Object.values(errors).some((error) => error !== "")) {
       setFormErrors(errors);
+      message.error("Ein Fehler ist bei der Registrierung aufgetreten", 4000);
       return;
     }
     try {
       const response = await axios.post(
-        "http://localhost:3001/users",
+        "http://cheeky/breeky/chebureky",
         formData
       );
       console.log("User registered successfully:", response.data);
+      message.success(
+        "Registrierung ist erfolgreich, Sie können sich jetzt anmelden",
+        4000
+      );
+
       // Reset form data and errors
       setFormData({
         username: "",
         email: "",
         password: "",
-        role: "",
+        role: "Mitarbeiter",
       });
       setFormErrors({
         username: "",
@@ -111,7 +118,6 @@ function RegistrationForm({ toggleForm }) {
             className="password-icon icon"
             onClick={togglePasswordVisibility}
           />{" "}
-          {/* Add onClick event to toggle password visibility */}
           {formErrors.password && (
             <p className="error-message">{formErrors.password}</p>
           )}
