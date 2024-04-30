@@ -24,7 +24,7 @@ namespace sstWebAPI.Controllers
         }
 
         [HttpGet("GetUserById")]
-        public ActionResult GetUserById(int id)
+        public ActionResult GetUserById(Guid id)
         {
             UserModel? user = _context.user.Find(id);
             if (user == null)
@@ -37,7 +37,7 @@ namespace sstWebAPI.Controllers
         [HttpGet("GetUserByUsername")]
         public ActionResult GetUserByUsername(string name)
         {
-            UserModel? user = _context.user.Find(name);
+            UserModel? user = _context.user.Where(x => x.username == name).FirstOrDefault();
             if (user == null)
             {
                 return NotFound("Found no user with that name");
