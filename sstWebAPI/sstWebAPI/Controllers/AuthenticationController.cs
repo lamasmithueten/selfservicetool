@@ -38,7 +38,7 @@ namespace sstWebAPI.Controllers
         public IActionResult Login(UserLoginModel loginUser)
         {
             //gets the whole record of the user with the username/email specified in loginUser
-            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail).FirstOrDefault();
+            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail).SingleOrDefault();
 
             if (user == null)
             {
