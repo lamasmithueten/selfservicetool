@@ -83,6 +83,8 @@ namespace sstWebAPI.Controllers
                 return BadRequest(alertmessage);
             }
 
+            registrationuser.Email = registrationuser.Email.ToLower();
+
             //checks if account or username already exists in db
             if (_context.user.Any(x => x.email == registrationuser.Email || x.username == registrationuser.Username))
             {

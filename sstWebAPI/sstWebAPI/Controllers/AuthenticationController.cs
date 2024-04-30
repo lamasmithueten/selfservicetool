@@ -38,9 +38,9 @@ namespace sstWebAPI.Controllers
         /// <returns></returns>
         [HttpPost("Login")]
         public IActionResult Login(UserLoginModel loginUser)
-        {
+        {   
             //gets the whole record of the user with the username/email specified in loginUser
-            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail).SingleOrDefault();
+            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail.ToLower()).SingleOrDefault();
 
             if (user == null)
             {
@@ -72,6 +72,9 @@ namespace sstWebAPI.Controllers
             {
                 return BadRequest(alertMessage);
             }
+
+            //nicht sicher hiermit
+            registrationUser.Email = registrationUser.Email.ToLower();
 
             //checks if account or username already exists in db
             if (_context.user.Any(x => x.email == registrationUser.Email || x.username == registrationUser.Username))
