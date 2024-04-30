@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
+using sstWebAPI.Models.DTO;
 
 namespace sstWebAPI.Controllers
 {
@@ -71,6 +72,35 @@ namespace sstWebAPI.Controllers
             _context.user.Remove(user);
             _context.SaveChanges();
             return Ok(user);
+        }
+
+        [HttpPost("registerUser")]
+        public IActionResult register(UserRegistrationModel registrationuser)
+        {
+            //after this check every parameter of registrationuser is not null or consists of only whitespaces
+            if (!registrationuser.IsValid(out string alertmessage))
+            {
+                return BadRequest(alertmessage);
+            }
+
+            //checks if account or username already exists in db
+            if (_context.user.Any(x => x.email == registrationuser.Email || x.username == registrationuser.Username))
+            {
+                if (_context.user.Any(x => x.email == registrationuser.Email))
+                {
+                    return BadRequest("account already exists.");
+                }
+                else
+                {
+                    return BadRequest("username already exists.");
+                }
+            }
+
+            //all requirements met to save the user in db
+            UserModel user = new(registrationuser);
+            _context.user.Add(user);
+            _context.SaveChanges();
+            return CreatedAtAction("getuser", new { id = user.ID }, user);
         }
     }
 }

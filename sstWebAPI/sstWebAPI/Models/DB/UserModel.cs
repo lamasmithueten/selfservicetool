@@ -1,4 +1,5 @@
-﻿using sstWebAPI.Models.DTO;
+﻿using sstWebAPI.Models;
+using sstWebAPI.Models.DTO;
 
 namespace SelfServiceWebAPI.Models
 {
@@ -28,6 +29,18 @@ namespace SelfServiceWebAPI.Models
             firstname = userRegistrationModel.Firstname;
             lastname = userRegistrationModel.Lastname;
             number_of_vacations = 30; // TODO: think about how to set number of vacation
+        }
+
+        public UserModel(RegistrationModel model)
+        {
+            ID = model.ID;
+            role = model.role;
+            email = model.email;
+            username = model.username;
+            password = model.password;
+            firstname = model.firstname;
+            lastname = model.lastname;
+            number_of_vacations = 30;
         }
 
         #endregion
