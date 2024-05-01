@@ -1,10 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
+using sstWebAPI.Constants;
 using sstWebAPI.Models;
 using sstWebAPI.Models.DTO;
 
@@ -36,9 +38,9 @@ namespace sstWebAPI.Controllers
         /// <returns></returns>
         [HttpPost("Login")]
         public IActionResult Login(UserLoginModel loginUser)
-        {
+        {   
             //gets the whole record of the user with the username/email specified in loginUser
-            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail).SingleOrDefault();
+            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail.ToLower()).SingleOrDefault();
 
             if (user == null)
             {
@@ -63,40 +65,6 @@ namespace sstWebAPI.Controllers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        //[HttpPost("Register")]
-        //public IActionResult Register(UserRegistrationModel registrationUser)
-        //{
-        //    //after this check every parameter of registrationUser is not null or consists of only whitespaces
-        //    if (!registrationUser.IsValid(out string alertMessage))
-        //    {
-        //        return BadRequest(alertMessage);
-        //    }
-
-        //    //checks if account or username already exists in db
-        //    if (_context.user.Any(x => x.email == registrationUser.Email || x.username == registrationUser.Username))
-        //    {
-        //        if (_context.user.Any(x => x.email == registrationUser.Email))
-        //        {
-        //            return BadRequest("Account already exists.");
-        //        }
-        //        else
-        //        {
-        //            return BadRequest("Username already exists.");
-        //        }
-        //    }
-
-        //    //all requirements met to save the user in db
-        //    UserModel user = new(registrationUser);
-        //    _context.user.Add(user);
-        //    _context.SaveChanges();
-        //    return CreatedAtAction("GetUser", new { id = user.ID }, user);
-        //}
-
-        /// <summary>
-        /// registers the user
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         [HttpPost("Register")]
         public IActionResult Register(UserRegistrationModel registrationUser)
         {
@@ -104,6 +72,9 @@ namespace sstWebAPI.Controllers
             {
                 return BadRequest(alertMessage);
             }
+
+            //nicht sicher hiermit
+            registrationUser.Email = registrationUser.Email.ToLower();
 
             //checks if account or username already exists in db
             if (_context.user.Any(x => x.email == registrationUser.Email || x.username == registrationUser.Username))
@@ -118,9 +89,9 @@ namespace sstWebAPI.Controllers
                 }
             }
 
-            if (_context.register_application.Any(y => y.email == registrationUser.Email || y.username == registrationUser.Username))
+            if (_context.registration_application.Any(y => y.email == registrationUser.Email || y.username == registrationUser.Username))
             {
-                if (_context.register_application.Any(y => y.email == registrationUser.Email))
+                if (_context.registration_application.Any(y => y.email == registrationUser.Email))
                 {
                     return BadRequest("Application was already send for this email");
                 }
@@ -130,12 +101,76 @@ namespace sstWebAPI.Controllers
                 }
             }
 
+            if (!UserRoles.Roles.Contains(registrationUser.Role))
+            {
+                registrationUser.Role = UserRoles.Employee;
+            }
+
             //all requirements met to save the application in db
             RegistrationModel application = new(registrationUser);
-            _context.register_application.Add(application);
+            _context.registration_application.Add(application);
             _context.SaveChanges();
-            return Created(); //CreatedAtAction("GetApplication", new { id = application.ID }, application);
+            return Created(); 
         }
+
+        /// <summary>
+        /// get all registration applications
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet("GetRegisterApplications")]
+        [Authorize(Roles = UserRoles.Admin)]
+        public IActionResult GetRegisterApplications()
+        {
+            var list = _context.registration_application.ToList();
+
+            if (!list.Any())
+            {
+                return BadRequest("No applications found");
+            }
+
+            return Ok(list);
+        }
+
+        /// <summary>
+        /// accept or deny registration application
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        ///
+        [HttpPost("EditRegistrationRequest")]
+        [Authorize(Roles = UserRoles.Admin)]
+        public IActionResult EditRegistrationRequest(EditRegistrationApplicationModel request)
+        {
+            RegistrationModel? registrationModel = _context.registration_application.Find(request.ID);
+
+            if (registrationModel == null)
+            {
+                return BadRequest("Application does not exist");
+            }
+
+            if (request.AcceptOrDecline)
+            {
+                UserModel userModel = new UserModel(registrationModel);
+
+                if(request.EditRole != null)
+                {
+                   if(UserRoles.Roles.Contains(request.EditRole.ToLower()))
+                    {
+                        userModel.role = request.EditRole;
+                    }
+                }
+
+                _context.user.Add(userModel);
+                _context.SaveChanges();
+            }
+
+            _context.registration_application.Remove(registrationModel);
+            _context.SaveChanges();
+
+            return Created();
+        }
+
 
         #region private helper funtions
 

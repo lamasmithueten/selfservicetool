@@ -1,10 +1,10 @@
 ﻿using System.Text.RegularExpressions;
-using sstWebAPI.Models.Constants;
+using sstWebAPI.Constants;
 
 namespace sstWebAPI.Models.DTO
 {
     public class UserRegistrationModel
-    {
+    { 
         #region properties
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace sstWebAPI.Models.DTO
             }
 
             //checks if the given role is valid
-            string[] roles = [UserRoles.Admin, UserRoles.Management, UserRoles.Admin];
+            string[] roles = [UserRoles.Employee, UserRoles.Management, UserRoles.Admin];
             if (!roles.Contains(Role))
             {
                 alertMessage = "The role is not valid.";
