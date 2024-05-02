@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+WORKDIR /source
+	
+COPY selfservicetool/sstWebAPI/*.sln .
+COPY selfservicetool/sstWebAPI/sstWebAPI/*.csproj ./sstWebAPI/
+RUN dotnet restore
+
+
+COPY selfservicetool/sstWebAPI/. ./sstWebAPI/
+WORKDIR /source/sstWebAPI
+RUN dotnet restore
+RUN dotnet publish -c release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app ./
+
+RUN sed -i 's/server=localhost/server=172.17.0.1/g' /app/appsettings.json
+
+ENTRYPOINT ["dotnet", "sstWebAPI.dll"]
