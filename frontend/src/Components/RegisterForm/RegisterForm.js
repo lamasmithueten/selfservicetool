@@ -55,7 +55,7 @@ function RegistrationForm({ toggleForm }) {
       const response = await axios.post(
         "https://api.mwerr.de/api/Authentication/Register",
         formData,
-        headers
+        { headers: headers }
       );
       console.log("User registered successfully:", response.data);
       message.success(
