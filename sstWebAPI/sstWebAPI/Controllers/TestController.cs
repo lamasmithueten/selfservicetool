@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
@@ -6,6 +7,7 @@ using sstWebAPI.Models.DTO;
 
 namespace sstWebAPI.Controllers
 {
+    [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class TestController : ControllerBase
