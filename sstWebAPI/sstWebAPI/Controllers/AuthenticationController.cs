@@ -13,7 +13,6 @@ using sstWebAPI.Models.DTO;
 
 namespace sstWebAPI.Controllers
 {
-    [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
