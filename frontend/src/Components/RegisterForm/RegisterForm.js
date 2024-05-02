@@ -58,12 +58,10 @@ function RegistrationForm({ toggleForm }) {
         { headers: headers }
       );
       console.log("User registered successfully:", response.data);
-      if (response.status === 409) {
-        message.error(
-          "Benutzername oder E-Mail schon bereits registriert",
-          4000
-        );
-      } else if (response.status === 204) {
+      console.log(response);
+      console.log(response.status);
+      console.log("hello");
+      if (response.status === 204) {
         message.success(
           "Registrierung ist erfolgreich, Sie können sich jetzt anmelden",
           4000
@@ -89,6 +87,9 @@ function RegistrationForm({ toggleForm }) {
       });
     } catch (error) {
       console.error("Error registering user:", error);
+      if (error.response && error.response.status === 409) {
+        message.error("Benutzername oder E-Mail bereits registriert", 4000);
+      }
     }
   };
 
