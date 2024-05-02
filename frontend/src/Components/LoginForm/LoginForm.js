@@ -5,7 +5,7 @@ import LoginRequest from "./LoginRequest";
 
 function LoginForm({ toggleForm }) {
   const [formData, setFormData] = useState({
-    username: "",
+    usernameOrEmail: "",
     password: "",
   });
 
@@ -34,9 +34,9 @@ function LoginForm({ toggleForm }) {
         <div className="input-box">
           <input
             type="text"
-            name="username"
-            placeholder="Benutzername"
-            value={formData.username}
+            name="usernameOrEmail"
+            placeholder="Benutzername / E-Mail"
+            value={formData.usernameOrEmail}
             onChange={handleChange}
           />
           <CiUser className="icon" />
