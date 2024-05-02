@@ -62,7 +62,7 @@ namespace sstWebAPI.Controllers
         }
 
         [HttpDelete("DeleteUser")]
-        public ActionResult DeleteUser(int id)
+        public ActionResult DeleteUser(Guid id)
         {
             UserModel? user = _context.user.Find(id);
             if (user == null)
@@ -102,7 +102,7 @@ namespace sstWebAPI.Controllers
             UserModel user = new(registrationuser);
             _context.user.Add(user);
             _context.SaveChanges();
-            return CreatedAtAction("getuser", new { id = user.ID }, user);
+            return Created();
         }
     }
 }
