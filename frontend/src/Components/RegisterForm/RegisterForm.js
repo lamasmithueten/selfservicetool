@@ -39,7 +39,7 @@ function RegistrationForm({ toggleForm }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const errors = validateForm(formData); // Validate form data
+    const errors = validateForm(formData);
     if (Object.values(errors).some((error) => error !== "")) {
       setFormErrors(errors);
       message.error("Ein Fehler ist bei der Registrierung aufgetreten", 4000);
