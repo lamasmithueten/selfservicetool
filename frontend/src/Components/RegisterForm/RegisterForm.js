@@ -12,7 +12,7 @@ function RegistrationForm({ toggleForm }) {
     username: "",
     email: "",
     password: "",
-    role: "Mitarbeiter",
+    role: "employee",
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -58,10 +58,17 @@ function RegistrationForm({ toggleForm }) {
         { headers: headers }
       );
       console.log("User registered successfully:", response.data);
-      message.success(
-        "Registrierung ist erfolgreich, Sie können sich jetzt anmelden",
-        4000
-      );
+      if (response.status === 409) {
+        message.error(
+          "Benutzername oder E-Mail schon bereits registriert",
+          4000
+        );
+      } else if (response.status === 204) {
+        message.success(
+          "Registrierung ist erfolgreich, Sie können sich jetzt anmelden",
+          4000
+        );
+      }
 
       // Reset form data and errors
       setFormData({
@@ -70,7 +77,7 @@ function RegistrationForm({ toggleForm }) {
         username: "",
         email: "",
         password: "",
-        role: "Mitarbeiter",
+        role: "employee",
       });
       setFormErrors({
         firstname: "",
@@ -174,7 +181,7 @@ function RegistrationForm({ toggleForm }) {
           <label>
             <input
               type="radio"
-              value="Mitarbeiter"
+              value="employee"
               name="role"
               onChange={handleChange}
               defaultChecked
@@ -184,7 +191,7 @@ function RegistrationForm({ toggleForm }) {
           <label>
             <input
               type="radio"
-              value="Management"
+              value="admin"
               name="role"
               onChange={handleChange}
             />{" "}
