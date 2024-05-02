@@ -98,7 +98,7 @@
 }
 
 .wrapper .error-message {
-  font-size: 14px;
+  font-size: 10px;
   text-align: left;
   margin: 5px 10 15px;
 }
@@ -113,4 +113,15 @@
 .input-box error {
   color: red;
   border: 2px solid rgba(255, 0, 0, 0.2);
+}
+
+.names {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.names .input-box {
+  margin: 0;
+  margin-top: 10%;
 }

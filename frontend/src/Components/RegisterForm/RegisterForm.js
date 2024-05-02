@@ -7,6 +7,8 @@ import { validateForm } from "./RegisterValidation";
 
 function RegistrationForm({ toggleForm }) {
   const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     password: "",
@@ -14,6 +16,8 @@ function RegistrationForm({ toggleForm }) {
   });
 
   const [formErrors, setFormErrors] = useState({
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     password: "",
@@ -42,9 +46,16 @@ function RegistrationForm({ toggleForm }) {
       return;
     }
     try {
+      const headers = {
+        accept: "*/*",
+        "x-api-key": "keyTest",
+        "Content-Type": "application/json",
+      };
+
       const response = await axios.post(
-        "http://cheeky/breeky/chebureky",
-        formData
+        "https://api.mwerr.de/api/Authentication/Register",
+        formData,
+        headers
       );
       console.log("User registered successfully:", response.data);
       message.success(
@@ -54,12 +65,16 @@ function RegistrationForm({ toggleForm }) {
 
       // Reset form data and errors
       setFormData({
+        firstname: "",
+        lastname: "",
         username: "",
         email: "",
         password: "",
         role: "Mitarbeiter",
       });
       setFormErrors({
+        firstname: "",
+        lastname: "",
         username: "",
         email: "",
         password: "",
@@ -73,7 +88,42 @@ function RegistrationForm({ toggleForm }) {
   return (
     <div className="wrapper">
       <h1>Registrieren</h1>
-      <form onSubmit={handleSubmit} className="">
+      <form onSubmit={handleSubmit}>
+        {" "}
+        <div className="names">
+          <div
+            className={`input-box ${formErrors.firstname && "error-message"}`}
+          >
+            <input
+              type="text"
+              name="firstname"
+              placeholder="Vorname"
+              value={formData.firstname}
+              onChange={handleChange}
+              maxLength={50}
+            />
+            <CiUser className="icon" />
+            {formErrors.firstname && (
+              <p className="error-message">{formErrors.firstname}</p>
+            )}
+          </div>
+          <div
+            className={`input-box ${formErrors.lastname && "error-message"}`}
+          >
+            <input
+              type="text"
+              name="lastname"
+              placeholder="Nachname"
+              value={formData.lastname}
+              onChange={handleChange}
+              maxLength={50}
+            />
+            <CiUser className="icon" />
+            {formErrors.lastname && (
+              <p className="error-message">{formErrors.lastname}</p>
+            )}
+          </div>
+        </div>
         <div className={`input-box ${formErrors.username && "error-message"}`}>
           <input
             type="text"
@@ -88,7 +138,6 @@ function RegistrationForm({ toggleForm }) {
             <p className="error-message">{formErrors.username}</p>
           )}
         </div>
-
         <div className={`input-box ${formErrors.email && "error-message"}`}>
           <input
             type="email"
@@ -103,7 +152,6 @@ function RegistrationForm({ toggleForm }) {
             <p className="error-message">{formErrors.email}</p>
           )}
         </div>
-
         <div className={`input-box ${formErrors.password && "error-message"}`}>
           <input
             type={showPassword ? "text" : "password"} // Toggle input type based on showPassword state
@@ -122,7 +170,6 @@ function RegistrationForm({ toggleForm }) {
             <p className="error-message">{formErrors.password}</p>
           )}
         </div>
-
         <div className="role">
           <label>
             <input
