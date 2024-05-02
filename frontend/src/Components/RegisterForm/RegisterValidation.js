@@ -1,13 +1,32 @@
 const validateForm = (formData) => {
   let errors = {
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     password: "",
     role: "",
   };
 
+  const nameRegex = /^[a-zA-Z]+$/; // Regex to match only letters
+  const usernameRegex = /^[a-zA-Z0-9]+$/; // Regex to match letters and numbers
+
+  if (!formData.firstname) {
+    errors.firstname = "* Vorname darf nicht leer sein";
+  } else if (!nameRegex.test(formData.firstname)) {
+    errors.firstname = "* Vorname darf nur Buchstaben enthalten";
+  }
+
+  if (!formData.lastname) {
+    errors.lastname = "* Nachname darf nicht leer sein";
+  } else if (!nameRegex.test(formData.lastname)) {
+    errors.lastname = "* Nachname darf nur Buchstaben enthalten";
+  }
+
   if (!formData.username) {
     errors.username = "* Benutzername darf nicht leer sein";
+  } else if (!usernameRegex.test(formData.username)) {
+    errors.username = "* Benutzername darf nur Buchstaben und Zahlen enthalten";
   }
 
   if (!formData.email) {
