@@ -1,4 +1,6 @@
-﻿namespace sstWebAPI.ApiKey
+﻿using Microsoft.Extensions.Primitives;
+
+namespace sstWebAPI.ApiKey
 {
     public class ApiKeyAuthMiddleware
     {
@@ -13,7 +15,7 @@
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if(!context.Request.Headers.TryGetValue(ApiKeyConstants.ApiKeyHeaderName, out var extractedApiKey)) 
+            if (!GetHeaderValue(context, out var extractedApiKey))
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync("API Key missing");
@@ -30,6 +32,11 @@
             }
 
             await _next(context);
+        }
+
+        private Boolean GetHeaderValue(HttpContext context, out StringValues extractedValue)
+        {
+            return context.Request.Headers.TryGetValue(ApiKeyConstants.ApiKeyHeaderName, out extractedValue);
         }
     }
 }
