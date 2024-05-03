@@ -127,7 +127,7 @@ namespace sstWebAPI.Controllers
 
             if (!list.Any())
             {
-                return BadRequest("No applications found");
+                return NotFound("No applications found");
             }
 
             return Ok(list);
@@ -147,7 +147,7 @@ namespace sstWebAPI.Controllers
 
             if (registrationModel == null)
             {
-                return BadRequest("Application does not exist");
+                return NotFound("Application does not exist");
             }
 
             if (request.AcceptOrDecline)

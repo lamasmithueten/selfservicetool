@@ -91,11 +91,11 @@ namespace sstWebAPI.Controllers
             {
                 if (_context.user.Any(x => x.email == registrationuser.Email))
                 {
-                    return BadRequest("account already exists.");
+                    return Conflict("account already exists.");
                 }
                 else
                 {
-                    return BadRequest("username already exists.");
+                    return Conflict("username already exists.");
                 }
             }
 
