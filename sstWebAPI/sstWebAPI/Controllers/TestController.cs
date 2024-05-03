@@ -75,8 +75,8 @@ namespace sstWebAPI.Controllers
             return Ok(user);
         }
 
-        [HttpPost("registerUser")]
-        public IActionResult register(UserRegistrationModel registrationuser)
+        [HttpPost("RegisterUser")]
+        public IActionResult Register(UserRegistrationModel registrationuser)
         {
             //after this check every parameter of registrationuser is not null or consists of only whitespaces
             if (!registrationuser.IsValid(out string alertmessage))
