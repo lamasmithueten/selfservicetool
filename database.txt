@@ -1,30 +1,30 @@
-2024-05-06 18:51:28+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:11.3.2+maria~ubu2204 started.
-2024-05-06 18:51:29+00:00 [Warn] [Entrypoint]: /sys/fs/cgroup///memory.pressure not writable, functionality unavailable to MariaDB
-2024-05-06 18:51:29+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
-2024-05-06 18:51:29+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:11.3.2+maria~ubu2204 started.
-2024-05-06 18:51:29+00:00 [Note] [Entrypoint]: MariaDB upgrade not required
-2024-05-06 18:51:29 0 [Note] Starting MariaDB 11.3.2-MariaDB-1:11.3.2+maria~ubu2204 source revision 068a6819eb63bcb01fdfa037c9bf3bf63c33ee42 as process 1
-2024-05-06 18:51:29 0 [Note] InnoDB: Compressed tables use zlib 1.2.11
-2024-05-06 18:51:29 0 [Note] InnoDB: Number of transaction pools: 1
-2024-05-06 18:51:29 0 [Note] InnoDB: Using crc32 + pclmulqdq instructions
-2024-05-06 18:51:29 0 [Note] mariadbd: O_TMPFILE is not supported on /tmp (disabling future attempts)
-2024-05-06 18:51:29 0 [Warning] mariadbd: io_uring_queue_init() failed with errno 1
-2024-05-06 18:51:29 0 [Warning] InnoDB: liburing disabled: falling back to innodb_use_native_aio=OFF
-2024-05-06 18:51:29 0 [Note] InnoDB: Initializing buffer pool, total size = 128.000MiB, chunk size = 2.000MiB
-2024-05-06 18:51:29 0 [Note] InnoDB: Completed initialization of buffer pool
-2024-05-06 18:51:29 0 [Note] InnoDB: File system buffers for log disabled (block size=512 bytes)
-2024-05-06 18:51:29 0 [Note] InnoDB: End of log at LSN=139271
-2024-05-06 18:51:29 0 [Note] InnoDB: Opened 3 undo tablespaces
-2024-05-06 18:51:29 0 [Note] InnoDB: 128 rollback segments in 3 undo tablespaces are active.
-2024-05-06 18:51:29 0 [Note] InnoDB: Setting file './ibtmp1' size to 12.000MiB. Physically writing the file full; Please wait ...
-2024-05-06 18:51:29 0 [Note] InnoDB: File './ibtmp1' size is now 12.000MiB.
-2024-05-06 18:51:29 0 [Note] InnoDB: log sequence number 139271; transaction id 193
-2024-05-06 18:51:29 0 [Note] Plugin 'FEEDBACK' is disabled.
-2024-05-06 18:51:29 0 [Note] Plugin 'wsrep-provider' is disabled.
-2024-05-06 18:51:29 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/ib_buffer_pool
-2024-05-06 18:51:29 0 [Note] InnoDB: Buffer pool(s) load completed at 240506 18:51:29
-2024-05-06 18:51:29 0 [Note] Server socket created on IP: '0.0.0.0'.
-2024-05-06 18:51:29 0 [Note] Server socket created on IP: '::'.
-2024-05-06 18:51:29 0 [Note] mariadbd: Event Scheduler: Loaded 0 events
-2024-05-06 18:51:29 0 [Note] mariadbd: ready for connections.
+2024-05-06 19:46:14+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:11.3.2+maria~ubu2204 started.
+2024-05-06 19:46:15+00:00 [Warn] [Entrypoint]: /sys/fs/cgroup///memory.pressure not writable, functionality unavailable to MariaDB
+2024-05-06 19:46:15+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+2024-05-06 19:46:15+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:11.3.2+maria~ubu2204 started.
+2024-05-06 19:46:15+00:00 [Note] [Entrypoint]: MariaDB upgrade not required
+2024-05-06 19:46:15 0 [Note] Starting MariaDB 11.3.2-MariaDB-1:11.3.2+maria~ubu2204 source revision 068a6819eb63bcb01fdfa037c9bf3bf63c33ee42 as process 1
+2024-05-06 19:46:15 0 [Note] InnoDB: Compressed tables use zlib 1.2.11
+2024-05-06 19:46:15 0 [Note] InnoDB: Number of transaction pools: 1
+2024-05-06 19:46:15 0 [Note] InnoDB: Using crc32 + pclmulqdq instructions
+2024-05-06 19:46:15 0 [Note] mariadbd: O_TMPFILE is not supported on /tmp (disabling future attempts)
+2024-05-06 19:46:15 0 [Warning] mariadbd: io_uring_queue_init() failed with errno 1
+2024-05-06 19:46:15 0 [Warning] InnoDB: liburing disabled: falling back to innodb_use_native_aio=OFF
+2024-05-06 19:46:15 0 [Note] InnoDB: Initializing buffer pool, total size = 128.000MiB, chunk size = 2.000MiB
+2024-05-06 19:46:15 0 [Note] InnoDB: Completed initialization of buffer pool
+2024-05-06 19:46:15 0 [Note] InnoDB: File system buffers for log disabled (block size=512 bytes)
+2024-05-06 19:46:15 0 [Note] InnoDB: End of log at LSN=139271
+2024-05-06 19:46:15 0 [Note] InnoDB: Opened 3 undo tablespaces
+2024-05-06 19:46:15 0 [Note] InnoDB: 128 rollback segments in 3 undo tablespaces are active.
+2024-05-06 19:46:15 0 [Note] InnoDB: Setting file './ibtmp1' size to 12.000MiB. Physically writing the file full; Please wait ...
+2024-05-06 19:46:15 0 [Note] InnoDB: File './ibtmp1' size is now 12.000MiB.
+2024-05-06 19:46:15 0 [Note] InnoDB: log sequence number 139271; transaction id 193
+2024-05-06 19:46:15 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/ib_buffer_pool
+2024-05-06 19:46:15 0 [Note] Plugin 'FEEDBACK' is disabled.
+2024-05-06 19:46:15 0 [Note] Plugin 'wsrep-provider' is disabled.
+2024-05-06 19:46:15 0 [Note] InnoDB: Buffer pool(s) load completed at 240506 19:46:15
+2024-05-06 19:46:15 0 [Note] Server socket created on IP: '0.0.0.0'.
+2024-05-06 19:46:15 0 [Note] Server socket created on IP: '::'.
+2024-05-06 19:46:15 0 [Note] mariadbd: Event Scheduler: Loaded 0 events
+2024-05-06 19:46:15 0 [Note] mariadbd: ready for connections.
 Version: '11.3.2-MariaDB-1:11.3.2+maria~ubu2204'  socket: '/run/mysqld/mysqld.sock'  port: 3306  mariadb.org binary distribution
