@@ -8,5 +8,4 @@ jobs:
   logging:
     runs-on: self-hosted
     steps:
-      - run: git stash; git pull; docker logs git-frontend-1 >& frontend.txt; docker logs git-api-1 >& api.txt; docker logs git-database-1 >& database.txt; git add .; git commit -m "$(date)"; git push
-        working-directory: /home/git/logs/selfservicetool
+      - run: docker logs git-frontend-1 >& frontend.txt; docker logs git-api-1 >& api.txt; docker logs git-database-1 >& database.txt; scp *.txt werr@webserver:/webserver/logs; rm *.txt
