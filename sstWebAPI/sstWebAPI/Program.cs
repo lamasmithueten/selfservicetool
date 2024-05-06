@@ -51,6 +51,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
     .WriteTo.File("logs/httpLogs.txt")
     .CreateLogger();
 
