@@ -7,6 +7,7 @@ using SelfServiceWebAPI;
 using sstWebAPI.ApiKey;
 using sstWebAPI.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -49,6 +50,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("logs/httpLogs.txt")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 var app = builder.Build();
 
 app.UseCors(policy =>
@@ -62,6 +69,8 @@ app.UseCors(policy =>
 app.UseSwagger();
 app.UseSwaggerUI();
 // }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

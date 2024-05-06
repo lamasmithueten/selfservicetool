@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace sstWebAPI.Controllers
 {
@@ -13,6 +14,8 @@ namespace sstWebAPI.Controllers
         [HttpGet]
         public string Info()
         {
+            Log.Information("Get-request for 'api/Info'");
+
             return "WebApi by Lukas and Nicolas for Sofware Engineering";
         }
     }

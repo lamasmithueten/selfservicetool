@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Models.DTO;
+using Serilog;
 
 namespace sstWebAPI.Controllers
 {
@@ -21,6 +20,7 @@ namespace sstWebAPI.Controllers
         [HttpGet("GetAllUsers")]
         public List<UserModel> GetAllUsers()
         {
+            Log.Information("Get-request for 'api/GetAllUsers'");
             return [.. _context.user];
         }
 
@@ -32,6 +32,7 @@ namespace sstWebAPI.Controllers
             {
                 return NotFound("Found no user with that id");
             }
+            Log.Information("Get-request for 'api/GetUserById' => " + id.ToString());
             return Ok(user);
         }
 
@@ -43,6 +44,7 @@ namespace sstWebAPI.Controllers
             {
                 return NotFound("Found no user with that name");
             }
+            Log.Information("Get-request for 'api/GetUserByUsername' => " + name);
             return Ok(user);
         }
 

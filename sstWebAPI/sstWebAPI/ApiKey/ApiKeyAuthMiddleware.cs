@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Primitives;
+using Serilog;
 
 namespace sstWebAPI.ApiKey
 {
@@ -19,6 +20,7 @@ namespace sstWebAPI.ApiKey
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync("API Key missing");
+                Log.Error("API Key missing");
                 return;
             }
 
@@ -27,10 +29,11 @@ namespace sstWebAPI.ApiKey
             if(!apiKey.Equals(extractedApiKey))
             {
                 context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("Invalid API Key");
+                await context.Response.WriteAsync("Invalid API Key => " + apiKey);
+                Log.Error("Invalid API Key");
                 return;
             }
-
+            Log.Information("API Key Accepted");
             await _next(context);
         }
 
