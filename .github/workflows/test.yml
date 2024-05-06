@@ -10,7 +10,7 @@ jobs:
     steps:
 # ich muss was ändern damit ich commiten kann
       - run: docker compose -f /home/git/docker-compose.yml down
-      - run: docker-compose -f /home/git/docker-compose.yml build
+      - run: docker compose -f /home/git/docker-compose.yml build
       - run: docker compose -f /home/git/docker-compose.yml up -d
 #       - run: if [[ $(docker ps | awk 'NR!=1' | wc -l) -gt 0 ]] then docker stop $(docker ps -q) && docker rm $(docker ps -aq); fi
 #       - run: git -C /home/git/frontend/selfservicetool pull
