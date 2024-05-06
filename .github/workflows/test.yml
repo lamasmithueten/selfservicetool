@@ -9,14 +9,14 @@ jobs:
     runs-on: self-hosted
     steps:
 # ich muss was ändern damit ich commiten kann
-#      - run: docker compose -f /home/git/docker-compose.yml down
-#      - run: docker-compose -f /home/git/docker-compose.yml build
-#      - run: docker compose -f /home/git/docker-compose.yml up -d
-       - run: if [[ $(docker ps | awk 'NR!=1' | wc -l) -gt 0 ]] then docker stop $(docker ps -q) && docker rm $(docker ps -aq); fi
-       - run: git -C /home/git/frontend/selfservicetool pull
-       - run: docker build /home/git/frontend -t frontend
-       - run: git -C /home/git/backend/selfservicetool pull
-       - run: docker build /home/git/backend -t api
-       - run: docker run -dp 8080:8080 --name api api
-       - run: docker run -dp 80:3000 --name frontend frontend
-       - run: docker run -dp 3306:3306 -e MYSQL_ROOT_PASSWORD=linux -v mysql:/var/lib/mysql --name database mariadb
+      - run: docker compose -f /home/git/docker-compose.yml down
+      - run: docker-compose -f /home/git/docker-compose.yml build
+      - run: docker compose -f /home/git/docker-compose.yml up -d
+#       - run: if [[ $(docker ps | awk 'NR!=1' | wc -l) -gt 0 ]] then docker stop $(docker ps -q) && docker rm $(docker ps -aq); fi
+#       - run: git -C /home/git/frontend/selfservicetool pull
+#       - run: docker build /home/git/frontend -t frontend
+#       - run: git -C /home/git/backend/selfservicetool pull
+#       - run: docker build /home/git/backend -t api
+#       - run: docker run -dp 8080:8080 --name api api
+#       - run: docker run -dp 80:3000 --name frontend frontend
+#       - run: docker run -dp 3306:3306 -e MYSQL_ROOT_PASSWORD=linux -v mysql:/var/lib/mysql --name database mariadb
