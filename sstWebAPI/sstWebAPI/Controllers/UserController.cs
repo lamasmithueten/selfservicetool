@@ -39,11 +39,11 @@ namespace SelfServiceWebAPI.Controllers
             {
                 if (_context.user.Any(x => x.email == registrationUser.Email))
                 {
-                    return Conflict("Account already exists.");
+                    return Conflict();
                 }
                 else
                 {
-                    return Conflict("Username already exists.");
+                    return Conflict();
                 }
             }
 
@@ -52,11 +52,11 @@ namespace SelfServiceWebAPI.Controllers
             {
                 if (_context.registration_application.Any(y => y.email == registrationUser.Email))
                 {
-                    return Conflict("Application was already send for this email");
+                    return Conflict();
                 }
                 else
                 {
-                    return Conflict("Username already exists.");
+                    return Conflict();
                 }
             }
 

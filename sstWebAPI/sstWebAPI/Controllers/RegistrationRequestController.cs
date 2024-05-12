@@ -32,7 +32,7 @@ namespace sstWebAPI.Controllers
 
             if (list.Count == 0)
             {
-                return NotFound("No applications found");
+                return NotFound();
             }
 
             return Ok(list);
@@ -52,7 +52,7 @@ namespace sstWebAPI.Controllers
 
             if (registrationModel == null)
             {
-                return NotFound("Application does not exist");
+                return NotFound();
             }
 
             if (request.AcceptOrDecline)

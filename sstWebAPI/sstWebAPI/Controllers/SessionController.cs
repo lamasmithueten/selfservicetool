@@ -33,21 +33,25 @@ namespace sstWebAPI.Controllers
                 return NotFound($"{loginUser.usernameOrEmail} not found in database");
             }
 
+            //get password hashes and salt from the database
+            if(string.IsNullOrWhiteSpace(user.password) && string.IsNullOrWhiteSpace(loginUser.password))
+            {
+                return BadRequest();
+            }
+
+            string passwordHashDB = user.password[..user.password.IndexOf(':')];
+            string salt = user.password[(user.password.IndexOf(':') + 1)..];
+            string passwordHashLogin = CalcHash.GetHashString(loginUser.password, salt);
+
             //checks if the hashes of both passwords are matching
-
-            string passwordDB = user.password[..user.password.IndexOf(":")];
-            string passwordLogin = loginUser.password;
-            string salt = user.password[(user.password.IndexOf(":") + 1)..];
-
-            if (!string.IsNullOrWhiteSpace(user.password) && !string.IsNullOrWhiteSpace(loginUser.password)
-                && CalcHash.GetHashString(passwordLogin, salt).Equals(passwordDB))
+            if (passwordHashLogin.Equals(passwordHashDB))
             {
                 //Generates JWT Token for the User and returns it
                 return Ok(GenerateToken(user));
             }
             else
             {
-                return BadRequest($"wrong password for user {loginUser.usernameOrEmail}");
+                return BadRequest();
             }
         }
 
