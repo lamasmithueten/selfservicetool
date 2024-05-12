@@ -3,6 +3,7 @@ using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Models.DTO;
 using Serilog;
+using sstWebAPI.Helpers;
 
 namespace sstWebAPI.Controllers
 {
@@ -51,6 +52,8 @@ namespace sstWebAPI.Controllers
         [HttpPost("CreateUser")]
         public ActionResult CreateUser(UserModel user)
         {
+            string salt = CalcHash.GenerateSalt();
+            user.password = $"{CalcHash.GetHashString(user.password, salt)}:{salt}";
             _context.user.Add(user);
             _context.SaveChanges();
             return Ok(user);

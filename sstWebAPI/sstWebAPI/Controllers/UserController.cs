@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Constants;
+using sstWebAPI.Helpers;
 using sstWebAPI.Models;
 using sstWebAPI.Models.DTO;
 
@@ -44,6 +47,7 @@ namespace SelfServiceWebAPI.Controllers
                 }
             }
 
+            //checks if application was already send for this account
             if (_context.registration_application.Any(y => y.email == registrationUser.Email || y.username == registrationUser.Username))
             {
                 if (_context.registration_application.Any(y => y.email == registrationUser.Email))
@@ -60,6 +64,10 @@ namespace SelfServiceWebAPI.Controllers
             {
                 registrationUser.Role = UserRoles.Employee;
             }
+
+            //hashes the password
+            string salt = CalcHash.GenerateSalt();
+            registrationUser.Password = $"{CalcHash.GetHashString(registrationUser.Password, salt)}:{salt}";
 
             //all requirements met to save the application in db
             RegistrationModel application = new(registrationUser);

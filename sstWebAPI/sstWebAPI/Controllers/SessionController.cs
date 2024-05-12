@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
+using sstWebAPI.Helpers;
 using sstWebAPI.Models.DTO;
 
 namespace sstWebAPI.Controllers
@@ -33,8 +34,13 @@ namespace sstWebAPI.Controllers
             }
 
             //checks if the hashes of both passwords are matching
-            if (!String.IsNullOrWhiteSpace(user.password) && !String.IsNullOrWhiteSpace(loginUser.password)
-                && loginUser.password.Equals(user.password))
+
+            string passwordDB = user.password.Substring(0, user.password.IndexOf(":"));
+            string passwordLogin = loginUser.password;
+            string salt = user.password.Substring(user.password.IndexOf(":") + 1);
+
+            if (!string.IsNullOrWhiteSpace(user.password) && !string.IsNullOrWhiteSpace(loginUser.password)
+                && CalcHash.GetHashString(passwordLogin, salt).Equals(passwordDB))
             {
                 //Generates JWT Token for the User and returns it
                 return Ok(GenerateToken(user));
