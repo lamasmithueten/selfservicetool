@@ -26,7 +26,7 @@ namespace sstWebAPI.Controllers
         public IActionResult CreateSession(UserLoginModel loginUser)
         {
             //gets the whole record of the user with the username/email specified in loginUser
-            UserModel? user = _context.user.Where(x => x.username == loginUser.usernameOrEmail || x.email == loginUser.usernameOrEmail.ToLower()).SingleOrDefault();
+            UserModel? user = _context.user.Where(x => x.username.Equals(loginUser.usernameOrEmail) || x.email.Equals(loginUser.usernameOrEmail, StringComparison.CurrentCultureIgnoreCase)).SingleOrDefault();
 
             if (user == null)
             {
@@ -35,9 +35,9 @@ namespace sstWebAPI.Controllers
 
             //checks if the hashes of both passwords are matching
 
-            string passwordDB = user.password.Substring(0, user.password.IndexOf(":"));
+            string passwordDB = user.password[..user.password.IndexOf(":")];
             string passwordLogin = loginUser.password;
-            string salt = user.password.Substring(user.password.IndexOf(":") + 1);
+            string salt = user.password[(user.password.IndexOf(":") + 1)..];
 
             if (!string.IsNullOrWhiteSpace(user.password) && !string.IsNullOrWhiteSpace(loginUser.password)
                 && CalcHash.GetHashString(passwordLogin, salt).Equals(passwordDB))

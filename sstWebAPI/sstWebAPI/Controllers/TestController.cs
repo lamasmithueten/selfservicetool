@@ -9,14 +9,9 @@ namespace sstWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class TestController(AppDbContext context) : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public TestController(AppDbContext context, IConfiguration config)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         [HttpGet("GetAllUsers")]
         public List<UserModel> GetAllUsers()

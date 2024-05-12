@@ -30,7 +30,7 @@ namespace sstWebAPI.Controllers
         {
             var list = _context.registration_application.ToList();
 
-            if (!list.Any())
+            if (list.Count == 0)
             {
                 return NotFound("No applications found");
             }
@@ -57,7 +57,7 @@ namespace sstWebAPI.Controllers
 
             if (request.AcceptOrDecline)
             {
-                UserModel userModel = new UserModel(registrationModel);
+                UserModel userModel = new(registrationModel);
 
                 if (request.EditRole != null)
                 {

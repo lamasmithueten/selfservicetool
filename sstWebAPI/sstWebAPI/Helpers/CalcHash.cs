@@ -7,7 +7,7 @@ namespace sstWebAPI.Helpers
     {
         public static string GetHashString(string inputString, string salt)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             foreach (byte b in GetHash(inputString + salt))
                 sb.Append(b.ToString("X2"));
 
