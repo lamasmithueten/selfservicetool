@@ -9,13 +9,13 @@ using sstWebAPI.Models.DTO;
 namespace sstWebAPI.Controllers
 {
     /// <summary>
-    /// constructor for AuthenticationController
+    /// constructor for RegistrationApplicationController
     /// </summary>
     /// <param name="context"></param>
     /// <param name="config"></param>
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class RegistrationRequestController(AppDbContext context) : ControllerBase
+    public class RegistrationApplicationController(AppDbContext context) : ControllerBase
     {
         private readonly AppDbContext _context = context;
 
@@ -68,7 +68,6 @@ namespace sstWebAPI.Controllers
                 }
 
                 _context.user.Add(userModel);
-                _context.SaveChanges();
             }
 
             _context.registration_application.Remove(registrationModel);
