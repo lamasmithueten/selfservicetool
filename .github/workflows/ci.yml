@@ -1,0 +1,17 @@
+name: selfservicetool
+run-name: ${{ github.actor }} fragt sich warum in der Demo so viele Emojis gespammt werden
+on: 
+  push:
+    branches:
+      - !main
+      - !logs
+jobs:
+  webfrontend:
+    runs-on: self-hosted
+    steps:
+# ich muss was ändern damit ich commiten kann
+      - run: git -C /home/git/backend/selfservicetool pull
+      - run: git -C /home/git/frontend/selfservicetool pull
+      - run: docker compose -f /home/git/docker-compose.yml down
+      - run: docker compose -f /home/git/docker-compose.yml build
+      - run: docker compose -f /home/git/docker-compose.yml up -d
