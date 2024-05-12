@@ -15,7 +15,7 @@ namespace sstWebAPI.Controllers
     /// </summary>
     /// <param name="context"></param>
     /// <param name="config"></param>
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class SessionController(AppDbContext context, IConfiguration config) : ControllerBase
     {

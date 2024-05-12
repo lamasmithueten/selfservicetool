@@ -7,7 +7,7 @@ using sstWebAPI.Helpers;
 
 namespace sstWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class TestController(AppDbContext context) : ControllerBase
     {
