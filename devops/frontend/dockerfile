@@ -12,4 +12,4 @@ USER node
 
 RUN npm ci && npm cache clean --force
 
-ENTRYPOINT npm start
+ENTRYPOINT npm run build
