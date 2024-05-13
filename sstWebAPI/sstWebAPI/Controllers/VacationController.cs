@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI;
+using sstWebAPI.Helpers;
 using sstWebAPI.Models.DB;
 using sstWebAPI.Models.DTO;
 using System.Security.Claims;
@@ -46,6 +47,14 @@ namespace sstWebAPI.Controllers
             _context.SaveChanges();
 
             return Created();
+        }
+
+        [HttpGet]
+        public IActionResult WorkdaysCalcTest()
+        {
+            var result = WordkdaysCalc.calcNumberOfWorkdays(new DateOnly(2024,5,13), new DateOnly(2024, 5, 20));
+
+            return Ok(result);
         }
     }
 }
