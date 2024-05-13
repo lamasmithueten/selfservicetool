@@ -10,6 +10,11 @@
         public DateTime first_day { get; set; }
 
         /// <summary>
+        /// Date of the first day of vacation
+        /// </summary>
+        public DateTime last_day { get; set; }
+
+        /// <summary>
         /// number of requested vacation days
         /// </summary>
         public int number_of_days { get; set; }

@@ -28,7 +28,6 @@ namespace SelfServiceWebAPI.Models
             password = userRegistrationModel.Password;
             firstname = userRegistrationModel.Firstname;
             lastname = userRegistrationModel.Lastname;
-            number_of_vacations = 30; // TODO: think about how to set number of vacation
         }
 
         public UserModel(RegistrationModel model)
@@ -40,7 +39,6 @@ namespace SelfServiceWebAPI.Models
             password = model.password;
             firstname = model.firstname;
             lastname = model.lastname;
-            number_of_vacations = 30;
         }
 
         #endregion
@@ -81,11 +79,6 @@ namespace SelfServiceWebAPI.Models
         /// lastname of user
         /// </summary>
         public string lastname { get; set; }
-
-        /// <summary>
-        /// number_of_vacations of user
-        /// </summary>
-        public int? number_of_vacations { get; set; } = null;
 
         #endregion
     }

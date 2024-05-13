@@ -5,19 +5,20 @@ namespace sstWebAPI.Models.DB
 {
     public class VacationApplicationModel
     {
-            #region constructors
+        #region constructors
 
-            /// <summary>
-            /// base constructor | this is needed!
-            /// </summary>
-            public VacationApplicationModel()
-            {
-                ID = Guid.NewGuid();
-                ID_user = Guid.NewGuid();
-                first_day = DateTime.Now;
-                number_of_days = 0;
-                state = "";
-            }
+        /// <summary>
+        /// base constructor | this is needed!
+        /// </summary>
+        public VacationApplicationModel()
+        {
+            ID = Guid.NewGuid();
+            ID_user = Guid.NewGuid();
+            first_day = DateTime.Now;
+            last_day = DateTime.Now;
+            number_of_days = 0;
+            state = "";
+        }
 
         /// <summary>
         /// constructor for creating VacationRequestModel instance with CreateVacationApplicationModel instance
@@ -27,9 +28,9 @@ namespace sstWebAPI.Models.DB
             ID = Guid.NewGuid();
             ID_user = user_id;
             first_day = model.first_day;
+            last_day = model.last_day;
             number_of_days = model.number_of_days;
             state = VacationApplicationStates.Pending;
-            reason = null;
         }
 
         #endregion
@@ -52,6 +53,11 @@ namespace sstWebAPI.Models.DB
         public DateTime first_day { get; set; }
 
         /// <summary>
+        /// Date of the first day of vacation
+        /// </summary>
+        public DateTime last_day { get; set; }
+
+        /// <summary>
         /// number of requested vacation days
         /// </summary>
         public int number_of_days { get; set; }
@@ -68,4 +74,4 @@ namespace sstWebAPI.Models.DB
 
         #endregion
     }
-    }
+}
