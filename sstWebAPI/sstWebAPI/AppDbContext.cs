@@ -11,6 +11,5 @@ namespace SelfServiceWebAPI
         public DbSet<UserModel> user { get; set; }
 
         public DbSet<RegistrationModel> registration_application { get; set; }
-
     }
 }
