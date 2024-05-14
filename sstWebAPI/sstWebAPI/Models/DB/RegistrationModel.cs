@@ -75,6 +75,7 @@ namespace sstWebAPI.Models
         /// </summary>
         public DateTime application_date { get; set; }
 
+
         #endregion
     }
 }
