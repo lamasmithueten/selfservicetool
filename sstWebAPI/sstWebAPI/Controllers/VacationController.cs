@@ -52,7 +52,7 @@ namespace sstWebAPI.Controllers
         [HttpGet]
         public IActionResult WorkdaysCalcTest()
         {
-            var result = WordkdaysCalc.calcNumberOfWorkdays(new DateOnly(2024,5,13), new DateOnly(2024, 5, 20));
+            var result = WordkdaysCalc.calcNumberOfWorkdays(new DateOnly(2024,5,6), new DateOnly(2024, 5, 27));
 
             return Ok(result);
         }
