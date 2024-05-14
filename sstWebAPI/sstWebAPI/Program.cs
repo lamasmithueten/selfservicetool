@@ -55,7 +55,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs/httpLogs.txt")
     .CreateLogger();
 
-builder.Host.UseSerilog();
+//builder.Host.UseSerilog();
 
 var app = builder.Build();
 
@@ -71,7 +71,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 // }
 
-app.UseSerilogRequestLogging();
+//app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
