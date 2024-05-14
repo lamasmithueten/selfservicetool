@@ -67,6 +67,8 @@ namespace sstWebAPI.Controllers
                     }
                 }
 
+                _context.vacation_days.Add(new NumberOfVacationDaysModel(userModel.ID));
+
                 _context.user.Add(userModel);
             }
 
