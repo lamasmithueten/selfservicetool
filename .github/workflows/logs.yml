@@ -1,4 +1,4 @@
-name: selfservicetool
+name: logs
 run-name: ${{ github.actor }} will die Logs sehen
 on: 
   push:

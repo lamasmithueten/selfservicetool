@@ -1,4 +1,4 @@
-name: selfservicetool
+name: CD
 run-name: ${{ github.actor }} fragt sich warum in der Demo so viele Emojis gespammt werden
 on: 
   push:
