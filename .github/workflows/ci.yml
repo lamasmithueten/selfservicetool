@@ -10,6 +10,7 @@ jobs:
     steps:
        - run: ls -la
        - run: pwd
+       - run: tree ..
 #      - run: git clone https://github.com/lamasmithueten/selfservicetool.git
 #      - run: cd selfservicetool
 #      - run: git checkout devops
