@@ -57,7 +57,7 @@
         private static Dictionary<DateOnly, string> HoldaysDic = new Dictionary<DateOnly, string>
             {
                 { DateOnly.ParseExact("01-01-2024","dd-MM-yyyy"), "Neujahr"},
-                { DateOnly.ParseExact("06-01-2024","dd-MM-yyyy"), "Erscheinungsfest "},
+                { DateOnly.ParseExact("06-01-2024","dd-MM-yyyy"), "Erscheinungsfest"},
                 { DateOnly.ParseExact("29-03-2024","dd-MM-yyyy"), "Karfreitag"},
                 { DateOnly.ParseExact("01-04-2024","dd-MM-yyyy"), "Ostermontag"},
                 { DateOnly.ParseExact("01-05-2024","dd-MM-yyyy"), "Tag der Arbeit"},

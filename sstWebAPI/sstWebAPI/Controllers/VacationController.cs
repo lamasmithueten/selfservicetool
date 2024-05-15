@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Helpers;
@@ -56,10 +57,24 @@ namespace sstWebAPI.Controllers
                 return BadRequest("User has not enough days left");
             }
 
+            var overlapsingVacation = DetectVacationOpverlaps(model.first_day, model.last_day, user_id);
+            if (overlapsingVacation == null)
+            {
+                return Conflict(overlapsingVacation);
+            }
+
             updateVacationDays(vacationDays, days);
             _context.vacation_request.Add(new VacationApplicationModel(model, user_id, days));
             _context.SaveChanges();
             return Created();
+        }
+
+        [HttpGet]
+        public IActionResult WorkdaysCalcTest()
+        {
+            var result = WordkdaysCalc.calcNumberOfWorkdays(new DateOnly(2024,5,6), new DateOnly(2024, 5, 27));
+
+            return Ok(result);
         }
 
         private bool CheckIfEnoughDays(VacationDaysModel vacationDays, int days)
@@ -72,12 +87,29 @@ namespace sstWebAPI.Controllers
             return vacationDays.planned_days = vacationDays.planned_days += days;
         }
 
-        [HttpGet]
-        public IActionResult WorkdaysCalcTest()
+        private VacationApplicationModel? DetectVacationOpverlaps(DateOnly firstDate, DateOnly lastDate, Guid userId)
         {
-            var result = WordkdaysCalc.calcNumberOfWorkdays(new DateOnly(2024,5,6), new DateOnly(2024, 5, 27));
+            var vacations = _context.vacation_request.Where(x => x.ID_user == userId);
 
-            return Ok(result);
+            if (vacations.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            foreach (var vacation in vacations)
+            {
+                if (AreDatesOverlapsing(firstDate, lastDate, vacation.first_day, vacation.last_day))
+                {
+                    return vacation;
+                }
+            }
+            return null;
         }
+
+        private bool AreDatesOverlapsing(DateOnly start1, DateOnly end1, DateOnly start2, DateOnly end2)
+        {
+            return start1.CompareTo(end2) <= 0 && start2.CompareTo(end1) <= 0;
+        }
+
     }
 }
