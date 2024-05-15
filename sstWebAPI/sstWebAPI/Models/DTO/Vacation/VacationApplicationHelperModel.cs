@@ -4,6 +4,9 @@ namespace sstWebAPI.Models.DTO.Vacation
 {
     public class VacationApplicationHelperModel
     {
+
+        public VacationApplicationHelperModel() { }
+
         public VacationApplicationHelperModel(DateOnly firstDay, DateOnly lastDay)
         {
             first_day = firstDay;

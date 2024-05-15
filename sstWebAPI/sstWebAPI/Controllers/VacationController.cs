@@ -29,12 +29,10 @@ namespace sstWebAPI.Controllers
         [Authorize]
         public IActionResult VacationRequest(CreateVacationApplicationModel stringModel)
         {
-            if(!(CreateVacationApplicationModel.TryParseStringToDateOnly(stringModel.first_day, out var firstDate) &&
-                CreateVacationApplicationModel.TryParseStringToDateOnly(stringModel.last_day, out var lastDate)))
+            if(!CreateVacationApplicationModel.createVacationModel(stringModel.first_day, stringModel.last_day, out var model))
             {
                 return BadRequest("Wrong format for Date");
             }
-            var model = new VacationApplicationHelperModel(firstDate, lastDate);
 
             var claims = HttpContext.User.Identity as ClaimsIdentity;
             if (claims == null)
@@ -82,6 +80,8 @@ namespace sstWebAPI.Controllers
             return Ok(result);
         }
 
+        #region helper_functions
+
         private bool CheckIfEnoughDays(VacationDaysModel vacationDays, int days)
         {
             return (vacationDays.total_days - (vacationDays.used_days + vacationDays.planned_days + days) >= 0);
@@ -115,6 +115,8 @@ namespace sstWebAPI.Controllers
         {
             return start1.CompareTo(end2) <= 0 && start2.CompareTo(end1) <= 0;
         }
+
+        #endregion
 
     }
 }

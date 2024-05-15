@@ -4,9 +4,21 @@ namespace sstWebAPI.Models.DTO.Vacation
 {
     public class CreateVacationApplicationModel
     {
-        public static bool TryParseStringToDateOnly(string str, out DateOnly date)
+        private static bool TryParseStringToDateOnly(string str, out DateOnly date)
         {
             return DateOnly.TryParseExact(str, DateFormat.DateFormatString, out date);
+        }
+
+        public static bool createVacationModel(string firstDay, string lastDay, out VacationApplicationHelperModel model)
+        {
+            if (TryParseStringToDateOnly(firstDay, out var firstDate) &&
+            TryParseStringToDateOnly(lastDay, out var lastDate))
+            {
+                model = new VacationApplicationHelperModel(firstDate, lastDate);
+                return true;
+            }
+            model = new VacationApplicationHelperModel();
+            return false;
         }
 
         #region properties
