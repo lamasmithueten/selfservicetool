@@ -4,24 +4,25 @@ on:
   push:
     branches:
       - '*'
-      - '!main'
-      - '!logs'
 jobs:
   webfrontend:
     runs-on: ubuntu-latest
     steps:
-      - run: git clone https://github.com/lamasmithueten/selfservicetool.git
-      - run: cd selfservicetool
-      - run: git checkout devops
-      - run: cd ..
-      - run: mkdir frontend
-      - run: cd frontend 
-      - run: git clone https://github.com/lamasmithueten/selfservicetool.git
-      - run: cd ..
-      - run: cp ../selfservicetool/devops/frontend/dockerfile .
-      - run: docker build . -t frontend
-      - run: cd backend
-      - run: git clone https://github.com/lamasmithueten/selfservicetool.git
-      - run: cd ..
-      - run: cp ../selfservicetool/devops/backend/dockerfile .
-      - run: docker build . -t api
+       - run: ls -la ../..
+       - run: pwd
+       - run: tree ../..
+#      - run: git clone https://github.com/lamasmithueten/selfservicetool.git
+#      - run: cd selfservicetool
+#      - run: git checkout devops
+#      - run: cd ..
+#      - run: mkdir frontend
+#      - run: cd frontend 
+#      - run: git clone https://github.com/lamasmithueten/selfservicetool.git
+#      - run: cd ..
+#      - run: cp ../selfservicetool/devops/frontend/dockerfile .
+#      - run: docker build . -t frontend
+#      - run: cd backend
+#      - run: git clone https://github.com/lamasmithueten/selfservicetool.git
+#      - run: cd ..
+#      - run: cp ../selfservicetool/devops/backend/dockerfile .
+#      - run: docker build . -t api
