@@ -3,7 +3,7 @@ using Serilog;
 
 namespace sstWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class InfoController : ControllerBase
     {

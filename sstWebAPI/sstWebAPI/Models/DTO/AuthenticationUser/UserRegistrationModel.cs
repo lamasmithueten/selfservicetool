@@ -1,10 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using sstWebAPI.Constants;
 
-namespace sstWebAPI.Models.DTO
+namespace sstWebAPI.Models.DTO.AuthenticationUser
 {
     public class UserRegistrationModel
-    { 
+    {
         #region properties
 
         /// <summary>

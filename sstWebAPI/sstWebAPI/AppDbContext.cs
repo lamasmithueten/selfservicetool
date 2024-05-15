@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Models;
+using sstWebAPI.Models.DB;
 
 namespace SelfServiceWebAPI
 {
@@ -11,5 +12,9 @@ namespace SelfServiceWebAPI
         public DbSet<UserModel> user { get; set; }
 
         public DbSet<RegistrationModel> registration_application { get; set; }
+
+        public DbSet<VacationApplicationModel> vacation_request { get; set; }
+
+        public DbSet<VacationDaysModel> vacation_days { get; set; }
     }
 }

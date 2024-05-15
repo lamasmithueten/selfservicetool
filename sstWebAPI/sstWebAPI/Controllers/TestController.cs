@@ -1,21 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
-using sstWebAPI.Models.DTO;
 using Serilog;
+using sstWebAPI.Helpers;
+using sstWebAPI.Models.DTO.AuthenticationUser;
 
 namespace sstWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class TestController(AppDbContext context) : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public TestController(AppDbContext context, IConfiguration config)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         [HttpGet("GetAllUsers")]
         public List<UserModel> GetAllUsers()
@@ -51,7 +47,10 @@ namespace sstWebAPI.Controllers
         [HttpPost("CreateUser")]
         public ActionResult CreateUser(UserModel user)
         {
+            string salt = CalcHash.GenerateSalt();
+            user.password = $"{CalcHash.GetHashString(user.password, salt)}:{salt}";
             _context.user.Add(user);
+            _context.vacation_days.Add(new VacationDaysModel(userId: user.ID));
             _context.SaveChanges();
             return Ok(user);
         }

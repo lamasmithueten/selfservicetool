@@ -1,5 +1,7 @@
-﻿using sstWebAPI.Models.DTO;
+﻿using sstWebAPI.Models.DTO.AuthenticationUser;
 using System.Data;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace sstWebAPI.Models
 {
