@@ -103,6 +103,7 @@ namespace sstWebAPI.Controllers
             //all requirements met to save the user in db
             UserModel user = new(registrationuser);
             _context.user.Add(user);
+            _context.vacation_days.Add(new VacationDaysModel(userId: user.ID));
             _context.SaveChanges();
             return Created();
         }
