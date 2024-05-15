@@ -8,7 +8,7 @@ jobs:
   webfrontend:
     runs-on: ubuntu-latest
     steps:
-       - run: ls -la
+       - run: ls -la ..
        - run: pwd
        - run: tree ..
 #      - run: git clone https://github.com/lamasmithueten/selfservicetool.git
