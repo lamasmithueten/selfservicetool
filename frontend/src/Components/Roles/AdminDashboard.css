@@ -1,0 +1,39 @@
+.dashboard {
+    width: auto;
+    height: 400px;
+    background: transparent;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(100px);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 10px 20px;
+  }
+
+  .dashboard h2 {
+    font-size: 30px;
+    text-align: center;
+}
+  
+select {
+    background-color: transparent; 
+    border: none; 
+    outline: none;
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: 16px;
+  }
+
+select option {
+    color: inherit;
+    border: none;
+}
+
+.send {
+    background-color: transparent !important;
+    color: white !important;
+    border: none !important;
+    backdrop-filter: blur(100px) !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    text-decoration: underline;
+}

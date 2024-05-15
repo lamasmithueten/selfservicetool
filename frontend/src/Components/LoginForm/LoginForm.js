@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import "./LoginForm.css";
 import { CiUser, CiLock } from "react-icons/ci";
 import LoginRequest from "./LoginRequest";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 
 function LoginForm({ toggleForm }) {
   const [formData, setFormData] = useState({
     usernameOrEmail: "",
     password: "",
   });
+  const [error, setError] = useState(null); // State to store login error
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleChange = (e) => {
     setFormData({
@@ -24,13 +27,21 @@ function LoginForm({ toggleForm }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    LoginRequest(formData);
+    try {
+      const token = await LoginRequest(formData); // Await for login request
+      // Save token to local storage or session storage
+      localStorage.setItem("token", token); // Save token to local storage
+      navigate("/adminDashboard"); // Redirect to adminDashboard
+    } catch (error) {
+      setError("Invalid username or password."); // Set error message if login fails
+    }
   };
 
   return (
     <div className="wrapper">
       <form onSubmit={handleSubmit}>
         <h1>Anmelden</h1>
+        {error && <p className="error">{error}</p>} {/* Display error message */}
         <div className="input-box">
           <input
             type="text"
