@@ -4,10 +4,21 @@ namespace sstWebAPI.Models.DTO.Vacation
 {
     public class CreateVacationApplicationModel
     {
-        public CreateVacationApplicationModel(StringVacationApplicationModel model)
+        private static bool TryParseStringToDateOnly(string str, out DateOnly date)
         {
-            first_day = DateOnly.ParseExact(model.first_day, DateFormat.DateFormatString);
-            last_day = DateOnly.ParseExact(model.last_day, DateFormat.DateFormatString);
+            return DateOnly.TryParseExact(str, DateFormat.DateFormatString, out date);
+        }
+
+        public static bool createVacationModel(string firstDay, string lastDay, out VacationApplicationHelperModel model)
+        {
+            if (TryParseStringToDateOnly(firstDay, out var firstDate) &&
+            TryParseStringToDateOnly(lastDay, out var lastDate))
+            {
+                model = new VacationApplicationHelperModel(firstDate, lastDate);
+                return true;
+            }
+            model = new VacationApplicationHelperModel();
+            return false;
         }
 
         #region properties
@@ -15,12 +26,12 @@ namespace sstWebAPI.Models.DTO.Vacation
         /// <summary>
         /// Date of the first day of vacation
         /// </summary>
-        public DateOnly first_day { get; set; }
+        public string first_day { get; set; } = string.Empty;
 
         /// <summary>
         /// Date of the first day of vacation
         /// </summary>
-        public DateOnly last_day { get; set; }
+        public string last_day { get; set; } = string.Empty;
 
         #endregion
     }
