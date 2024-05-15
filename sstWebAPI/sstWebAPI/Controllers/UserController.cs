@@ -1,5 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Constants;
@@ -74,6 +76,29 @@ namespace SelfServiceWebAPI.Controllers
             _context.registration_application.Add(application);
             _context.SaveChanges();
             return Created();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetUser()
+        {
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            if (claims == null)
+            {
+                return Unauthorized();
+            }
+            var user_id_string = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (user_id_string == null)
+            {
+                return Unauthorized();
+            }
+            var user_id = Guid.Parse(user_id_string);
+            var user = _context.user.Find(user_id);
+            if(user == null)
+            {
+                return NotFound(user_id);
+            }
+            return Ok(user);
         }
     }
 }
