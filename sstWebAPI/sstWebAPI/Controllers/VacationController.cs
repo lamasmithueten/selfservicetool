@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
+using sstWebAPI.Constants;
 using sstWebAPI.Helpers;
 using sstWebAPI.Models.DB;
 using sstWebAPI.Models.DTO.Vacation;
@@ -73,12 +74,43 @@ namespace sstWebAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult WorkdaysCalcTest()
+        [Authorize]
+        public IActionResult GetVacationApplicationsOfUser()
         {
-            var result = WordkdaysCalc.calcNumberOfWorkdays(new DateOnly(2024,5,6), new DateOnly(2024, 5, 27));
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            if (claims == null)
+            {
+                return Unauthorized();
+            }
+            var user_id_string = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (user_id_string == null)
+            {
+                return Unauthorized();
+            }
+            var user_id = Guid.Parse(user_id_string);
+            var applications = _context.vacation_request.Where(x => x.ID_user == user_id);
 
-            return Ok(result);
+            var pending = new List<VacationApplicationModel>();
+            var accepted = new List<VacationApplicationModel>();
+            var declined = new List<VacationApplicationModel>();
+
+            foreach (var application in applications)
+            {
+                if(application.state == VacationApplicationStates.Pending)
+                {
+                    pending.Add(application);
+                } else if (application.state == VacationApplicationStates.Accepted)
+                {
+                    accepted.Add(application);
+                } else
+                {
+                    declined.Add(application);
+                }
+            }
+
+            return Ok(new GetVacationApplicationsModel(pending,accepted,declined));
         }
+
 
         #region helper_functions
 
