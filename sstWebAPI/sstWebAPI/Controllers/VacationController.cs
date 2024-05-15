@@ -63,8 +63,7 @@ namespace sstWebAPI.Controllers
             }
 
             var overlapsingVacation = DetectVacationOpverlaps(model.first_day, model.last_day, user_id);
-            Console.WriteLine(overlapsingVacation);
-            if (overlapsingVacation == null)
+            if (overlapsingVacation != null)
             {
                 return Conflict(overlapsingVacation);
             }
