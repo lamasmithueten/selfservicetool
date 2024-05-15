@@ -1,4 +1,4 @@
-﻿namespace sstWebAPI.Models.DTO
+﻿namespace sstWebAPI.Models.DTO.AuthenticationUser
 {
     public class UserLoginModel
     {

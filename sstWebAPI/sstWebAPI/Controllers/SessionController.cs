@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Helpers;
-using sstWebAPI.Models.DTO;
+using sstWebAPI.Models.DTO.AuthenticationUser;
 
 namespace sstWebAPI.Controllers
 {

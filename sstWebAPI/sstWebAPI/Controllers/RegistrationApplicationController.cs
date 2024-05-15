@@ -4,7 +4,7 @@ using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Constants;
 using sstWebAPI.Models;
-using sstWebAPI.Models.DTO;
+using sstWebAPI.Models.DTO.AuthenticationUser;
 
 namespace sstWebAPI.Controllers
 {
@@ -67,8 +67,7 @@ namespace sstWebAPI.Controllers
                     }
                 }
 
-                _context.vacation_days.Add(new NumberOfVacationDaysModel(userModel.ID));
-
+                _context.vacation_days.Add(new VacationDaysModel(userModel.ID));
                 _context.user.Add(userModel);
             }
 

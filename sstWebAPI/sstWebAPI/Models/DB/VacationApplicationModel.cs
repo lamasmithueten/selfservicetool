@@ -1,5 +1,5 @@
 ﻿using sstWebAPI.Constants;
-using sstWebAPI.Models.DTO;
+using sstWebAPI.Models.DTO.Vacation;
 
 namespace sstWebAPI.Models.DB
 {
@@ -14,8 +14,8 @@ namespace sstWebAPI.Models.DB
         {
             ID = Guid.NewGuid();
             ID_user = Guid.NewGuid();
-            first_day = DateTime.Now;
-            last_day = DateTime.Now;
+            first_day = DateOnly.FromDateTime(DateTime.Now);
+            last_day = DateOnly.FromDateTime(DateTime.Now);
             number_of_days = 0;
             state = "";
         }
@@ -23,13 +23,13 @@ namespace sstWebAPI.Models.DB
         /// <summary>
         /// constructor for creating VacationRequestModel instance with CreateVacationApplicationModel instance
         /// </summary>
-        public VacationApplicationModel(CreateVacationApplicationModel model, Guid user_id)
+        public VacationApplicationModel(CreateVacationApplicationModel model, Guid user_id, int numberOfDays)
         {
             ID = Guid.NewGuid();
             ID_user = user_id;
             first_day = model.first_day;
             last_day = model.last_day;
-            number_of_days = model.number_of_days;
+            number_of_days = numberOfDays;
             state = VacationApplicationStates.Pending;
         }
 
@@ -50,12 +50,12 @@ namespace sstWebAPI.Models.DB
         /// <summary>
         /// Date of the first day of vacation
         /// </summary>
-        public DateTime first_day { get; set; }
+        public DateOnly first_day { get; set; }
 
         /// <summary>
         /// Date of the first day of vacation
         /// </summary>
-        public DateTime last_day { get; set; }
+        public DateOnly last_day { get; set; }
 
         /// <summary>
         /// number of requested vacation days

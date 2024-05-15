@@ -1,5 +1,5 @@
 ﻿using sstWebAPI.Models;
-using sstWebAPI.Models.DTO;
+using sstWebAPI.Models.DTO.AuthenticationUser;
 
 namespace SelfServiceWebAPI.Models
 {

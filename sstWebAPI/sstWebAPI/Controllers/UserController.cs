@@ -5,7 +5,7 @@ using SelfServiceWebAPI.Models;
 using sstWebAPI.Constants;
 using sstWebAPI.Helpers;
 using sstWebAPI.Models;
-using sstWebAPI.Models.DTO;
+using sstWebAPI.Models.DTO.AuthenticationUser;
 
 namespace SelfServiceWebAPI.Controllers
 {

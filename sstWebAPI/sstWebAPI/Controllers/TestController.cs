@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
-using sstWebAPI.Models.DTO;
 using Serilog;
 using sstWebAPI.Helpers;
+using sstWebAPI.Models.DTO.AuthenticationUser;
 
 namespace sstWebAPI.Controllers
 {
@@ -50,6 +50,7 @@ namespace sstWebAPI.Controllers
             string salt = CalcHash.GenerateSalt();
             user.password = $"{CalcHash.GetHashString(user.password, salt)}:{salt}";
             _context.user.Add(user);
+            _context.vacation_days.Add(new VacationDaysModel(userId: user.ID));
             _context.SaveChanges();
             return Ok(user);
         }

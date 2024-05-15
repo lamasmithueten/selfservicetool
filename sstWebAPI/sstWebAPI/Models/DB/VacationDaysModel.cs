@@ -3,26 +3,25 @@ using sstWebAPI.Models.DTO;
 
 namespace SelfServiceWebAPI.Models
 {
-    public class NumberOfVacationDaysModel
+    public class VacationDaysModel
     {
         #region constructors
 
         /// <summary>
         /// base constructor | this is needed!
         /// </summary>
-        public NumberOfVacationDaysModel()
+        public VacationDaysModel()
         {
-
         }
 
         /// <summary>
         /// constructor for filling object with data
         /// </summary>
-        public NumberOfVacationDaysModel(Guid user_id, int totalDays = 30, int usedDays = 0, int plannedDays = 0)
+        public VacationDaysModel(Guid userId, int totalDays = 30, int usedDays = 0, int plannedDays = 0)
         {
             ID = Guid.NewGuid();
-            ID_User = user_id;
-            total_days = total_days;
+            ID_user = userId;
+            total_days = totalDays;
             used_days = usedDays;
             planned_days = plannedDays;
         }
@@ -39,7 +38,7 @@ namespace SelfServiceWebAPI.Models
         /// <summary>
         /// ID of user
         /// </summary>
-        public Guid ID_User { get; set; }
+        public Guid ID_user { get; set; }
 
         /// <summary>
         /// total vacation days of user
