@@ -23,7 +23,7 @@ namespace sstWebAPI.Models.DB
         /// <summary>
         /// constructor for creating VacationRequestModel instance with CreateVacationApplicationModel instance
         /// </summary>
-        public VacationApplicationModel(CreateVacationApplicationModel model, Guid user_id, int numberOfDays)
+        public VacationApplicationModel(VacationApplicationHelperModel model, Guid user_id, int numberOfDays)
         {
             ID = Guid.NewGuid();
             ID_user = user_id;

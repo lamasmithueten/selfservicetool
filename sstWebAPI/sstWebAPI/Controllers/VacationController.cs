@@ -27,9 +27,14 @@ namespace sstWebAPI.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult VacationRequest(StringVacationApplicationModel stringModel)
+        public IActionResult VacationRequest(CreateVacationApplicationModel stringModel)
         {
-            var model = new CreateVacationApplicationModel(stringModel);
+            if(!(CreateVacationApplicationModel.TryParseStringToDateOnly(stringModel.first_day, out var firstDate) &&
+                CreateVacationApplicationModel.TryParseStringToDateOnly(stringModel.last_day, out var lastDate)))
+            {
+                return BadRequest("Wrong format for Date");
+            }
+            var model = new VacationApplicationHelperModel(firstDate, lastDate);
 
             var claims = HttpContext.User.Identity as ClaimsIdentity;
             if (claims == null)
@@ -58,6 +63,7 @@ namespace sstWebAPI.Controllers
             }
 
             var overlapsingVacation = DetectVacationOpverlaps(model.first_day, model.last_day, user_id);
+            Console.WriteLine(overlapsingVacation);
             if (overlapsingVacation == null)
             {
                 return Conflict(overlapsingVacation);
