@@ -1,0 +1,6 @@
+Wichtige Konstanten:
+
+User-Rollen: "admin","management","employee"
+Urlaubs Überprüfung stand (also ob Antrag ausstehend, angenommen oder abgelehnt ist): "pending","accepted","declined"
+
+Format fürs Datum: "dd-MM-yyyy"
