@@ -8,7 +8,7 @@ jobs:
   webfrontend:
     runs-on: ubuntu-latest
     steps:
-       - uses: actions/checkout@2
+       - uses: actions/checkout
        - run: ls -la ../..
        - run: pwd
        - run: tree ../..
