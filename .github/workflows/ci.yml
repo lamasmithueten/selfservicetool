@@ -8,9 +8,7 @@ jobs:
   webfrontend:
     runs-on: ubuntu-latest
     steps:
-       - uses: lamasmithueten/selfservicetool@main
-         with:
-           fetch-depth: 0
+       - uses: actions/checkout@v2
        - run: ls -la ../..
        - run: pwd
        - run: tree ../..
