@@ -8,7 +8,7 @@ jobs:
   webfrontend:
     runs-on: ubuntu-latest
     steps:
-       - uses: main
+       - uses: lamasmithueten/main
        - run: ls -la ../..
        - run: pwd
        - run: tree ../..
