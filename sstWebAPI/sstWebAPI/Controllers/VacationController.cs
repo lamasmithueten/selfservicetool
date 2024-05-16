@@ -34,18 +34,10 @@ namespace sstWebAPI.Controllers
             {
                 return BadRequest("Wrong format for Date");
             }
-
-            var claims = HttpContext.User.Identity as ClaimsIdentity;
-            if (claims == null)
+            if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
             {
                 return Unauthorized();
             }
-            var user_id_string = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (user_id_string == null)
-            {
-                return Unauthorized();
-            }
-            var user_id = Guid.Parse(user_id_string);
             var days = WordkdaysCalc.calcNumberOfWorkdays(model.first_day, model.last_day);
             if (days <= 0)
             {
@@ -77,18 +69,10 @@ namespace sstWebAPI.Controllers
         [Authorize]
         public IActionResult GetVacationApplicationsOfUser()
         {
-            var claims = HttpContext.User.Identity as ClaimsIdentity;
-            if (claims == null)
+            if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
             {
                 return Unauthorized();
             }
-            var user_id_string = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (user_id_string == null)
-            {
-                return Unauthorized();
-            }
-            var user_id = Guid.Parse(user_id_string);
-            
             return Ok(VacationManagementController.GetAllVacationsWithUsernameForUserId(user_id, _context));
         }
 
