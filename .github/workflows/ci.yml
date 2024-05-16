@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
        - uses: actions/checkout@v2
-       - run: ls -la ../..
+       - run: ls -la 
        - run: pwd
-       - run: tree ../..
+       - run: tree 
        - uses: actions/checkout@v2
          with:
            ref: backend
-       - run: ls -la ../..
+       - run: ls -la 
        - run: pwd
-       - run: tree ../..
+       - run: tree 
