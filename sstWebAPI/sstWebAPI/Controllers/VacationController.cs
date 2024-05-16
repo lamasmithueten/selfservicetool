@@ -72,7 +72,7 @@ namespace sstWebAPI.Controllers
             _context.SaveChanges();
             return Created();
         }
-
+        
         [HttpGet]
         [Authorize]
         public IActionResult GetVacationApplicationsOfUser()
@@ -88,27 +88,8 @@ namespace sstWebAPI.Controllers
                 return Unauthorized();
             }
             var user_id = Guid.Parse(user_id_string);
-            var applications = _context.vacation_request.Where(x => x.ID_user == user_id);
-
-            var pending = new List<VacationApplicationModel>();
-            var accepted = new List<VacationApplicationModel>();
-            var declined = new List<VacationApplicationModel>();
-
-            foreach (var application in applications)
-            {
-                if(application.state == VacationApplicationStates.Pending)
-                {
-                    pending.Add(application);
-                } else if (application.state == VacationApplicationStates.Accepted)
-                {
-                    accepted.Add(application);
-                } else
-                {
-                    declined.Add(application);
-                }
-            }
-
-            return Ok(new GetVacationApplicationsModel(pending,accepted,declined));
+            
+            return Ok(VacationManagementController.GetAllVacationsWithUsernameForUserId(user_id, _context));
         }
 
 

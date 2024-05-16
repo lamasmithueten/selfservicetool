@@ -6,7 +6,7 @@ namespace sstWebAPI.Models.DTO.Vacation
     {
         #region constructors
 
-        public GetVacationApplicationsModel(List<VacationApplicationModel> pending, List<VacationApplicationModel> accepted, List<VacationApplicationModel> declined) 
+        public GetVacationApplicationsModel(List<VactionApplicationWithUserModel> pending, List<VactionApplicationWithUserModel> accepted, List<VactionApplicationWithUserModel> declined) 
         {
             pending_applications = pending;
             accepted_applications = accepted;
@@ -20,17 +20,17 @@ namespace sstWebAPI.Models.DTO.Vacation
         /// <summary>
         /// List of pending applications
         /// </summary>
-        public List<VacationApplicationModel> pending_applications { get; set; }
+        public List<VactionApplicationWithUserModel> pending_applications { get; set; }
 
         /// <summary>
         /// List of accepted applications
         /// </summary>
-        public List<VacationApplicationModel> accepted_applications { get; set; }
+        public List<VactionApplicationWithUserModel> accepted_applications { get; set; }
 
         /// <summary>
         /// List of declined applications
         /// </summary>
-        public List<VacationApplicationModel> declined_applications { get; set; }
+        public List<VactionApplicationWithUserModel> declined_applications { get; set; }
 
         #endregion
     }

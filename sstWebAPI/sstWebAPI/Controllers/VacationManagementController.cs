@@ -8,6 +8,7 @@ using sstWebAPI.Models.DB;
 using sstWebAPI.Models.DTO.Vacation;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace sstWebAPI.Controllers
 {
@@ -29,29 +30,15 @@ namespace sstWebAPI.Controllers
         [Authorize(Roles = UserRoles.Admin +","+UserRoles.Management)]
         public IActionResult GetVacationApplicationsOfUser(Guid user_id)
         {
-            var applications = user_id == Guid.Empty ? _context.vacation_request.ToList() : _context.vacation_request.Where(x => x.ID_user == user_id).ToList();
-
-            var pending = new List<VacationApplicationModel>();
-            var accepted = new List<VacationApplicationModel>();
-            var declined = new List<VacationApplicationModel>();
-
-            foreach (var application in applications)
+            //var applications = user_id == Guid.Empty ? GetAllVacationsWithUsername() : GetAllVacationsWithUsernameForUserId(user_id);
+                
+            if(user_id == Guid.Empty)
             {
-                if (application.state == VacationApplicationStates.Pending)
-                {
-                    pending.Add(application);
-                }
-                else if (application.state == VacationApplicationStates.Accepted)
-                {
-                    accepted.Add(application);
-                }
-                else
-                {
-                    declined.Add(application);
-                }
+                return Ok(GetAllVacationsWithUsername());
+            } else
+            {
+                return Ok(GetAllVacationsWithUsernameForUserId(user_id, _context));
             }
-
-            return Ok(new GetVacationApplicationsModel(pending, accepted, declined));
         }
 
         [HttpPatch]
@@ -115,6 +102,82 @@ namespace sstWebAPI.Controllers
 
 
         #region helper_functions
+
+        private GetVacationApplicationsModel GetAllVacationsWithUsername()
+        { 
+            var applications = from vacation in _context.vacation_request
+                        join user in _context.user on vacation.ID_user equals user.ID
+                        select new
+                        {
+                            TabelleVacation = vacation,
+                            TabelleUser = user,
+                        };
+
+            var pending = new List<VactionApplicationWithUserModel>();
+            var accepted = new List<VactionApplicationWithUserModel>();
+            var declined = new List<VactionApplicationWithUserModel>();
+
+            foreach (var application in applications)
+            {
+                var vacation = application.TabelleVacation;
+                var user = application.TabelleUser;
+
+                if (vacation.state == VacationApplicationStates.Pending)
+                {
+                    pending.Add(new VactionApplicationWithUserModel(vacation.ID, vacation.ID_user, user.firstname, user.lastname, vacation.first_day,
+                        vacation.last_day, vacation.number_of_days, vacation.state, vacation.reason));
+                }
+                else if (vacation.state == VacationApplicationStates.Accepted)
+                {
+                    accepted.Add(new VactionApplicationWithUserModel(vacation.ID, vacation.ID_user, user.firstname, user.lastname, vacation.first_day,
+                        vacation.last_day, vacation.number_of_days, vacation.state, vacation.reason));
+                }
+                else
+                {
+                    declined.Add(new VactionApplicationWithUserModel(vacation.ID, vacation.ID_user, user.firstname, user.lastname, vacation.first_day,
+                        vacation.last_day, vacation.number_of_days, vacation.state, vacation.reason));
+                }
+            }
+            return new GetVacationApplicationsModel(pending,accepted,declined);
+        }
+
+        public static GetVacationApplicationsModel GetAllVacationsWithUsernameForUserId(Guid userId, AppDbContext context)
+        {
+            var applications=  from vacation in context.vacation_request
+                   join user in context.user on vacation.ID_user equals user.ID where user.ID == userId
+                   select new
+                   {
+                       TabelleVacation = vacation,
+                       TabelleUser = user,
+                   };
+
+            var pending = new List<VactionApplicationWithUserModel>();
+            var accepted = new List<VactionApplicationWithUserModel>();
+            var declined = new List<VactionApplicationWithUserModel>();
+
+            foreach (var application in applications)
+            {
+                var vacation = application.TabelleVacation;
+                var user = application.TabelleUser;
+
+                if (vacation.state == VacationApplicationStates.Pending)
+                {
+                    pending.Add(new VactionApplicationWithUserModel(vacation.ID, vacation.ID_user, user.firstname, user.lastname, vacation.first_day,
+                        vacation.last_day, vacation.number_of_days, vacation.state, vacation.reason));
+                }
+                else if (vacation.state == VacationApplicationStates.Accepted)
+                {
+                    accepted.Add(new VactionApplicationWithUserModel(vacation.ID, vacation.ID_user, user.firstname, user.lastname, vacation.first_day,
+                        vacation.last_day, vacation.number_of_days, vacation.state, vacation.reason));
+                }
+                else
+                {
+                    declined.Add(new VactionApplicationWithUserModel(vacation.ID, vacation.ID_user, user.firstname, user.lastname, vacation.first_day,
+                        vacation.last_day, vacation.number_of_days, vacation.state, vacation.reason));
+                }
+            }
+            return new GetVacationApplicationsModel(pending, accepted, declined);
+        }
 
         #endregion
 
