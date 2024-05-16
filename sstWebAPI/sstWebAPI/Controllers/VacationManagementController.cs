@@ -50,7 +50,6 @@ namespace sstWebAPI.Controllers
                     declined.Add(application);
                 }
             }
-
             return Ok(new GetVacationApplicationsModel(pending, accepted, declined));
         }
 
