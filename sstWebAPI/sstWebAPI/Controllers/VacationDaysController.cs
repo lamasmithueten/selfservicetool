@@ -1,20 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
+using sstWebAPI.Constants;
 using sstWebAPI.Helpers;
 using sstWebAPI.Models.DTO.Vacation;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace sstWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class VacationDaysController(AppDbContext context) : ControllerBase
     {
         private readonly AppDbContext _context = context;
-
+        
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Management)]
         public IActionResult GetVacationDays(Guid id)
         {
             UserModel? user = _context.user.Find(id);
@@ -29,22 +33,48 @@ namespace sstWebAPI.Controllers
             return Ok(vacationDaysRecord);
         }
 
-        [HttpGet] 
-        public IActionResult GetWorkingDays(string startDate, string endDate, bool enhanced)
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetVacationDaysJWT()
         {
-            if (!CreateVacationApplicationModel.createVacationModel(startDate, endDate, out var model))
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            if (claims == null)
             {
-                return BadRequest("Wrong format for Date");
+                return Unauthorized();
+            }
+            var user_id_string = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (user_id_string == null)
+            {
+                return Unauthorized();
+            }
+            var user_id = Guid.Parse(user_id_string);
+
+            UserModel? user = _context.user.Find(user_id);
+
+            if (user == null)
+            {
+                return NotFound();
             }
 
-            int workingdays = WordkdaysCalc.calcNumberOfWorkdays(model.first_day, model.last_day);
-            var vacationDict = WordkdaysCalc.calcDicOfWeekendsAndHolidays(model.first_day, model.last_day);
+            VacationDaysModel? vacationDaysRecord = _context.vacation_days.Where(x => x.ID_user == user_id).SingleOrDefault();
 
-            if (!enhanced)
+            return Ok(vacationDaysRecord);
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = UserRoles.Admin+","+UserRoles.Management)]
+        public IActionResult ChangeTotalVacationDays(int totalDays, Guid userID)
+        {
+           var vacationDaysRecord = _context.vacation_days.Where(x => x.ID_user == userID).FirstOrDefault();
+
+            if(vacationDaysRecord == null)
             {
-                return Ok(workingdays);
+                return NotFound(userID);
             }
-            return Ok(new {workingdays, vacationDict });
+
+            vacationDaysRecord.total_days = totalDays;
+            _context.SaveChanges();
+            return Ok(vacationDaysRecord);
         }
     }
 }
