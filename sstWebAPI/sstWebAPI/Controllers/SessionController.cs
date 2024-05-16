@@ -34,7 +34,7 @@ namespace sstWebAPI.Controllers
             }
 
             //get password hashes and salt from the database
-            if(string.IsNullOrWhiteSpace(user.password) && string.IsNullOrWhiteSpace(loginUser.password))
+            if (string.IsNullOrWhiteSpace(user.password) && string.IsNullOrWhiteSpace(loginUser.password))
             {
                 return NotFound("No credentials found");
             }
