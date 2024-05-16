@@ -100,5 +100,17 @@ namespace SelfServiceWebAPI.Controllers
             }
             return Ok(user);
         }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Management)]
+        public IActionResult GetUserWithID(Guid id)
+        {
+            var user = _context.user.Find(id);
+            if (user == null)
+            {
+                return NotFound(id);
+            }
+            return Ok(user);
+        }
     }
 }
