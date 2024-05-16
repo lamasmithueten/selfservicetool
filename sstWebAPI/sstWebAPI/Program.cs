@@ -76,6 +76,11 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ApiKeyAuthMiddleware>();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+    await next.Invoke();
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
