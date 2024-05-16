@@ -16,4 +16,11 @@ jobs:
        - run: docker build .. -t backend 
        - run: rm ../Dockerfile
 
+#hier ist das Template für das Frontend. Da Adrian immer neue Branches verwendet, steht als Branch im Moment Main, der muss halt auf den neuen Branch geändert werden. Dockerfile sollte aber nicht angepasst werden müssen
+       - uses: actions/checkout@v2
+         with:
+           ref: main   # <----- Hier anpassen
+       - run: |
+           printf "FROM node\n\nRUN mkdir -p /srv/frontend\n\nRUN chown node: /srv/frontend\n\nCOPY selfservicetool/frontend /srv/frontend\n\nWORKDIR /srv/frontend\n\nUSER node\n\nRUN npm ci && npm cache clean --force\n\nENTRYPOINT npm start\n" > ../Dockerfile
+       - run: docker build .. -t frontend
 
