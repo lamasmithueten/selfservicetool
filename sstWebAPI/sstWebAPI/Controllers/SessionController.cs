@@ -30,13 +30,13 @@ namespace sstWebAPI.Controllers
 
             if (user == null)
             {
-                return NotFound($"{loginUser.usernameOrEmail} not found in database");
+                return Unauthorized("username or password wrong");
             }
 
             //get password hashes and salt from the database
             if(string.IsNullOrWhiteSpace(user.password) && string.IsNullOrWhiteSpace(loginUser.password))
             {
-                return BadRequest();
+                return NotFound("No credentials found");
             }
 
             string passwordHashDB = user.password[..user.password.IndexOf(':')];
@@ -51,7 +51,7 @@ namespace sstWebAPI.Controllers
             }
             else
             {
-                return BadRequest();
+                return Unauthorized("username or password wrong");
             }
         }
 
