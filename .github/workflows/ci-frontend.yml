@@ -12,5 +12,6 @@ jobs:
        - uses: actions/checkout@v2
          with:
            ref: main   # <----- Hier anpassen
-       - run: printf "FROM node\nRUN mkdir -p /srv/frontend\nRUN chown node: /srv/frontend\nCOPY selfservicetool/frontend /srv/frontend\nWORKDIR /srv/frontend\nUSER node\nRUN npm ci && npm cache clean --force\nENTRYPOINT npm start\n" > ../Dockerfile
+       - run: |
+           printf "FROM node\n\nRUN mkdir -p /srv/frontend\n\nRUN chown node: /srv/frontend\n\nCOPY selfservicetool/frontend /srv/frontend\n\nWORKDIR /srv/frontend\n\nUSER node\n\nRUN npm ci && npm cache clean --force\n\nENTRYPOINT npm start\n" > ../Dockerfile
        - run: docker build .. -t frontend
