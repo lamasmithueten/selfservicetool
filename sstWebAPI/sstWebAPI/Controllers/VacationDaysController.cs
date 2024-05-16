@@ -4,6 +4,7 @@ using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Helpers;
 using sstWebAPI.Models.DTO.Vacation;
+using System.Globalization;
 
 namespace sstWebAPI.Controllers
 {
@@ -16,42 +17,34 @@ namespace sstWebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetVacationDays(Guid id)
         {
-            VacationDaysModel? vacationDaysRecord = _context.vacation_days.Where(x => x.ID_user == id).SingleOrDefault();
+            UserModel? user = _context.user.Find(id);
 
-            if (vacationDaysRecord == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
+            VacationDaysModel? vacationDaysRecord = _context.vacation_days.Where(x => x.ID_user == id).SingleOrDefault();
+
             return Ok(vacationDaysRecord);
         }
 
-        [HttpGet("GetWorkingDays")] 
-        public IActionResult GetWorkingDays(CreateVacationApplicationModel stringModel)
+        [HttpGet] 
+        public IActionResult GetWorkingDays(string startDate, string endDate, bool enhanced)
         {
-            if (!CreateVacationApplicationModel.createVacationModel(stringModel.first_day, stringModel.last_day, out var model))
+            if (!CreateVacationApplicationModel.createVacationModel(startDate, endDate, out var model))
             {
                 return BadRequest("Wrong format for Date");
             }
 
-            return Ok(WordkdaysCalc.calcNumberOfWorkdays(model.first_day, model.last_day));
-        }
-
-        [HttpPost("GetVacationDays")]
-        public IActionResult GetVacationDays(CreateVacationApplicationModel stringModel, bool enhanced)
-        {
-            if (!CreateVacationApplicationModel.createVacationModel(stringModel.first_day, stringModel.last_day, out var model))
-            {
-                return BadRequest("Wrong format for Date");
-            }
-
+            int workingdays = WordkdaysCalc.calcNumberOfWorkdays(model.first_day, model.last_day);
             var vacationDict = WordkdaysCalc.calcDicOfWeekendsAndHolidays(model.first_day, model.last_day);
 
             if (!enhanced)
-            {            
-                return Ok(vacationDict.Count);
+            {
+                return Ok(workingdays);
             }
-            return Ok(vacationDict);
+            return Ok(new {workingdays, vacationDict });
         }
     }
 }

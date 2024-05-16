@@ -29,12 +29,6 @@ namespace sstWebAPI.Controllers
         public IActionResult GetRegisterApplications()
         {
             var list = _context.registration_application.ToList();
-
-            if (list.Count == 0)
-            {
-                return NotFound();
-            }
-
             return Ok(list);
         }
 
