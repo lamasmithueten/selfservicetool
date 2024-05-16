@@ -2,7 +2,6 @@ import axios from "axios";
 import { message } from "react-message-popup";
 
 const LoginRequest = async (formData) => {
-  // Hash the password before sending it for validation
 
   try {
     const headers = {
@@ -12,7 +11,7 @@ const LoginRequest = async (formData) => {
     };
 
     const response = await axios.post(
-      "https://api.mwerr.de/api/Authentication/Login",
+      "https://api.mwerr.de/api/v1/Session",
       {
         usernameOrEmail: formData.usernameOrEmail,
         password: formData.password,
@@ -20,11 +19,9 @@ const LoginRequest = async (formData) => {
       { headers: headers }
     );
 
-    // Handle response based on your backend logic
-    console.log("Login successful:", response.data);
     message.success("Anemldung Erfolgreich", 2000);
+    return response.data;
   } catch (error) {
-    // Handle errors
     console.error("Login failed:", error);
     message.error("Anmeldung nicht erfolgreich", 4000);
   }

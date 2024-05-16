@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import "./LoginForm.css";
 import { CiUser, CiLock } from "react-icons/ci";
 import LoginRequest from "./LoginRequest";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+import axios from "axios";
 
 function LoginForm({ toggleForm }) {
   const [formData, setFormData] = useState({
     usernameOrEmail: "",
     password: "",
   });
+  const [error] = useState(null); // State to store login error
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleChange = (e) => {
     setFormData({
@@ -24,13 +28,29 @@ function LoginForm({ toggleForm }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    LoginRequest(formData);
+    const token = await LoginRequest(formData);
+    localStorage.setItem("token", token);
+    if (token != null) {
+      const userResponse = await axios.get("https://api.mwerr.de/api/v1/User", {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+          "x-api-key": "keyTest",
+        },
+      });
+      if(userResponse.data.role === "admin") {
+        navigate("/urlaubsantraege"); 
+      } else {
+        navigate("/employee"); 
+      }
+    }
   };
 
   return (
     <div className="wrapper">
       <form onSubmit={handleSubmit}>
         <h1>Anmelden</h1>
+        {error && <p className="error">{error}</p>} 
         <div className="input-box">
           <input
             type="text"
