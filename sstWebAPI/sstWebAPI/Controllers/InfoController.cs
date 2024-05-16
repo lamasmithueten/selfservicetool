@@ -15,6 +15,7 @@ namespace sstWebAPI.Controllers
         public string Info()
         {
             Log.Information("Get-request for 'api/Info'");
+            Response.Headers.Add("Cache-Control", "no-cache, no-store");
 
             return "WebApi by Lukas and Nicolas for Sofware Engineering";
         }
