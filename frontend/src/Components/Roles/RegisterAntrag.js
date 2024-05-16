@@ -84,7 +84,7 @@ const RegisterAntrag = () => {
   return (
     <div>
       {error && <p>{error}</p>}
-      <div className= "dashboard" style={{ overflowY: 'auto', maxHeight: '200px', marginBottom: '20px' }}>
+      <div className= "register-dash" style={{ overflowY: 'auto', maxHeight: '600px', marginBottom: '20px' }}>
         <h2>Ausstehende Registrierungsanträge</h2>
         <table border="1" className='table'>
           <thead>

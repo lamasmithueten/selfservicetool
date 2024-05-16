@@ -1,3 +1,21 @@
+.register-dash {
+  width: auto;
+  height: 800px !important;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(100px);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 10px 20px;
+}
+
+  .register-dash h2 {
+    font-size: 30px;
+    text-align: center;
+    padding: 20px;
+  }
+
+
 .vacantion-button {
     position: fixed;
     top: 20px;

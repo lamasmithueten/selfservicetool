@@ -53,7 +53,7 @@ function RegistrationForm({ toggleForm }) {
       };
 
       const response = await axios.post(
-        "https://api.mwerr.de/api/Authentication/Register",
+        "https://api.mwerr.de/api/v1/User",
         formData,
         { headers: headers }
       );
