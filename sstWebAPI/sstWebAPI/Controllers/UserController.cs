@@ -82,17 +82,10 @@ namespace SelfServiceWebAPI.Controllers
         [Authorize]
         public IActionResult GetUser()
         {
-            var claims = HttpContext.User.Identity as ClaimsIdentity;
-            if (claims == null)
+            if(!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
             {
                 return Unauthorized();
             }
-            var user_id_string = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (user_id_string == null)
-            {
-                return Unauthorized();
-            }
-            var user_id = Guid.Parse(user_id_string);
             var user = _context.user.Find(user_id);
             if(user == null)
             {
