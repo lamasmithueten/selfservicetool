@@ -14,6 +14,7 @@ jobs:
            ref: backend   # <----- Hier anpassen
        - run: printf "FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build\n\nWORKDIR /source\n\nCOPY selfservicetool/sstWebAPI/*.sln .\nCOPY selfservicetool/sstWebAPI/sstWebAPI/*.csproj ./sstWebAPI/\nRUN dotnet restore\n\nCOPY selfservicetool/sstWebAPI/. ./sstWebAPI/\nWORKDIR /source/sstWebAPI\nRUN dotnet restore\nRUN dotnet publish -c release -o /app --no-restore\n\nFROM mcr.microsoft.com/dotnet/aspnet:8.0\nWORKDIR /app\nCOPY --from=build /app ./\n\nRUN sed -i 's/server=localhost/server=database/g' /app/appsettings.json\n\nENTRYPOINT [\"dotnet\", \"sstWebAPI.dll\"]\n" > ../Dockerfile
        - run: docker build .. -t backend 
+       - run: rm ../Dockerfile
 
 
 #hier ist das Template für das Frontend. Da Adrian immer neue Branches verwendet, steht als Branch im Moment Main, der muss halt auf den neuen Branch geändert werden. Dockerfile sollte aber nicht angepasst werden müssen
