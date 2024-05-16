@@ -24,6 +24,7 @@ namespace sstWebAPI.Controllers
             return [.. _context.user];
         }
 
+
         [HttpGet("GetUserById")]
         public ActionResult GetUserById(Guid id)
         {
