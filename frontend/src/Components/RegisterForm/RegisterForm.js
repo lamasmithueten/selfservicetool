@@ -58,9 +58,6 @@ function RegistrationForm({ toggleForm }) {
         { headers: headers }
       );
       console.log("User registered successfully:", response.data);
-      console.log(response);
-      console.log(response.status);
-      console.log("hello");
       if (response.status === 204) {
         message.success(
           "Registrierung ist erfolgreich, Sie können sich jetzt anmelden",

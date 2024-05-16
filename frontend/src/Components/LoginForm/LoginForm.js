@@ -39,7 +39,7 @@ function LoginForm({ toggleForm }) {
         },
       });
       if(userResponse.data.role === "admin") {
-        navigate("/adminDashboard"); 
+        navigate("/urlaubsantraege"); 
       } else {
         navigate("/employee"); 
       }

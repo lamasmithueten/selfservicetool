@@ -99,6 +99,9 @@ const TripleTable = () => {
     navigate("/login");
   };
   
+  const handleRegister = () => {
+    navigate("/registrierungsantraege");
+  }
   return (
     <div>
       {error && <p>{error}</p>}
@@ -245,6 +248,7 @@ const TripleTable = () => {
         </table>
       </div>
       <button className="logout-button" onClick={handleLogout}>Logout</button>
+      <button className="reg-button" onClick={handleRegister}>Register</button>
     </div>
   );
 };

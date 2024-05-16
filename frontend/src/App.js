@@ -4,7 +4,8 @@ import LoginForm from "./Components/LoginForm/LoginForm";
 import RegisterForm from "./Components/RegisterForm/RegisterForm";
 import Home from "./Components/Home";
 import Employee from "./Components/Roles/Employee";
-import TripleTable from "./Components/Roles/Admin";
+import AdminUrlaubDashboard from "./Components/Roles/Admin";
+import AdminRegisterDashboard from "./Components/Roles/RegisterAntrag"
 
 const App = () => {
   return (
@@ -15,7 +16,8 @@ const App = () => {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/home" element={<Home />} />
         <Route path="/employee" element={<Employee />} />
-        <Route path="/adminDashboard" element={<TripleTable />} />
+        <Route path="/urlaubsantraege" element={<AdminUrlaubDashboard />} />
+        <Route path="/registrierungsantraege" element={<AdminRegisterDashboard />} />
       </Routes>
     </Router>
   );
