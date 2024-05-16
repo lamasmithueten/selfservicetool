@@ -19,9 +19,7 @@ const LoginRequest = async (formData) => {
       { headers: headers }
     );
 
-    console.log("Login successful:", response.data);
     message.success("Anemldung Erfolgreich", 2000);
-    console.log(localStorage.token)
     return response.data;
   } catch (error) {
     console.error("Login failed:", error);

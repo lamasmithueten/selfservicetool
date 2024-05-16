@@ -14,6 +14,16 @@
     text-align: center;
 }
   
+.dashboard::-webkit-scrollbar {
+  width: 8px; 
+  background-color: transparent; 
+}
+
+.dashboard::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 6px; 
+}
+
 select {
     background-color: transparent; 
     border: none; 
@@ -24,7 +34,7 @@ select {
   }
 
 select option {
-    color: inherit;
+    background-color: #4F6F52;
     border: none;
 }
 
@@ -36,4 +46,47 @@ select option {
     height: auto !important;
     border-radius: 0 !important;
     text-decoration: underline;
+    cursor: pointer
+}
+
+.table th,
+.table tr,
+.table td {
+  width: 100px;
+  text-align: center;
+  padding: 5px;
+}
+
+.textfield {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  width: 80px;
+  font-size: 16px;
+
+}
+
+.textfield::placeholder {
+  color: white;
+  font-size: 16px;
+
+}
+
+.logout-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 45px;
+
+  background: white;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 700;
 }
