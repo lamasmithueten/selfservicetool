@@ -1,4 +1,4 @@
-name: CI-frontend
+name: CI
 run-name: ${{ github.actor }} will sehen, ob die CI-Pipeline geht
 on: 
   push:
