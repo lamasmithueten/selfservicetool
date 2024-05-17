@@ -140,7 +140,7 @@ const TripleTable = () => {
                   />
                 </td>
                 <td>
-                  <select className="select" onChange={handleChangeState}>
+                  <select className="select" onChange={handleChangeState} defaultValue="accepted">
                     <option className="select-items" value="accepted">approve</option>
                     <option value="declined">decline</option>
                   </select>
@@ -188,7 +188,7 @@ const TripleTable = () => {
                   />
                 </td>
                 <td>
-                  <select className = "select" onChange={handleChangeState}>
+                  <select className = "select" onChange={handleChangeState} defaultValue="accepted">
                     <option className="select-items" value="accepted">approve</option>
                     <option value="declined">decline</option>
                   </select>
@@ -236,7 +236,7 @@ const TripleTable = () => {
                   />
                 </td>
                 <td>
-                  <select className = "select" onChange={handleChangeState}>
+                  <select className = "select" onChange={handleChangeState} defaultValue="accepted">
                     <option className="select-items" value="accepted">approve</option>
                     <option value="declined">decline</option>
                   </select>
