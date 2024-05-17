@@ -70,6 +70,7 @@ const Calendar = () => {
       }
     } catch (error) {
       console.error('Error sending vacation request:', error);
+      message.error("Antrag wurde nicht gesendet", 2000);
     }
   };
 
