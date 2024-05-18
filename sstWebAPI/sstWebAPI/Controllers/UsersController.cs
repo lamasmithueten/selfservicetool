@@ -21,7 +21,7 @@ namespace SelfServiceWebAPI.Controllers
     /// <param name="config"></param>
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class UserController(AppDbContext context) : ControllerBase
+    public class UsersController(AppDbContext context) : ControllerBase
     {
         private readonly AppDbContext _context = context;
 

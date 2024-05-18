@@ -15,7 +15,7 @@ namespace sstWebAPI.Controllers
     /// <param name="config"></param>
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class RegistrationApplicationController(AppDbContext context) : ControllerBase
+    public class RegistrationApplicationsController(AppDbContext context) : ControllerBase
     {
         private readonly AppDbContext _context = context;
 
