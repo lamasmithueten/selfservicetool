@@ -4,7 +4,7 @@ import "./AdminVacantionDashboard.css";
 import { useNavigate } from "react-router-dom";
 import "./AdminRegisterDashboard.css";
 
-const RegisterAntrag = () => {
+const AdminRegisterDashboard = () => {
   const [applications, setApplications] = useState([]);
   const [error, setError] = useState(null);
   const [state, setState] = useState("accepted");
@@ -150,4 +150,4 @@ const RegisterAntrag = () => {
   );
 };
 
-export default RegisterAntrag;
+export default AdminRegisterDashboard;

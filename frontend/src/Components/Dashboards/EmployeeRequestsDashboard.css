@@ -1,6 +1,6 @@
 .employee-dash {
   width: auto;
-  height: 250px;
+  height: 800px;
   max-height: 250px;
   background: transparent;
   border: 2px solid rgba(0, 0, 0, 0.2);
@@ -8,7 +8,6 @@
   color: white;
   border-radius: 10px;
   padding: 10px 10px 20px;
-  margin-top: 20px;
 }
 
 .employee-dash h3 {
@@ -25,4 +24,12 @@
 .employee-dash::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 6px;
+}
+
+.table th,
+.table tr,
+.table td {
+  width: 150px;
+  text-align: center;
+  padding: 5px;
 }

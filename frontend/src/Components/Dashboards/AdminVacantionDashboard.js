@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./AdminRegisterDashboard.css";
+import "./AdminVacantionDashboard.css";
 import { useNavigate } from "react-router-dom";
 
 const AdminVacantionDashboard = () => {
