@@ -1,0 +1,152 @@
+.admin-vac-dashboard {
+  width: auto;
+  height: 800px;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(100px);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 10px 20px;
+}
+
+.admin-vac-dashboard h2 {
+  font-size: 30px;
+  text-align: center;
+}
+
+.admin-vac-dashboard::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+
+.admin-vac-dashboard::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+}
+
+select {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 16px;
+}
+
+select option {
+  background-color: #4f6f52;
+  border: none;
+}
+
+.send {
+  background-color: transparent !important;
+  color: white !important;
+  border: none !important;
+  backdrop-filter: blur(100px) !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.table th,
+.table tr,
+.table td {
+  width: 150px;
+  text-align: center;
+  padding: 5px;
+}
+
+.textfield {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  width: 80px;
+  font-size: 16px;
+}
+
+.textfield::placeholder {
+  color: white;
+  font-size: 16px;
+}
+
+.logout-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 45px;
+  background: #fcaf3c;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 700;
+}
+
+.reg-button {
+  position: fixed;
+  top: 20px;
+  right: 130px;
+  width: 100px;
+  height: 45px;
+  background: #fcaf3c;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 700;
+}
+
+.tab-buttons button {
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(100px);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 2px;
+  max-width: 150px;
+}
+
+.tab-buttons button.active {
+  font-weight: bold;
+  border-bottom: 2px solid #000;
+}
+
+.dashboard {
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.textfield {
+  width: 100%;
+}
+
+.select {
+  width: 100%;
+}
+
+.send {
+  padding: 5px 10px;
+  cursor: pointer;
+}

@@ -1,0 +1,159 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.calendar-info-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 50px; /* 50 pixels gap between calendar and vacation days info */
+  width: 100%;
+}
+
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.react-datepicker {
+  width: 400px !important;
+  height: 400px !important;
+  background-color: transparent !important;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.react-datepicker__header {
+  background-color: transparent !important;
+  border-bottom: none;
+  width: 100%;
+  color: white;
+}
+
+.react-datepicker__current-month {
+  color: white !important;
+}
+
+.react-datepicker__day-name {
+  color: white !important;
+}
+
+.react-datepicker__month-container {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+.react-datepicker__month {
+  width: 100% !important;
+  height: 100% !important;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.react-datepicker__week {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.react-datepicker__day,
+.react-datepicker__day-name,
+.react-datepicker__time-name {
+  width: 14.2% !important;
+  margin: 2px 0;
+  background-color: transparent !important;
+  color: rgb(255, 255, 255) !important;
+  text-align: center;
+  padding: 10px;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range {
+  background-color: rgba(0, 123, 255, 0.5) !important;
+  color: white !important;
+}
+
+h2 {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.antrag-button {
+  margin-top: 30px;
+  width: 150px;
+  height: 25px;
+  background: white;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 700;
+}
+
+.selected-vac {
+  margin-top: 10px;
+  background-color: transparent !important;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.meine-antrage {
+  position: fixed;
+  top: 20px;
+  right: 130px;
+  width: 100px;
+  height: 45px;
+  background: #fcaf3c;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 700;
+}
+
+.vacation-days-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(100px);
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  margin-top: 28%;
+}
+
+.vacation-days-info h3 {
+  color: white;
+  margin-bottom: 10px;
+}

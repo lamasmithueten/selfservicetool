@@ -1,0 +1,35 @@
+.employee-dash {
+  width: auto;
+  height: 800px;
+  max-height: 250px;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(100px);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 10px 20px;
+}
+
+.employee-dash h3 {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.employee-dash::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+
+.employee-dash::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+}
+
+.table th,
+.table tr,
+.table td {
+  width: 150px;
+  text-align: center;
+  padding: 5px;
+}
