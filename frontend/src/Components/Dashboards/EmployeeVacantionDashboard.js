@@ -140,42 +140,45 @@ const EmployeeVacantionDashboard = () => {
 
   return (
     <div className="container">
-      <h2>Urlaubsantrag</h2>
-      <DatePicker
-        selected={startDate}
-        onChange={handleSelect}
-        startDate={startDate}
-        endDate={endDate}
-        selectsRange
-        inline
-      />
-      {startDate && endDate && (
-        <div className="selected-vac">
-          <p>Beginndatum: {startDate.toLocaleDateString()}</p>
-          <p>Endedatum: {endDate.toLocaleDateString()}</p>
-          {workdays !== null && <p>Arbeitstage: {workdays}</p>}
+      <div className="calendar-info-container">
+        <div className="calendar-container">
+          <h2>Urlaubsantrag</h2>
+
+          <DatePicker
+            selected={startDate}
+            onChange={handleSelect}
+            startDate={startDate}
+            endDate={endDate}
+            selectsRange
+            inline
+          />
+          {startDate && endDate && (
+            <div className="selected-vac">
+              <p>Beginndatum: {startDate.toLocaleDateString()}</p>
+              <p>Endedatum: {endDate.toLocaleDateString()}</p>
+              {workdays !== null && <p>Arbeitstage: {workdays}</p>}
+            </div>
+          )}
+          <button className="antrag-button" onClick={handleVacRequest}>
+            Antrag erstellen
+          </button>
         </div>
-      )}
-
-      <div className="vacation-days-info">
-        {vacationDays && (
-          <div>
-            <h3>Info</h3>
-            <p>Tage gesamt: {vacationDays.total_days}</p>
-            <p>Tage benutzt: {vacationDays.used_days}</p>
-            <p>Tage geplant: {vacationDays.planned_days}</p>
-          </div>
-        )}
+        <div className="vacation-days-info">
+          {vacationDays && (
+            <div>
+              <h3>Info</h3>
+              <p>Tage gesamt: {vacationDays.total_days}</p>
+              <p>Tage benutzt: {vacationDays.used_days}</p>
+              <p>Tage geplant: {vacationDays.planned_days}</p>
+            </div>
+          )}
+        </div>
       </div>
-
       <button className="logout-button" onClick={handleLogout}>
         Logout
       </button>
       <button className="meine-antrage" onClick={handleMeine}>
         Meine Anträge
-      </button>
-      <button className="antrag-button" onClick={handleVacRequest}>
-        Antrag erstellen
       </button>
     </div>
   );
