@@ -20,7 +20,7 @@ namespace sstWebAPI.Controllers
     /// </remarks>
     /// <param name="context"></param>
     /// <param name="config"></param>
-    [Route("api/v1/management/Vacations")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class VacationManagementController(AppDbContext context) : Controller
     {
