@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
-using Serilog;
 using sstWebAPI.Helpers;
 using sstWebAPI.Models.DB;
 
@@ -11,9 +9,10 @@ namespace sstWebAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class PasswordController(AppDbContext context) : ControllerBase
+    public class PasswordController(AppDbContext context, IConfiguration configuration) : ControllerBase
     {
         private readonly AppDbContext _context = context;
+        private readonly IConfiguration _configuration = configuration;
 
         /// <summary>
         /// Controller to reset password of user
@@ -22,6 +21,8 @@ namespace sstWebAPI.Controllers
         [HttpPost]
         public IActionResult CreateResetRequest(string email)
         {
+            int expiresIn = 20;
+
             if (email.IsNullOrEmpty())
             {
                 return BadRequest("No email");
@@ -32,16 +33,15 @@ namespace sstWebAPI.Controllers
             var user = _context.user.Where(x => x.email == userEmail).FirstOrDefault();
             if (user == null)
             {
-                //Theoretisch nicht zurückgeben, da Nutzer nicht wissen soll, ob Account existiert
-                return NotFound("No user with this email found");
+                return Created();
             }
 
             string token = "";
 
             while (true)
             {
-                var tokenPuffer = createRandomString(10);
-                var doubleCheckPuffer = _context.password_reset_request.Where(x => x.reset_token == tokenPuffer).FirstOrDefault();
+                var tokenPuffer = createRandomString(1000000, 6);
+                var doubleCheckPuffer = _context.password_reset.Where(x => x.reset_token == tokenPuffer).FirstOrDefault();
                 if (doubleCheckPuffer == null)
                 {
                     token = tokenPuffer;
@@ -51,36 +51,40 @@ namespace sstWebAPI.Controllers
 
             try
             {
-                SendEmailHelper.SendEmail("", userEmail, "passwort reset test", token);
+                sendEmail(userEmail, "test", token);
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
 
-            _context.password_reset_request.Add(new PasswordResetRequestModel(user.ID, token));
+            var entry = _context.password_reset.Where(x => x.user_id == user.ID).FirstOrDefault();
+            if (entry != null) 
+            {
+                entry.reset_token = token;
+                entry.expires = DateTime.Now.AddMinutes(expiresIn);
+            } else
+            {
+                _context.password_reset.Add(new PasswordResetModel(user.ID, token, DateTime.Now.AddMinutes(expiresIn)));
+            }
             _context.SaveChanges();
 
             return Created();
         }
 
-        private string createRandomString(int length)
+        private string createRandomString(int maxValue, int maxLength)
         {
             Random rand = new Random();
-
-            // Choosing the size of string 
-            // Using Next() string 
-            int randValue;
-            string str = "";
-            for (int i = 0; i < length; i++)
-            {
-
-                // Generating a random number. 
-                randValue = rand.Next(0, 26);
-
-                // Appending the letter to string. 
-                str = str + randValue.ToString();
-            }
+            // Generating a random number. 
+            var randValue = rand.Next(0, maxValue);
+            var str = randValue.ToString($"D{maxLength}");
             return str;
+        }
+
+        private void sendEmail(string toEmail, string suject, string body)
+        {
+            var fromEmail = _configuration["ServiceEmailData:Email"] ?? throw new Exception("ServiceEmailData:Email is not found in the configuration.");
+            var appPassword = _configuration["ServiceEmailData:AppPassword"] ?? throw new Exception("ServiceEmailData:AppPassword is not found in the configuration.");
+            SendEmailHelper.SendEmail(fromEmail: fromEmail, emailAppPassword: appPassword, toEmail: toEmail, subject: suject, text: body);
         }
     }
 }

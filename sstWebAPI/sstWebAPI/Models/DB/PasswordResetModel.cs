@@ -2,17 +2,18 @@
 
 namespace sstWebAPI.Models.DB
 {
-    public class PasswordResetRequestModel
+    public class PasswordResetModel
     {
         #region constructors
 
-        public PasswordResetRequestModel() {}
+        public PasswordResetModel() {}
 
-        public PasswordResetRequestModel(Guid userId, string resetToken)
+        public PasswordResetModel(Guid userId, string resetToken, DateTime time)
         {
             id = Guid.NewGuid();
             user_id = userId;
             reset_token = resetToken;
+            expires = time;
         }
 
         #endregion
@@ -33,6 +34,11 @@ namespace sstWebAPI.Models.DB
         /// reset token
         /// </summary>
         public string reset_token { get; set; }
+
+        /// <summary>
+        /// Time when token expires
+        /// </summary>
+        public DateTime expires {  get; set; }
 
         #endregion
     }
