@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using sstWebAPI.Helpers;
+using sstWebAPI.Helpers.Email;
+using sstWebAPI.Helpers.Email.Templates;
 using sstWebAPI.Models.DB;
 using sstWebAPI.Models.DTO.Password;
 
@@ -52,7 +54,7 @@ namespace sstWebAPI.Controllers
 
             try
             {
-                sendEmail(userEmail, "test", token);
+                sendEmail(userEmail, PasswordResetCreateToken.Subject, PasswordResetCreateToken.Body(token));
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);

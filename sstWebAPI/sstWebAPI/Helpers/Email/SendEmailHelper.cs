@@ -1,7 +1,7 @@
 ﻿using System.Net.Mail;
 using System.Net;
 
-namespace sstWebAPI.Helpers
+namespace sstWebAPI.Helpers.Email
 {
     public class SendEmailHelper
     {
