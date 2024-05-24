@@ -100,7 +100,7 @@ namespace sstWebAPI.Controllers
 
             try
             {
-                sendEmail(user.email, "Passwort geändert", "Dein Passwort wurde geändert.");
+                sendEmail(user.email, PasswordResetSuccess.Subject, PasswordResetSuccess.Body);
             }
             catch (Exception ex)
             {
