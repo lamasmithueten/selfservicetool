@@ -100,6 +100,9 @@ namespace sstWebAPI.Controllers
                 }
             }
 
+            string salt = CalcHash.GenerateSalt();
+            registrationuser.Password = $"{CalcHash.GetHashString(registrationuser.Password, salt)}:{salt}";
+
             //all requirements met to save the user in db
             UserModel user = new(registrationuser);
             _context.user.Add(user);

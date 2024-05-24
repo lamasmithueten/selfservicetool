@@ -4,12 +4,13 @@ using Microsoft.IdentityModel.Tokens;
 using SelfServiceWebAPI;
 using sstWebAPI.Helpers;
 using sstWebAPI.Models.DB;
+using sstWebAPI.Models.DTO.Password;
 
 namespace sstWebAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class PasswordController(AppDbContext context, IConfiguration configuration) : ControllerBase
+    public class PasswordsController(AppDbContext context, IConfiguration configuration) : ControllerBase
     {
         private readonly AppDbContext _context = context;
         private readonly IConfiguration _configuration = configuration;
@@ -71,6 +72,56 @@ namespace sstWebAPI.Controllers
             return Created();
         }
 
+        [HttpPut]
+        public IActionResult ChangePassword(ChangePasswordModel model)
+        {
+            var passwordRequestEntry = _context.password_reset.Where(x => x.reset_token == model.reset_token).FirstOrDefault();
+            if(passwordRequestEntry == null) 
+            {
+                return NoContent();
+            }
+
+            if (DateTime.Compare(DateTime.Now, passwordRequestEntry.expires) > 0)
+            {
+                deletePasswordRequest(passwordRequestEntry);
+                return StatusCode(410);
+            }
+
+            var user = _context.user.Find(passwordRequestEntry.user_id);
+            if (user == null)
+            {
+                return NotFound("user was not found");
+            }
+
+            user.password = createPasswordHash(model.newPassword);
+            deletePasswordRequest(passwordRequestEntry);
+
+            try
+            {
+                sendEmail(user.email, "Passwort geändert", "Dein Passwort wurde geändert.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return NoContent();
+        }
+
+        #region helperFunctions
+
+        private void deletePasswordRequest(PasswordResetModel entry)
+        {
+            _context.password_reset.Remove(entry);
+            _context.SaveChanges();
+        }
+
+        private string createPasswordHash(string password)
+        {
+            string salt = CalcHash.GenerateSalt();
+            return $"{CalcHash.GetHashString(password, salt)}:{salt}";
+        }
+
         private string createRandomString(int maxValue, int maxLength)
         {
             Random rand = new Random();
@@ -86,5 +137,6 @@ namespace sstWebAPI.Controllers
             var appPassword = _configuration["ServiceEmailData:AppPassword"] ?? throw new Exception("ServiceEmailData:AppPassword is not found in the configuration.");
             SendEmailHelper.SendEmail(fromEmail: fromEmail, emailAppPassword: appPassword, toEmail: toEmail, subject: suject, text: body);
         }
+        #endregion
     }
 }
