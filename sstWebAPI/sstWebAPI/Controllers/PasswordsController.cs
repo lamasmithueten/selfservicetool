@@ -133,11 +133,11 @@ namespace sstWebAPI.Controllers
             return str;
         }
 
-        private void sendEmail(string toEmail, string suject, string body)
+        private void sendEmail(string toEmail, string subject, string body)
         {
             var fromEmail = _configuration["ServiceEmailData:Email"] ?? throw new Exception("ServiceEmailData:Email is not found in the configuration.");
             var appPassword = _configuration["ServiceEmailData:AppPassword"] ?? throw new Exception("ServiceEmailData:AppPassword is not found in the configuration.");
-            SendEmailHelper.SendEmail(fromEmail: fromEmail, emailAppPassword: appPassword, toEmail: toEmail, subject: suject, text: body);
+            SendEmailHelper.SendEmail(fromEmail: fromEmail, emailAppPassword: appPassword, toEmail: toEmail, subject: subject, text: body);
         }
         #endregion
     }
