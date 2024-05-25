@@ -25,7 +25,11 @@ DROP TABLE IF EXISTS `existing_environment`;
 CREATE TABLE `existing_environment` (
   `ID` uuid NOT NULL,
   `ID_USER` uuid NOT NULL,
-  `IP_address` int(11) unsigned NOT NULL,
+  `virtual_environment` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `answer` varchar(255) NOT NULL,
+  `IP_address` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `ID_USER` (`ID_USER`),
   CONSTRAINT `existing_environment_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `user` (`ID`)
@@ -83,6 +87,7 @@ CREATE TABLE `provisioning_request` (
   `virtual_environment` varchar(255) NOT NULL,
   `purpose` varchar(255) NOT NULL,
   `state` varchar(255) NOT NULL,
+  `answer` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `ID_USER` (`ID_USER`),
   CONSTRAINT `provisioning_request_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `user` (`ID`)
@@ -175,4 +180,4 @@ CREATE TABLE `vacation_request` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-24  9:30:26
+-- Dump completed on 2024-05-25 20:05:02
