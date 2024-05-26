@@ -75,6 +75,23 @@ CREATE TABLE `password_reset` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `provisioning_declined`
+--
+
+DROP TABLE IF EXISTS `provisioning_declined`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `provisioning_declined` (
+  `ID` uuid NOT NULL,
+  `ID_user` uuid NOT NULL,
+  `virtual_environment` varchar(255) NOT NULL,
+  `purpose` varchar(255) NOT NULL,
+  `answer` varchar(255) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `provisioning_request`
 --
 
@@ -86,8 +103,6 @@ CREATE TABLE `provisioning_request` (
   `ID_user` uuid NOT NULL,
   `virtual_environment` varchar(255) NOT NULL,
   `purpose` varchar(255) NOT NULL,
-  `state` varchar(255) NOT NULL,
-  `answer` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `ID_USER` (`ID_user`),
   CONSTRAINT `provisioning_request_ibfk_1` FOREIGN KEY (`ID_user`) REFERENCES `user` (`ID`)
@@ -180,4 +195,4 @@ CREATE TABLE `vacation_request` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-26 11:04:16
+-- Dump completed on 2024-05-26 16:36:21

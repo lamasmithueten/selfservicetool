@@ -1,9 +1,7 @@
 ﻿namespace sstWebAPI.Models.DB
 {
-    public class ProvisioningRequestModel
+    public class ProvisioningDeclinedModel
     {
-        #region properties
-
         /// <summary>
         /// ID of entry
         /// </summary>
@@ -24,6 +22,10 @@
         /// </summary>
         public string purpose { get; set; }
 
-        #endregion
+        /// <summary>
+        /// answer of management for this request
+        /// </summary>
+        public string answer { get; set; }
+
     }
 }

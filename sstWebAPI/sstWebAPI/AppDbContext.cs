@@ -22,5 +22,7 @@ namespace SelfServiceWebAPI
         public DbSet<ProvisioningRequestModel> provisioning_request { get;set; }
 
         public DbSet<VirtualEnvironmentModel> virtual_environment { get; set; }
+
+        public DbSet<ProvisioningDeclinedModel> provisioning_declined { get; set; }
     }
 }
