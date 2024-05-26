@@ -18,5 +18,9 @@ namespace SelfServiceWebAPI
         public DbSet<VacationDaysModel> vacation_days { get; set; }
 
         public DbSet<PasswordResetModel> password_reset { get; set; }
+
+        public DbSet<ProvisioningRequestModel> provisioning_request { get;set; }
+
+        public DbSet<VirtualEnvironmentModel> virtual_environment { get; set; }
     }
 }

@@ -24,15 +24,15 @@ DROP TABLE IF EXISTS `existing_environment`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `existing_environment` (
   `ID` uuid NOT NULL,
-  `ID_USER` uuid NOT NULL,
+  `ID_user` uuid NOT NULL,
   `virtual_environment` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `answer` varchar(255) NOT NULL,
   `IP_address` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`),
-  KEY `ID_USER` (`ID_USER`),
-  CONSTRAINT `existing_environment_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `user` (`ID`)
+  KEY `ID_USER` (`ID_user`),
+  CONSTRAINT `existing_environment_ibfk_1` FOREIGN KEY (`ID_user`) REFERENCES `user` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -83,14 +83,14 @@ DROP TABLE IF EXISTS `provisioning_request`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `provisioning_request` (
   `ID` uuid NOT NULL,
-  `ID_USER` uuid NOT NULL,
+  `ID_user` uuid NOT NULL,
   `virtual_environment` varchar(255) NOT NULL,
   `purpose` varchar(255) NOT NULL,
   `state` varchar(255) NOT NULL,
   `answer` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`),
-  KEY `ID_USER` (`ID_USER`),
-  CONSTRAINT `provisioning_request_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `user` (`ID`)
+  KEY `ID_USER` (`ID_user`),
+  CONSTRAINT `provisioning_request_ibfk_1` FOREIGN KEY (`ID_user`) REFERENCES `user` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -180,4 +180,4 @@ CREATE TABLE `vacation_request` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-25 20:05:02
+-- Dump completed on 2024-05-26 11:04:16
