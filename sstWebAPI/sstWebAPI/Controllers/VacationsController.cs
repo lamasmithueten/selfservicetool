@@ -22,7 +22,7 @@ namespace sstWebAPI.Controllers
     /// <param name="config"></param>
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class VacationController(AppDbContext context) : Controller
+    public class VacationsController(AppDbContext context) : Controller
     {
         private readonly AppDbContext _context = context;
 
@@ -73,6 +73,7 @@ namespace sstWebAPI.Controllers
             {
                 return Unauthorized();
             }
+
             return Ok(VacationManagementController.GetAllVacationsWithUsernameForUserId(user_id, _context));
         }
 

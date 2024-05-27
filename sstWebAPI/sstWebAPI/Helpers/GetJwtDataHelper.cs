@@ -15,10 +15,11 @@ namespace sstWebAPI.Helpers
             var user_id_string = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (user_id_string == null)
             {
-                return false ;
+                return false;
             }
             user_id = Guid.Parse(user_id_string);
             return true;
         }
     }
 }
+
