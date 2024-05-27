@@ -2,6 +2,25 @@
 {
     public class VirtualEnvironmentModel
     {
+        #region constructors
+
+        public VirtualEnvironmentModel() { }
+
+        public VirtualEnvironmentModel(Guid id, Guid userID, string virtualEnvironment, string answer, string ipAdresse, string username, string password) 
+        {
+            this.ID = id;
+            this.ID_user = userID;
+            this.virtual_environment = virtualEnvironment;
+            this.answer = answer;
+            this.username = username;
+            this.password = password;
+            this.IP_address = ipAdresse;
+        }
+
+        #endregion
+
+        #region properties
+
         /// <summary>
         /// ID of entry
         /// </summary>
@@ -36,5 +55,7 @@
         /// password for authentication to use this environemnt
         /// </summary>
         public string password { get; set; }
+
+        #endregion
     }
 }

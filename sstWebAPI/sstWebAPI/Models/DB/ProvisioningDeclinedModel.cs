@@ -2,6 +2,24 @@
 {
     public class ProvisioningDeclinedModel
     {
+        #region constructors
+
+        public ProvisioningDeclinedModel() { } 
+
+        public ProvisioningDeclinedModel(Guid id, Guid userId, string virtualEnvironment, string purpose, string answer) 
+        { 
+            ID = id;
+            ID_user = userId;
+            virtual_environment = virtualEnvironment;
+            this.purpose = purpose;
+            this.answer = answer;
+            this.answer = answer;
+        }
+
+        #endregion
+
+        #region properties
+
         /// <summary>
         /// ID of entry
         /// </summary>
@@ -27,5 +45,6 @@
         /// </summary>
         public string answer { get; set; }
 
+        #endregion
     }
 }
