@@ -5,7 +5,7 @@ import "./EmployeeVacantionDashboard.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { message } from "react-message-popup";
-import { CiSettings } from "react-icons/ci";
+import { CiSettings, CiUser } from "react-icons/ci";
 
 const EmployeeVacantionDashboard = () => {
   const [startDate, setStartDate] = useState(null);
@@ -43,6 +43,10 @@ const EmployeeVacantionDashboard = () => {
       navigate("/login");
     }
     setUserMenuOpen(false);
+  };
+
+  const handleProfile = () => {
+    navigate("/my-profile");
   };
 
   const fetchVacationDays = async () => {
@@ -216,6 +220,9 @@ const EmployeeVacantionDashboard = () => {
           </>
         </div>
       )}
+      <button className="second-button" onClick={handleProfile}>
+        <CiUser />
+      </button>
     </div>
   );
 };

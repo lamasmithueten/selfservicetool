@@ -4,7 +4,7 @@ import "../AdminVacantionDashboard.css";
 import "../OptionButtons.css";
 import { useNavigate } from "react-router-dom";
 import { message } from "react-message-popup";
-import { CiSettings } from "react-icons/ci";
+import { CiSettings, CiUser } from "react-icons/ci";
 
 const AdminProvisioningDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
@@ -112,6 +112,10 @@ const AdminProvisioningDashboard = () => {
 
   const handleOptionsMenu = () => {
     setUserMenuOpen(!isUserMenuOpen);
+  };
+
+  const handleProfile = () => {
+    navigate("/my-profile");
   };
 
   const handleUserOption = (option) => {
@@ -315,6 +319,9 @@ const AdminProvisioningDashboard = () => {
           </>
         </div>
       )}
+      <button className="second-button" onClick={handleProfile}>
+        <CiUser />
+      </button>
     </div>
   );
 };

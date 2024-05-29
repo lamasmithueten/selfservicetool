@@ -1,0 +1,31 @@
+.user-info {
+  width: 500px;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(30px);
+  color: white;
+  border-radius: 10px;
+  padding: 30px 40px;
+  font-size: 16px;
+}
+.user-info h1 {
+  margin-bottom: 50px;
+}
+
+.user-info .content p {
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+.user-info .content p span {
+  display: inline-block;
+  width: 150px;
+}
+
+.user-info .content p .info {
+  margin-left: 20px;
+}
+
+.user-info .content p .label {
+  text-decoration: underline;
+}

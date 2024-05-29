@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { message } from "react-message-popup";
-import { CiSettings } from "react-icons/ci";
+import { CiSettings, CiUser } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
 function EmployeeVMRequest({ toggleForm }) {
@@ -91,6 +91,11 @@ function EmployeeVMRequest({ toggleForm }) {
     }
     setUserMenuOpen(false);
   };
+
+  const handleProfile = () => {
+    navigate("/my-profile");
+  };
+
   return (
     <div>
       <div className="wrapper">
@@ -151,6 +156,9 @@ function EmployeeVMRequest({ toggleForm }) {
           </>
         </div>
       )}
+      <button className="second-button" onClick={handleProfile}>
+        <CiUser />
+      </button>
     </div>
   );
 }

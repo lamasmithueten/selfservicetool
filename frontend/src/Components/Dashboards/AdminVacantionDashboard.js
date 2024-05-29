@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AdminVacantionDashboard.css";
 import { useNavigate } from "react-router-dom";
-import { CiSettings } from "react-icons/ci";
+import { CiSettings, CiUser } from "react-icons/ci";
 import { message } from "react-message-popup";
 
 const AdminVacantionDashboard = () => {
@@ -122,6 +122,10 @@ const AdminVacantionDashboard = () => {
       navigate("/login");
     }
     setUserMenuOpen(false);
+  };
+
+  const handleProfile = () => {
+    navigate("/my-profile");
   };
 
   const renderTable = (applications, title) => (
@@ -247,6 +251,9 @@ const AdminVacantionDashboard = () => {
           </>
         </div>
       )}
+      <button className="second-button" onClick={handleProfile}>
+        <CiUser />
+      </button>
     </div>
   );
 };
