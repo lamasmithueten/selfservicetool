@@ -1,7 +1,18 @@
 ﻿namespace sstWebAPI.Models.DB
 {
+
     public class ProvisioningRequestModel
     {
+        public ProvisioningRequestModel() { }
+
+        public ProvisioningRequestModel(Guid id, Guid userId, string virtualEnvironment, string purpose)
+        {
+            ID = id;
+            ID_user = userId;
+            this.virtual_environment = virtualEnvironment;
+            this.purpose = purpose;
+        }
+
         #region properties
 
         /// <summary>
