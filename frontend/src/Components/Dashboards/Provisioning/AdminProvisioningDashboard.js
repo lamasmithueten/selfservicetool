@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./AdminVacantionDashboard.css";
+import "../AdminVacantionDashboard.css";
+import "../OptionButtons.css";
 import { useNavigate } from "react-router-dom";
 
-const AdminVacantionDashboard = () => {
+const AdminProvisioningDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
   const [acceptedApplications, setAcceptedApplications] = useState([]);
   const [declinedApplications, setDeclinedApplications] = useState([]);
@@ -22,7 +23,7 @@ const AdminVacantionDashboard = () => {
         Authorization: `Bearer ${token}`,
       };
       const response = await axios.get(
-        "https://api.mwerr.de/api/v1/VacationManagement",
+        "https://api.mwerr.de/api/v1/Provisioning",
         {
           headers: headers,
         }
@@ -70,7 +71,7 @@ const AdminVacantionDashboard = () => {
 
       console.log(requestBody);
       const response = await axios.patch(
-        "https://api.mwerr.de/api/v1/VacationManagement",
+        "https://api.mwerr.de/api/v1/Provisioning",
         requestBody,
         {
           headers: headers,
@@ -110,39 +111,39 @@ const AdminVacantionDashboard = () => {
     navigate("/registrierungsantraege");
   };
 
-  const handleProvisioning = () => {
-    navigate("/provisioningantraege ");
+  const handleUrlaub = () => {
+    navigate("/urlaubsantraege");
   };
 
-  const renderTable = (applications, title) => (
+  const renderPendingTable = () => (
     <div
       className="admin-vac-dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <h2>{title}</h2>
+      <h2>Pending Applications</h2>
       <table border="1" className="table">
         <thead>
           <tr>
+            <th>Antrags-ID</th>
+            <th>Nutzer-ID</th>
             <th>Vorname</th>
             <th>Nachname</th>
-            <th>Beginn</th>
-            <th>Ende</th>
-            <th>Länge</th>
-            <th>Zustand</th>
+            <th>Art der Umgebung</th>
+            <th>Zweck</th>
             <th>Grund</th>
             <th>Bearbeite</th>
             <th>Update</th>
           </tr>
         </thead>
         <tbody>
-          {applications.map((application, index) => (
+          {pendingApplications.map((application, index) => (
             <tr key={index}>
+              <td>{application.antrags_id}</td>
+              <td>{application.nutzer_id}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.first_day}</td>
-              <td>{application.last_day}</td>
-              <td>{application.number_of_days}</td>
-              <td>{application.state}</td>
+              <td>{application.art}</td>
+              <td>{application.zweck}</td>
               <td>
                 <input
                   type="text"
@@ -186,6 +187,78 @@ const AdminVacantionDashboard = () => {
     </div>
   );
 
+  const renderAcceptedTable = () => (
+    <div
+      className="admin-vac-dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
+      <h2>Accepted Applications</h2>
+      <table border="1" className="table">
+        <thead>
+          <tr>
+            <th>Antrags-ID</th>
+            <th>Nutzer-ID</th>
+            <th>Username</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Art der Umgebung</th>
+            <th>Zweck</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {acceptedApplications.map((application, index) => (
+            <tr key={index}>
+              <td>{application.antrags_id}</td>
+              <td>{application.nutzer_id}</td>
+              <td>{application.username}</td>
+              <td>{application.first_name}</td>
+              <td>{application.last_name}</td>
+              <td>{application.art}</td>
+              <td>{application.zweck}</td>
+              <td>{application.ip}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const renderDeclinedTable = () => (
+    <div
+      className="admin-vac-dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
+      <h2>Declined Applications</h2>
+      <table border="1" className="table">
+        <thead>
+          <tr>
+            <th>Antrags-ID</th>
+            <th>Nutzer-ID</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Art der Umgebung</th>
+            <th>Zweck</th>
+            <th>Grund</th>
+          </tr>
+        </thead>
+        <tbody>
+          {declinedApplications.map((application, index) => (
+            <tr key={index}>
+              <td>{application.antrags_id}</td>
+              <td>{application.nutzer_id}</td>
+              <td>{application.first_name}</td>
+              <td>{application.last_name}</td>
+              <td>{application.art}</td>
+              <td>{application.zweck}</td>
+              <td>{application.reason}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
   return (
     <div>
       {error && <p>{error}</p>}
@@ -210,12 +283,9 @@ const AdminVacantionDashboard = () => {
         </button>
       </div>
 
-      {activeTab === "pending" &&
-        renderTable(pendingApplications, "Pending Applications")}
-      {activeTab === "accepted" &&
-        renderTable(acceptedApplications, "Accepted Applications")}
-      {activeTab === "declined" &&
-        renderTable(declinedApplications, "Declined Applications")}
+      {activeTab === "pending" && renderPendingTable()}
+      {activeTab === "accepted" && renderAcceptedTable()}
+      {activeTab === "declined" && renderDeclinedTable()}
 
       <button className="first-button" onClick={handleLogout}>
         Logout
@@ -223,11 +293,11 @@ const AdminVacantionDashboard = () => {
       <button className="second-button" onClick={handleRegister}>
         Register
       </button>
-      <button className="third-button" onClick={handleProvisioning}>
-        Provision
+      <button className="third-button" onClick={handleUrlaub}>
+        Urlaub
       </button>
     </div>
   );
 };
 
-export default AdminVacantionDashboard;
+export default AdminProvisioningDashboard;

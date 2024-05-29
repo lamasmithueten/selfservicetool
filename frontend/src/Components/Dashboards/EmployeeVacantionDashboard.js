@@ -28,6 +28,10 @@ const EmployeeVacantionDashboard = () => {
     navigate("/antraege");
   };
 
+  const handleProvisioning = () => {
+    navigate("/vmantrag ");
+  };
+
   const fetchVacationDays = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -174,11 +178,14 @@ const EmployeeVacantionDashboard = () => {
           )}
         </div>
       </div>
-      <button className="logout-button" onClick={handleLogout}>
+      <button className="first-button" onClick={handleLogout}>
         Logout
       </button>
-      <button className="meine-antrage" onClick={handleMeine}>
+      <button className="second-button" onClick={handleMeine}>
         Meine Anträge
+      </button>
+      <button className="third-button" onClick={handleProvisioning}>
+        Provision
       </button>
     </div>
   );

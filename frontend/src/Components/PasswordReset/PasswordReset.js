@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CiUser, CiLock } from "react-icons/ci";
 import { message } from "react-message-popup";
-import "./PasswordValidation.css";
+import "./PasswordPageStyle.css";
 function ResetPassword({ toggleForm }) {
   const [formData, setFormData] = useState({
     reset_token: "",
@@ -96,7 +96,7 @@ function ResetPassword({ toggleForm }) {
   return (
     <div className="wrapper">
       <form onSubmit={handleSubmit}>
-        <h1>Passwort Rücksetzen</h1>
+        <h1>Passwort Rücksetzung</h1>
         <div className="input-box">
           <input
             type="text"

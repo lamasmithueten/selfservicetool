@@ -89,6 +89,10 @@ const AdminRegisterDashboard = () => {
     navigate("/urlaubsantraege");
   };
 
+  const handleProvisioning = () => {
+    navigate("/provisioningantraege ");
+  };
+
   return (
     <div>
       {error && <p>{error}</p>}
@@ -140,11 +144,14 @@ const AdminRegisterDashboard = () => {
           </tbody>
         </table>
       </div>
-      <button className="logout-button" onClick={handleLogout}>
+      <button className="first-button" onClick={handleLogout}>
         Logout
       </button>
-      <button className="vacantion-button" onClick={handleUrlaub}>
+      <button className="second-button" onClick={handleUrlaub}>
         Urlaub
+      </button>
+      <button className="third-button" onClick={handleProvisioning}>
+        Provision
       </button>
     </div>
   );

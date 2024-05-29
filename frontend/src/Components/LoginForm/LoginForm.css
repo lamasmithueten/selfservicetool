@@ -95,33 +95,3 @@
 .register-link p a:hover {
   text-decoration: underline;
 }
-
-.reset-info {
-  margin-top: 15px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  font-size: 14px;
-  padding: 20px 15px;
-  border-radius: 10px;
-}
-
-.wrapper .reset {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14.5px;
-  margin: -15px 0 15px;
-  padding: 15px 10px;
-}
-
-.reset label input {
-  align-content: white;
-  margin-right: 4px;
-}
-
-.reset a {
-  color: white;
-  text-decoration: none;
-}
-
-.reset a:hover {
-  text-decoration: underline;
-}

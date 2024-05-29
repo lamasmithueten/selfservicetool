@@ -47,6 +47,10 @@ const EmployeeRequestsDashboard = () => {
     navigate("/employee");
   };
 
+  const handleProvisioning = () => {
+    navigate("/vmantrag ");
+  };
+
   const renderTable = (applications, title) => (
     <div
       className="employee-dash"
@@ -115,11 +119,14 @@ const EmployeeRequestsDashboard = () => {
       {activeTab === "declined" &&
         renderTable(declinedApplications, "Declined Applications")}
 
-      <button className="logout-button" onClick={handleLogout}>
+      <button className="first-button" onClick={handleLogout}>
         Logout
       </button>
-      <button className="meine-antrage" onClick={handleMeine}>
-        Meine Anträge
+      <button className="second-button" onClick={handleMeine}>
+        Antrag stellen
+      </button>
+      <button className="third-button" onClick={handleProvisioning}>
+        Provision
       </button>
     </div>
   );

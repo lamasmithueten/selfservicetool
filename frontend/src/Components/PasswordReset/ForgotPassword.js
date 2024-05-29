@@ -62,11 +62,11 @@ function ForgotPassword({ toggleForm }) {
   return (
     <div className="wrapper">
       <form onSubmit={handleSubmit}>
-        <h1>Passwort Rücksetzen</h1>
+        <h1>Passwort vergessen</h1>
         <p className="reset-info">
-          Gib deine E-Mail-Adresse ein, mit der du dich registriert hast. Wir
-          senden dir einen Code zum Zurücksetzen des Passworts. Bitte auch Spam
-          Ordner schauen.
+          Bitte geben Sie Ihre E-Mail Adresse an, mit welchen Sie registriert
+          sind. Wir senden Ihnen einen Code zum Rücksetzung des Passworts.
+          Beobachten Sie auch Ihr Spam Ordner bitte.
         </p>
         {errors.email && <p className="error">{errors.email}</p>}
         <div className="input-box">

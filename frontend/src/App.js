@@ -8,6 +8,8 @@ import EmployeeVacantionDashboard from "./Components/Dashboards/EmployeeVacantio
 import AdminVacantionDashboard from "./Components/Dashboards/AdminVacantionDashboard";
 import AdminRegisterDashboard from "./Components/Dashboards/AdminRegisterDashboard";
 import EmployeeRequestsDashboard from "./Components/Dashboards/EmployeeRequestsDashboard";
+import AdminProvisioningDashboard from "./Components/Dashboards/Provisioning/AdminProvisioningDashboard";
+import EmployeeProvisioningDashboard from "./Components/Dashboards/Provisioning/EmployeeProvisioningDashboard";
 
 const App = () => {
   return (
@@ -24,6 +26,11 @@ const App = () => {
           path="/registrierungsantraege"
           element={<AdminRegisterDashboard />}
         />
+        <Route
+          path="/provisioningantraege"
+          element={<AdminProvisioningDashboard />}
+        />
+        <Route path="/vmantrag" element={<EmployeeProvisioningDashboard />} />
         <Route path="/antraege" element={<EmployeeRequestsDashboard />} />
       </Routes>
     </Router>
