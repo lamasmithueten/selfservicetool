@@ -1,46 +1,39 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "./EmployeeRequestsDashboard.css";
 import { message } from "react-message-popup";
 import { CiSettings } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
-const EmployeeRequestsDashboard = () => {
-  const [pendingApplications, setPendingApplications] = useState([]);
+const EmployeeVMList = () => {
   const [acceptedApplications, setAcceptedApplications] = useState([]);
-  const [declinedApplications, setDeclinedApplications] = useState([]);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("pending");
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
       const headers = {
         accept: "*/*",
-        Authorization: `Bearer ${token}`,
         "x-api-key": "keyTest",
+        Authorization: `Bearer ${token}`,
       };
       const response = await axios.get(
-        "https://api.mwerr.de/api/v1/Vacations",
+        "https://api.mwerr.de/api/v1/Provisionings",
         {
           headers: headers,
         }
       );
 
-      setPendingApplications(response.data.pending_applications);
       setAcceptedApplications(response.data.accepted_applications);
-      setDeclinedApplications(response.data.declined_applications);
     } catch (error) {
       setError("Failed to fetch data");
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
   const handleOptionsMenu = () => {
     setUserMenuOpen(!isUserMenuOpen);
   };
@@ -64,76 +57,44 @@ const EmployeeRequestsDashboard = () => {
     }
     setUserMenuOpen(false);
   };
-
-  const renderTable = (applications, title) => (
+  const renderMyVms = () => (
     <div
-      className="employee-dash"
+      className="admin-vac-dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <div>
-        <h3>{title}</h3>
-        <table border="1" className="table">
-          <thead>
-            <tr>
-              <th>Vorname</th>
-              <th>Nachname</th>
-              <th>Beginn</th>
-              <th>Ende</th>
-              <th>Anzahl Tage</th>
-              <th>Status</th>
-              <th>Grund</th>
+      <h2>Meine Umgebungen</h2>
+      <table border="1" className="table">
+        <thead>
+          <tr>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Art der Umgebung</th>
+            <th>Nutzername</th>
+            <th>Passwort</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {acceptedApplications.map((application, index) => (
+            <tr key={index}>
+              <td>{application.first_name}</td>
+              <td>{application.last_name}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.username}</td>
+              <td>{application.password}</td>
+              <td>{application.iP_address}</td>
             </tr>
-          </thead>
-          <tbody>
-            {applications.map((application, index) => (
-              <tr key={index}>
-                <td>{application.first_name}</td>
-                <td>{application.last_name}</td>
-                <td>{application.first_day}</td>
-                <td>{application.last_day}</td>
-                <td>{application.number_of_days}</td>
-                <td>{application.state}</td>
-                <td>{application.reason}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 
   return (
     <div>
-      <h1>Urlaubsanträge</h1>
+      <h1>Meine Umgebungen</h1>
       {error && <p>{error}</p>}
-      <div className="tab-buttons">
-        <button
-          onClick={() => setActiveTab("pending")}
-          className={activeTab === "pending" ? "active" : ""}
-        >
-          Pending Applications
-        </button>
-        <button
-          onClick={() => setActiveTab("accepted")}
-          className={activeTab === "accepted" ? "active" : ""}
-        >
-          Accepted Applications
-        </button>
-        <button
-          onClick={() => setActiveTab("declined")}
-          className={activeTab === "declined" ? "active" : ""}
-        >
-          Declined Applications
-        </button>
-      </div>
-
-      {activeTab === "pending" &&
-        renderTable(pendingApplications, "Pending Applications")}
-      {activeTab === "accepted" &&
-        renderTable(acceptedApplications, "Accepted Applications")}
-      {activeTab === "declined" &&
-        renderTable(declinedApplications, "Declined Applications")}
-
+      {renderMyVms()}
       <button className="first-button" onClick={handleOptionsMenu}>
         <CiSettings />
       </button>
@@ -163,4 +124,4 @@ const EmployeeRequestsDashboard = () => {
   );
 };
 
-export default EmployeeRequestsDashboard;
+export default EmployeeVMList;

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./AdminVacantionDashboard.css";
+import "../AdminVacantionDashboard.css";
+import "../OptionButtons.css";
 import { useNavigate } from "react-router-dom";
-import { CiSettings } from "react-icons/ci";
 import { message } from "react-message-popup";
+import { CiSettings } from "react-icons/ci";
 
-const AdminVacantionDashboard = () => {
+const AdminProvisioningDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
   const [acceptedApplications, setAcceptedApplications] = useState([]);
   const [declinedApplications, setDeclinedApplications] = useState([]);
@@ -25,7 +26,7 @@ const AdminVacantionDashboard = () => {
         Authorization: `Bearer ${token}`,
       };
       const response = await axios.get(
-        "https://api.mwerr.de/api/v1/VacationManagement",
+        "https://api.mwerr.de/api/v1/Provisionings/management",
         {
           headers: headers,
         }
@@ -37,13 +38,13 @@ const AdminVacantionDashboard = () => {
 
       const reasonsObj = {};
       response.data.pending_applications.forEach((application) => {
-        reasonsObj[application.application_ID] = application.reason || "";
+        reasonsObj[application.id] = application.reason || "";
       });
       response.data.accepted_applications.forEach((application) => {
-        reasonsObj[application.application_ID] = application.reason || "";
+        reasonsObj[application.id] = application.reason || "";
       });
       response.data.declined_applications.forEach((application) => {
-        reasonsObj[application.application_ID] = application.reason || "";
+        reasonsObj[application.id] = application.reason || "";
       });
       setReasons(reasonsObj);
     } catch (error) {
@@ -53,6 +54,7 @@ const AdminVacantionDashboard = () => {
 
   useEffect(() => {
     fetchData();
+    setSelectedState({});
   }, []);
 
   const handleButtonClick = async (applicationId) => {
@@ -65,16 +67,18 @@ const AdminVacantionDashboard = () => {
         "Content-Type": "application/json",
       };
 
+      const acceptOrDeclineValue =
+        selectedState[applicationId] === "declined" ? false : true;
+
       const requestBody = {
-        application_id: applicationId,
-        state: selectedState[applicationId] || "accepted",
-        reason: reasons[applicationId],
+        applicationId: applicationId,
+        acceptOrDecline: acceptOrDeclineValue,
+        answer: reasons[applicationId],
       };
 
-      message.success("Anfrage wurde bearbeitet");
       console.log(requestBody);
-      const response = await axios.patch(
-        "https://api.mwerr.de/api/v1/VacationManagement",
+      const response = await axios.put(
+        "https://api.mwerr.de/api/v1/Provisionings",
         requestBody,
         {
           headers: headers,
@@ -84,6 +88,7 @@ const AdminVacantionDashboard = () => {
       console.log("Request successful:", response.data);
       setSelectedState({});
       fetchData();
+      message.success("Anfrage wurde bearbeitet");
     } catch (error) {
       console.error("Error while sending PATCH request:", error);
     }
@@ -124,43 +129,41 @@ const AdminVacantionDashboard = () => {
     setUserMenuOpen(false);
   };
 
-  const renderTable = (applications, title) => (
+  const renderPendingTable = () => (
     <div
       className="admin-vac-dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <h2>{title}</h2>
+      <h2>Pending Applications</h2>
       <table border="1" className="table">
         <thead>
           <tr>
+            <th>Antrags-ID</th>
+            <th>Nutzer-ID</th>
             <th>Vorname</th>
             <th>Nachname</th>
-            <th>Beginn</th>
-            <th>Ende</th>
-            <th>Länge</th>
-            <th>Zustand</th>
+            <th>Art der Umgebung</th>
+            <th>Zweck</th>
             <th>Grund</th>
             <th>Bearbeite</th>
             <th>Update</th>
           </tr>
         </thead>
         <tbody>
-          {applications.map((application, index) => (
+          {pendingApplications.map((application, index) => (
             <tr key={index}>
+              <td>{application.id}</td>
+              <td>{application.iD_user}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.first_day}</td>
-              <td>{application.last_day}</td>
-              <td>{application.number_of_days}</td>
-              <td>{application.state}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.purpose}</td>
               <td>
                 <input
                   type="text"
                   placeholder={application.reason}
-                  value={reasons[application.application_ID]}
-                  onChange={(e) =>
-                    handleChangeReason(e, application.application_ID)
-                  }
+                  value={reasons[application.id]}
+                  onChange={(e) => handleChangeReason(e, application.id)}
                   className="textfield"
                   maxLength={100}
                 />
@@ -168,12 +171,8 @@ const AdminVacantionDashboard = () => {
               <td>
                 <select
                   className="select"
-                  onChange={(e) =>
-                    handleChangeState(e, application.application_ID)
-                  }
-                  value={
-                    selectedState[application.application_ID] || "accepted"
-                  }
+                  onChange={(e) => handleChangeState(e, application.id)}
+                  value={selectedState[application.id] || "accepted"}
                 >
                   <option className="select-items" value="accepted">
                     accept
@@ -184,7 +183,7 @@ const AdminVacantionDashboard = () => {
               <td>
                 <button
                   className="send"
-                  onClick={() => handleButtonClick(application.application_ID)}
+                  onClick={() => handleButtonClick(application.id)}
                 >
                   Send
                 </button>
@@ -196,9 +195,81 @@ const AdminVacantionDashboard = () => {
     </div>
   );
 
+  const renderAcceptedTable = () => (
+    <div
+      className="admin-vac-dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
+      <h2>Accepted Applications</h2>
+      <table border="1" className="table">
+        <thead>
+          <tr>
+            <th>Antrags-ID</th>
+            <th>Nutzer-ID</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Art der Umgebung</th>
+            <th>Username</th>
+            <th>Passwort</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {acceptedApplications.map((application, index) => (
+            <tr key={index}>
+              <td>{application.id}</td>
+              <td>{application.iD_user}</td>
+              <td>{application.first_name}</td>
+              <td>{application.last_name}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.username}</td>
+              <td>{application.password}</td>
+              <td>{application.iP_address}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const renderDeclinedTable = () => (
+    <div
+      className="admin-vac-dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
+      <h2>Declined Applications</h2>
+      <table border="1" className="table">
+        <thead>
+          <tr>
+            <th>Antrags-ID</th>
+            <th>Nutzer-ID</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Art der Umgebung</th>
+            <th>Zweck</th>
+            <th>Grund</th>
+          </tr>
+        </thead>
+        <tbody>
+          {declinedApplications.map((application, index) => (
+            <tr key={index}>
+              <td>{application.id}</td>
+              <td>{application.iD_user}</td>
+              <td>{application.first_name}</td>
+              <td>{application.last_name}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.purpose}</td>
+              <td>{application.answer}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
   return (
     <div>
-      <h1>Urlaubsanträge</h1>
+      <h1>Umgebungsanträge</h1>
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
@@ -221,12 +292,9 @@ const AdminVacantionDashboard = () => {
         </button>
       </div>
 
-      {activeTab === "pending" &&
-        renderTable(pendingApplications, "Pending Applications")}
-      {activeTab === "accepted" &&
-        renderTable(acceptedApplications, "Accepted Applications")}
-      {activeTab === "declined" &&
-        renderTable(declinedApplications, "Declined Applications")}
+      {activeTab === "pending" && renderPendingTable()}
+      {activeTab === "accepted" && renderAcceptedTable()}
+      {activeTab === "declined" && renderDeclinedTable()}
 
       <button className="first-button" onClick={handleOptionsMenu}>
         <CiSettings />
@@ -251,4 +319,4 @@ const AdminVacantionDashboard = () => {
   );
 };
 
-export default AdminVacantionDashboard;
+export default AdminProvisioningDashboard;

@@ -31,17 +31,20 @@ function LoginForm({ toggleForm }) {
     const token = await LoginRequest(formData);
     localStorage.setItem("token", token);
     if (token != null) {
-      const userResponse = await axios.get("https://api.mwerr.de/api/v1/User", {
-        headers: {
-          accept: "*/*",
-          Authorization: `Bearer ${token}`,
-          "x-api-key": "keyTest",
-        },
-      });
-      if(userResponse.data.role === "admin") {
-        navigate("/urlaubsantraege"); 
+      const userResponse = await axios.get(
+        "https://api.mwerr.de/api/v1/Users",
+        {
+          headers: {
+            accept: "*/*",
+            Authorization: `Bearer ${token}`,
+            "x-api-key": "keyTest",
+          },
+        }
+      );
+      if (userResponse.data.role === "admin") {
+        navigate("/vacantion-requests");
       } else {
-        navigate("/employee"); 
+        navigate("/my-vacation-requests");
       }
     }
   };
@@ -50,7 +53,7 @@ function LoginForm({ toggleForm }) {
     <div className="wrapper">
       <form onSubmit={handleSubmit}>
         <h1>Anmelden</h1>
-        {error && <p className="error">{error}</p>} 
+        {error && <p className="error">{error}</p>}
         <div className="input-box">
           <input
             type="text"
@@ -75,7 +78,7 @@ function LoginForm({ toggleForm }) {
           />{" "}
         </div>
         <div className="forgot">
-          <a href="resetPassword">Passwort vergessen?</a>
+          <a href="forgotPassword">Passwort vergessen?</a>
         </div>
         <button type="submit" className="submit-button">
           Anmelden
