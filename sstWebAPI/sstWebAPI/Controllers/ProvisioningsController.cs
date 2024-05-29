@@ -60,26 +60,30 @@ namespace sstWebAPI.Controllers
             return Created();
         }
 
-        /*
         [HttpPost]
-        [Authorize]
-        public IActionResult test()
+        public ActionResult CreateProvisioningApplications(ProvisioningRequestCreationModel model)
         {
+            ProvisioningRequestModel request = new();
+
             if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
             {
                 return Unauthorized();
             }
 
-            var testRequest = new ProvisioningRequestModel();
-            testRequest.ID = Guid.NewGuid();
-            testRequest.ID_user = user_id;
-            testRequest.purpose = "test";
-            testRequest.virtual_environment = "windows 10";
+            if (!_context.virtualenvexamples.Select(x => x.name).ToList().Contains(model.VirtualEnvironment))
+            {
+                return BadRequest("Virtual environment not valid");
+            }
 
-            _context.provisioning_request.Add(testRequest);
+            request.ID = Guid.NewGuid();
+            request.ID_user = user_id;
+            request.purpose = model.Purpose;
+            request.virtual_environment = model.VirtualEnvironment;
+            
+            _context.provisioning_request.Add(request);
             _context.SaveChanges();
             return Created();
-        }*/
+        }
 
         #region helperFunctions
 
