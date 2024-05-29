@@ -93,11 +93,30 @@ namespace sstWebAPI.Controllers
                 return Unauthorized();
             }
 
-            var pending = _context.provisioning_request.Where(x => x.ID_user == user_id && x.state == ProvisioningApplicationStates.Pending).ToList();
-            var accepted = _context.existing_environment.Where(x => x.ID_user == user_id).ToList();
-            var declined = _context.provisioning_declined.Where(x => x.ID_user == user_id).ToList();
+            var data = GetData(user_id);
+            return Ok(data);
+        }
 
-            return Ok(new GetProvisioningApplicationsModel(pending, accepted, declined));
+        [HttpGet("management")]
+        [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Management)]
+        public IActionResult GetApplicationOfUserManagement(Guid user_id)
+        {
+            if(user_id == Guid.Empty)
+            {
+                var data = GetData();
+                return Ok(data);
+            }
+            else
+            {
+                var user = _context.user.Find(user_id);
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                var data = GetData(user_id);
+                return Ok(data);
+            }
         }
 
         #region helperFunctions
@@ -195,13 +214,13 @@ namespace sstWebAPI.Controllers
             }
         }
 
-        private GetProvisioningDataModel GetData()
+        private GetProvisioningDataModel GetData(Guid? ID = null)
         {
-            var enviroment = GetEnviroments();
-            var requests = GetRequests();
-            var declined = GetDeclined();
+            var enviroment = GetEnviroments(ID);
+            var requests = GetRequests(ID);
+            var declined = GetDeclined(ID);
 
-            return new GetProvisioningDataModel(enviroment, requests, declined);
+            return new GetProvisioningDataModel(requests, enviroment, declined);
         }
 
         #endregion
