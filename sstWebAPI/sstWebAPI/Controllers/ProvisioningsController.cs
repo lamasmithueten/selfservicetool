@@ -65,10 +65,10 @@ namespace sstWebAPI.Controllers
         {
             ProvisioningRequestModel request = new();
 
-            //if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
-            //{
-            //    return Unauthorized();
-            //}
+            if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
+            {
+                return Unauthorized();
+            }
 
             if (!_context.virtualenvexamples.Select(x => x.name).ToList().Contains(model.VirtualEnvironment))
             {
@@ -76,36 +76,14 @@ namespace sstWebAPI.Controllers
             }
 
             request.ID = Guid.NewGuid();
-            request.ID_user = _context.user.FirstOrDefault().ID ;//user_id;
+            request.ID_user = user_id;
             request.purpose = model.Purpose;
             request.virtual_environment = model.VirtualEnvironment;
             
-
             _context.provisioning_request.Add(request);
             _context.SaveChanges();
             return Created();
         }
-
-        /*
-        [HttpPost]
-        [Authorize]
-        public IActionResult test()
-        {
-            if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
-            {
-                return Unauthorized();
-            }
-
-            var testRequest = new ProvisioningRequestModel();
-            testRequest.ID = Guid.NewGuid();
-            testRequest.ID_user = user_id;
-            testRequest.purpose = "test";
-            testRequest.virtual_environment = "windows 10";
-
-            _context.provisioning_request.Add(testRequest);
-            _context.SaveChanges();
-            return Created();
-        }*/
 
         #region helperFunctions
 
