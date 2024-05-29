@@ -43,7 +43,7 @@ namespace sstWebAPI.Controllers
             Log.Information("Get-request for 'api/GetUserByUsername' => " + name);
             return Ok(user);
         }
-
+/*
         [HttpPost("CreateUser")]
         public ActionResult CreateUser(UserModel user)
         {
@@ -53,7 +53,7 @@ namespace sstWebAPI.Controllers
             _context.vacation_days.Add(new VacationDaysModel(userId: user.ID));
             _context.SaveChanges();
             return Ok(user);
-        }
+        }*/
 
         [HttpPut("UpdateUser")]
         public ActionResult UpdateUser(UserModel user)
