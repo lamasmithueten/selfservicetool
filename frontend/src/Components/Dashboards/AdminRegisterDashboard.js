@@ -3,11 +3,14 @@ import axios from "axios";
 import "./AdminVacantionDashboard.css";
 import { useNavigate } from "react-router-dom";
 import "./AdminRegisterDashboard.css";
+import { message } from "react-message-popup";
+import { CiSettings } from "react-icons/ci";
 
 const AdminRegisterDashboard = () => {
   const [applications, setApplications] = useState([]);
   const [error, setError] = useState(null);
   const [state, setState] = useState("accepted");
+  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -80,21 +83,28 @@ const AdminRegisterDashboard = () => {
     setState(e.target.value);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleOptionsMenu = () => {
+    setUserMenuOpen(!isUserMenuOpen);
   };
 
-  const handleUrlaub = () => {
-    navigate("/urlaubsantraege");
-  };
-
-  const handleProvisioning = () => {
-    navigate("/provisioningantraege ");
+  const handleUserOption = (option) => {
+    if (option === "register") {
+      navigate("/registration-requests");
+    } else if (option === "vacantion") {
+      navigate("/vacantion-requests");
+    } else if (option === "provision") {
+      navigate("/provisioning-requests");
+    } else if (option === "logout") {
+      message.success("You have been logged out", 1500);
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+    setUserMenuOpen(false);
   };
 
   return (
     <div>
+      <h1>Registrierungsanträge</h1>
       {error && <p>{error}</p>}
       <div
         className="admin-reg-dashboard"
@@ -144,15 +154,25 @@ const AdminRegisterDashboard = () => {
           </tbody>
         </table>
       </div>
-      <button className="first-button" onClick={handleLogout}>
-        Logout
+      <button className="first-button" onClick={handleOptionsMenu}>
+        <CiSettings />
       </button>
-      <button className="second-button" onClick={handleUrlaub}>
-        Urlaub
-      </button>
-      <button className="third-button" onClick={handleProvisioning}>
-        Provision
-      </button>
+      {isUserMenuOpen && (
+        <div className="dropdown-menu">
+          <>
+            <button onClick={() => handleUserOption("register")}>
+              Registrierungsanträge
+            </button>
+            <button onClick={() => handleUserOption("vacantion")}>
+              Urlaubsanträge
+            </button>
+            <button onClick={() => handleUserOption("provision")}>
+              Umgebungsanträge
+            </button>
+            <button onClick={() => handleUserOption("logout")}>Logout</button>
+          </>
+        </div>
+      )}
     </div>
   );
 };

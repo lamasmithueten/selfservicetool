@@ -5,12 +5,14 @@ import "./EmployeeVacantionDashboard.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { message } from "react-message-popup";
+import { CiSettings } from "react-icons/ci";
 
 const EmployeeVacantionDashboard = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [workdays, setWorkdays] = useState(null);
   const [vacationDays, setVacationDays] = useState(null);
+  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSelect = (dates) => {
@@ -19,17 +21,28 @@ const EmployeeVacantionDashboard = () => {
     setEndDate(end);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleOptionsMenu = () => {
+    setUserMenuOpen(!isUserMenuOpen);
   };
 
-  const handleMeine = () => {
-    navigate("/antraege");
-  };
-
-  const handleProvisioning = () => {
-    navigate("/vmantrag ");
+  const handleUserOption = (option) => {
+    // TODO: switch case
+    if (option === "vacantion") {
+      navigate("/my-vacation-requests");
+    } else if (option === "vacantion-new") {
+      navigate("/vacation-request/new");
+    } else if (option === "provision") {
+      navigate("/my-provisioning-requests");
+    } else if (option === "provision-new") {
+      navigate("/provisioning-request/new");
+    } else if (option === "environments") {
+      navigate("/my-environments");
+    } else if (option === "logout") {
+      message.success("Sie wurden ausgelogt", 1500);
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+    setUserMenuOpen(false);
   };
 
   const fetchVacationDays = async () => {
@@ -146,7 +159,7 @@ const EmployeeVacantionDashboard = () => {
     <div className="container">
       <div className="calendar-info-container">
         <div className="calendar-container">
-          <h2>Urlaubsantrag</h2>
+          <h1>Neue Urlaubsantrag</h1>
 
           <DatePicker
             selected={startDate}
@@ -178,15 +191,31 @@ const EmployeeVacantionDashboard = () => {
           )}
         </div>
       </div>
-      <button className="first-button" onClick={handleLogout}>
-        Logout
+      <button className="first-button" onClick={handleOptionsMenu}>
+        <CiSettings />
       </button>
-      <button className="second-button" onClick={handleMeine}>
-        Meine Anträge
-      </button>
-      <button className="third-button" onClick={handleProvisioning}>
-        Provision
-      </button>
+      {isUserMenuOpen && (
+        <div className="dropdown-menu">
+          <>
+            <button onClick={() => handleUserOption("vacantion")}>
+              Urlaubsanträge
+            </button>
+            <button onClick={() => handleUserOption("vacantion-new")}>
+              Urlaub beantragen
+            </button>
+            <button onClick={() => handleUserOption("provision")}>
+              Umgebungsanträge
+            </button>
+            <button onClick={() => handleUserOption("provision-new")}>
+              Umgebung beantragen
+            </button>
+            <button onClick={() => handleUserOption("environments")}>
+              Meine Umgebungen
+            </button>
+            <button onClick={() => handleUserOption("logout")}>Logout</button>
+          </>
+        </div>
+      )}
     </div>
   );
 };

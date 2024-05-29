@@ -3,6 +3,8 @@ import axios from "axios";
 import "../AdminVacantionDashboard.css";
 import "../OptionButtons.css";
 import { useNavigate } from "react-router-dom";
+import { message } from "react-message-popup";
+import { CiSettings } from "react-icons/ci";
 
 const AdminProvisioningDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
@@ -12,6 +14,7 @@ const AdminProvisioningDashboard = () => {
   const [reasons, setReasons] = useState({});
   const [selectedState, setSelectedState] = useState({});
   const [activeTab, setActiveTab] = useState("pending");
+  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -102,17 +105,23 @@ const AdminProvisioningDashboard = () => {
     }));
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleOptionsMenu = () => {
+    setUserMenuOpen(!isUserMenuOpen);
   };
 
-  const handleRegister = () => {
-    navigate("/registrierungsantraege");
-  };
-
-  const handleUrlaub = () => {
-    navigate("/urlaubsantraege");
+  const handleUserOption = (option) => {
+    if (option === "register") {
+      navigate("/registration-requests");
+    } else if (option === "vacantion") {
+      navigate("/vacantion-requests");
+    } else if (option === "provision") {
+      navigate("/provisioning-requests");
+    } else if (option === "logout") {
+      message.success("You have been logged out", 1500);
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+    setUserMenuOpen(false);
   };
 
   const renderPendingTable = () => (
@@ -261,6 +270,7 @@ const AdminProvisioningDashboard = () => {
 
   return (
     <div>
+      <h1>Umgebungsanträge</h1>
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
@@ -287,15 +297,25 @@ const AdminProvisioningDashboard = () => {
       {activeTab === "accepted" && renderAcceptedTable()}
       {activeTab === "declined" && renderDeclinedTable()}
 
-      <button className="first-button" onClick={handleLogout}>
-        Logout
+      <button className="first-button" onClick={handleOptionsMenu}>
+        <CiSettings />
       </button>
-      <button className="second-button" onClick={handleRegister}>
-        Register
-      </button>
-      <button className="third-button" onClick={handleUrlaub}>
-        Urlaub
-      </button>
+      {isUserMenuOpen && (
+        <div className="dropdown-menu">
+          <>
+            <button onClick={() => handleUserOption("register")}>
+              Registrierungsanträge
+            </button>
+            <button onClick={() => handleUserOption("vacantion")}>
+              Urlaubsanträge
+            </button>
+            <button onClick={() => handleUserOption("provision")}>
+              Umgebungsanträge
+            </button>
+            <button onClick={() => handleUserOption("logout")}>Logout</button>
+          </>
+        </div>
+      )}
     </div>
   );
 };

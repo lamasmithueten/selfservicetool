@@ -10,6 +10,8 @@ import AdminRegisterDashboard from "./Components/Dashboards/AdminRegisterDashboa
 import EmployeeRequestsDashboard from "./Components/Dashboards/EmployeeRequestsDashboard";
 import AdminProvisioningDashboard from "./Components/Dashboards/Provisioning/AdminProvisioningDashboard";
 import EmployeeProvisioningDashboard from "./Components/Dashboards/Provisioning/EmployeeProvisioningDashboard";
+import EmployeeVMList from "./Components/Dashboards/Provisioning/EmployeeVMList";
+import EmployeeVMRequest from "./Components/Dashboards/Provisioning/EmployeeVMRequest";
 
 const App = () => {
   return (
@@ -20,18 +22,37 @@ const App = () => {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
-        <Route path="/employee" element={<EmployeeVacantionDashboard />} />
-        <Route path="/urlaubsantraege" element={<AdminVacantionDashboard />} />
+        {/*employee routes*/}
         <Route
-          path="/registrierungsantraege"
+          path="/vacation-request/new"
+          element={<EmployeeVacantionDashboard />}
+        />
+        <Route
+          path="/provisioning-request/new"
+          element={<EmployeeVMRequest />}
+        />
+        <Route
+          path="/my-vacation-requests"
+          element={<EmployeeRequestsDashboard />}
+        />
+        <Route
+          path="/my-provisioning-requests"
+          element={<EmployeeProvisioningDashboard />}
+        />
+        <Route path="/my-environments" element={<EmployeeVMList />} />
+        {/*admin routes*/}
+        <Route
+          path="/vacantion-requests"
+          element={<AdminVacantionDashboard />}
+        />
+        <Route
+          path="/registration-requests"
           element={<AdminRegisterDashboard />}
         />
         <Route
-          path="/provisioningantraege"
+          path="/provisioning-requests"
           element={<AdminProvisioningDashboard />}
         />
-        <Route path="/vmantrag" element={<EmployeeProvisioningDashboard />} />
-        <Route path="/antraege" element={<EmployeeRequestsDashboard />} />
       </Routes>
     </Router>
   );

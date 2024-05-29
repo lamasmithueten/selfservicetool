@@ -3,6 +3,8 @@ import axios from "axios";
 import "../AdminVacantionDashboard.css";
 import "../OptionButtons.css";
 import { useNavigate } from "react-router-dom";
+import { message } from "react-message-popup";
+import { CiSettings } from "react-icons/ci";
 
 const EmployeeProvisioningDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
@@ -10,6 +12,8 @@ const EmployeeProvisioningDashboard = () => {
   const [declinedApplications, setDeclinedApplications] = useState([]);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("pending");
+  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -39,17 +43,28 @@ const EmployeeProvisioningDashboard = () => {
     fetchData();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleOptionsMenu = () => {
+    setUserMenuOpen(!isUserMenuOpen);
   };
 
-  const handleMeine = () => {
-    navigate("/antraege");
-  };
-
-  const handleUrlaub = () => {
-    navigate("/employee ");
+  const handleUserOption = (option) => {
+    // TODO: switch case
+    if (option === "vacantion") {
+      navigate("/my-vacation-requests");
+    } else if (option === "vacantion-new") {
+      navigate("/vacation-request/new");
+    } else if (option === "provision") {
+      navigate("/my-provisioning-requests");
+    } else if (option === "provision-new") {
+      navigate("/provisioning-request/new");
+    } else if (option === "environments") {
+      navigate("/my-environments");
+    } else if (option === "logout") {
+      message.success("Sie wurden ausgelogt", 1500);
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+    setUserMenuOpen(false);
   };
 
   const renderPendingTable = () => (
@@ -150,46 +165,9 @@ const EmployeeProvisioningDashboard = () => {
     </div>
   );
 
-  const renderMyVms = () => (
-    <div
-      className="admin-vac-dashboard"
-      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
-    >
-      <h2>Accepted Applications</h2>
-      <table border="1" className="table">
-        <thead>
-          <tr>
-            <th>Antrags-ID</th>
-            <th>Vorname</th>
-            <th>Nachname</th>
-            <th>Art der Umgebung</th>
-            <th>Zweck</th>
-            <th>Status</th>
-            <th>IP</th>
-            <th>Nutzername</th>
-            <th>Passwort</th>
-          </tr>
-        </thead>
-        <tbody>
-          {acceptedApplications.map((application, index) => (
-            <tr key={index}>
-              <td>{application.antrags_id}</td>
-              <td>{application.first_name}</td>
-              <td>{application.last_name}</td>
-              <td>{application.art}</td>
-              <td>{application.zweck}</td>
-              <td>{application.ip}</td>
-              <td>{application.username}</td>
-              <td>{application.password}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-
   return (
     <div>
+      <h1>Umgebungsanträge</h1>
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
@@ -210,28 +188,37 @@ const EmployeeProvisioningDashboard = () => {
         >
           Declined Applications
         </button>
-        <button
-          onClick={() => setActiveTab("myvms")}
-          className={activeTab === "myvms" ? "active" : ""}
-        >
-          Meine Umgebungen
-        </button>
       </div>
 
       {activeTab === "pending" && renderPendingTable()}
       {activeTab === "accepted" && renderAcceptedTable()}
       {activeTab === "declined" && renderDeclinedTable()}
-      {activeTab === "myvms" && renderMyVms()}
 
-      <button className="first-button" onClick={handleLogout}>
-        Logout
+      <button className="first-button" onClick={handleOptionsMenu}>
+        <CiSettings />
       </button>
-      <button className="third-button" onClick={handleUrlaub}>
-        Antrag stellen
-      </button>
-      <button className="second-button" onClick={handleMeine}>
-        Meine Anträge
-      </button>
+      {isUserMenuOpen && (
+        <div className="dropdown-menu">
+          <>
+            <button onClick={() => handleUserOption("vacantion")}>
+              Urlaubsanträge
+            </button>
+            <button onClick={() => handleUserOption("vacantion-new")}>
+              Urlaub beantragen
+            </button>
+            <button onClick={() => handleUserOption("provision")}>
+              Umgebungsanträge
+            </button>
+            <button onClick={() => handleUserOption("provision-new")}>
+              Umgebung beantragen
+            </button>
+            <button onClick={() => handleUserOption("environments")}>
+              Meine Umgebungen
+            </button>
+            <button onClick={() => handleUserOption("logout")}>Logout</button>
+          </>
+        </div>
+      )}
     </div>
   );
 };

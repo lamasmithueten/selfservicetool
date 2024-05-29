@@ -10,7 +10,7 @@
 }
 
 .admin-vac-dashboard h2 {
-  font-size: 30px;
+  font-size: 25px;
   text-align: center;
 }
 
@@ -149,4 +149,37 @@ select option {
 .send {
   padding: 5px 10px;
   cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 70px;
+  right: 30px;
+  width: 200px;
+  max-height: 300px;
+  background-color: white;
+  border-radius: 5px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu button {
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-size: 17px;
+  padding: 10px;
+}
+
+.dropdown-menu button:hover {
+  background-color: #fcaf3c;
+}
+
+h1 {
+  font-size: 36px;
+  color: white;
+  text-align: center;
+  text-decoration: underline;
+  margin-bottom: 30px;
 }
