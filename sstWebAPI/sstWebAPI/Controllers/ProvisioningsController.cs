@@ -60,6 +60,27 @@ namespace sstWebAPI.Controllers
             return Created();
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult CreateProvisioningApplications(ProvisioningRequestCreationModel model)
+        {
+            ProvisioningRequestModel request = new();
+
+            if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
+            {
+                return Unauthorized();
+            }
+
+            request.ID = Guid.NewGuid();
+            request.ID_user = user_id;
+            request.purpose = model.Purpose;
+            request.virtual_environment = model.VirtualEnvironment;
+
+            _context.provisioning_request.Add(request);
+            _context.SaveChanges();
+            return Created();
+        }
+
         /*
         [HttpPost]
         [Authorize]
