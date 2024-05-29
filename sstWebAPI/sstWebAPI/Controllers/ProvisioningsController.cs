@@ -161,7 +161,7 @@ namespace sstWebAPI.Controllers
                var data =
                     from environment in _context.existing_environment
                     join user in _context.user on environment.ID_user equals user.ID
-                    where environment.ID == ID
+                    where environment.ID_user == ID
                     select new VirtualEnviromentWithUserModel(environment.ID, environment.ID_user, environment.virtual_environment, environment.answer, environment.IP_address, environment.username, environment.password, user.firstname, user.lastname);
 
                 return data.ToList();
@@ -184,7 +184,7 @@ namespace sstWebAPI.Controllers
                 var data =
                      from requests in _context.provisioning_request
                      join user in _context.user on requests.ID_user equals user.ID
-                     where requests.ID == ID
+                     where requests.ID_user == ID
                      select new ProvisioningRequestModelWithUserModel(requests.ID, requests.ID_user, requests.virtual_environment, requests.purpose, user.firstname, user.lastname);
 
                 return data.ToList();
@@ -207,7 +207,7 @@ namespace sstWebAPI.Controllers
                 var data =
                      from requests in _context.provisioning_declined
                      join user in _context.user on requests.ID_user equals user.ID
-                     where requests.ID == ID
+                     where requests.ID_user == ID
                      select new ProvisioningDeclinedWithUserModel(requests.ID, requests.ID_user, requests.virtual_environment, requests.purpose, requests.answer, user.firstname, user.lastname);
 
                 return data.ToList();
