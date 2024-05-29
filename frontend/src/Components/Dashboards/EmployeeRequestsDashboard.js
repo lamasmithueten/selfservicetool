@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./EmployeeRequestsDashboard.css";
 import { message } from "react-message-popup";
-import { CiSettings } from "react-icons/ci";
+import { CiSettings, CiUser } from "react-icons/ci";
 
 const EmployeeRequestsDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
@@ -63,6 +63,10 @@ const EmployeeRequestsDashboard = () => {
       navigate("/login");
     }
     setUserMenuOpen(false);
+  };
+
+  const handleProfile = () => {
+    navigate("/my-profile");
   };
 
   const renderTable = (applications, title) => (
@@ -159,6 +163,9 @@ const EmployeeRequestsDashboard = () => {
           </>
         </div>
       )}
+      <button className="second-button" onClick={handleProfile}>
+        <CiUser />
+      </button>
     </div>
   );
 };

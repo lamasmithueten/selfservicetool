@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { message } from "react-message-popup";
-import { CiSettings } from "react-icons/ci";
+import { CiSettings, CiUser } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
 const EmployeeVMList = () => {
@@ -57,6 +57,11 @@ const EmployeeVMList = () => {
     }
     setUserMenuOpen(false);
   };
+
+  const handleProfile = () => {
+    navigate("/my-profile");
+  };
+
   const renderMyVms = () => (
     <div
       className="admin-vac-dashboard"
@@ -120,6 +125,9 @@ const EmployeeVMList = () => {
           </>
         </div>
       )}
+      <button className="second-button" onClick={handleProfile}>
+        <CiUser />
+      </button>
     </div>
   );
 };

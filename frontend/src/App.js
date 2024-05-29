@@ -12,6 +12,7 @@ import AdminProvisioningDashboard from "./Components/Dashboards/Provisioning/Adm
 import EmployeeProvisioningDashboard from "./Components/Dashboards/Provisioning/EmployeeProvisioningDashboard";
 import EmployeeVMList from "./Components/Dashboards/Provisioning/EmployeeVMList";
 import EmployeeVMRequest from "./Components/Dashboards/Provisioning/EmployeeVMRequest";
+import UserProfile from "./Components/Dashboards/UserProfile";
 
 const App = () => {
   return (
@@ -22,6 +23,8 @@ const App = () => {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/my-profile" element={<UserProfile />} />
+
         {/*employee routes*/}
         <Route
           path="/vacation-request/new"

@@ -4,7 +4,7 @@ import "./AdminVacantionDashboard.css";
 import { useNavigate } from "react-router-dom";
 import "./AdminRegisterDashboard.css";
 import { message } from "react-message-popup";
-import { CiSettings } from "react-icons/ci";
+import { CiSettings, CiUser } from "react-icons/ci";
 
 const AdminRegisterDashboard = () => {
   const [applications, setApplications] = useState([]);
@@ -102,6 +102,10 @@ const AdminRegisterDashboard = () => {
     setUserMenuOpen(false);
   };
 
+  const handleProfile = () => {
+    navigate("/my-profile");
+  };
+
   return (
     <div>
       <h1>Registrierungsanträge</h1>
@@ -173,6 +177,9 @@ const AdminRegisterDashboard = () => {
           </>
         </div>
       )}
+      <button className="second-button" onClick={handleProfile}>
+        <CiUser />
+      </button>
     </div>
   );
 };
