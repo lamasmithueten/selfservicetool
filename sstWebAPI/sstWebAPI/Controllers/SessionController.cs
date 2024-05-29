@@ -26,7 +26,7 @@ namespace sstWebAPI.Controllers
         public IActionResult CreateSession(UserLoginModel loginUser)
         {
             //gets the whole record of the user with the username/email specified in loginUser
-            UserModel? user = _context.user.Where(x => x.username.Equals(loginUser.usernameOrEmail) || x.email.Equals(loginUser.usernameOrEmail.ToLower())).SingleOrDefault();
+            UserModel? user = _context.user.Where(x => x.username.Equals(loginUser.usernameOrEmail) || x.email.Equals(loginUser.usernameOrEmail.ToLower())).FirstOrDefault();
 
             if (user == null)
             {
