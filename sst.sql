@@ -212,7 +212,7 @@ INSERT INTO `vacation_request` (`ID`, `ID_user`, `first_day`, `number_of_days`, 
 --
 
 CREATE TABLE `virtualenvexamples` (
-  `id` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
