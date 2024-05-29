@@ -38,10 +38,10 @@ function LoginForm({ toggleForm }) {
           "x-api-key": "keyTest",
         },
       });
-      if(userResponse.data.role === "admin") {
-        navigate("/urlaubsantraege"); 
+      if (userResponse.data.role === "admin") {
+        navigate("/urlaubsantraege");
       } else {
-        navigate("/employee"); 
+        navigate("/employee");
       }
     }
   };
@@ -50,7 +50,7 @@ function LoginForm({ toggleForm }) {
     <div className="wrapper">
       <form onSubmit={handleSubmit}>
         <h1>Anmelden</h1>
-        {error && <p className="error">{error}</p>} 
+        {error && <p className="error">{error}</p>}
         <div className="input-box">
           <input
             type="text"
@@ -75,7 +75,7 @@ function LoginForm({ toggleForm }) {
           />{" "}
         </div>
         <div className="forgot">
-          <a href="resetPassword">Passwort vergessen?</a>
+          <a href="forgotPassword">Passwort vergessen?</a>
         </div>
         <button type="submit" className="submit-button">
           Anmelden
