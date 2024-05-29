@@ -67,16 +67,12 @@ const AdminProvisioningDashboard = () => {
         "Content-Type": "application/json",
       };
 
-      let acceptOrDecline = selectedState[applicationId];
-      if (acceptOrDecline === "accepted") {
-        acceptOrDecline = true;
-      } else if (acceptOrDecline === "declined") {
-        acceptOrDecline = false;
-      }
+      const acceptOrDeclineValue =
+        selectedState[applicationId] === "declined" ? false : true;
 
       const requestBody = {
         applicationId: applicationId,
-        acceptOrDecline: acceptOrDecline,
+        acceptOrDecline: acceptOrDeclineValue,
         answer: reasons[applicationId],
       };
 
@@ -92,6 +88,7 @@ const AdminProvisioningDashboard = () => {
       console.log("Request successful:", response.data);
       setSelectedState({});
       fetchData();
+      message.success("Anfrage wurde bearbeitet");
     } catch (error) {
       console.error("Error while sending PATCH request:", error);
     }

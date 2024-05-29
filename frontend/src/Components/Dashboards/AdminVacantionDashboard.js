@@ -71,6 +71,7 @@ const AdminVacantionDashboard = () => {
         reason: reasons[applicationId],
       };
 
+      message.success("Anfrage wurde bearbeitet");
       console.log(requestBody);
       const response = await axios.patch(
         "https://api.mwerr.de/api/v1/VacationManagement",

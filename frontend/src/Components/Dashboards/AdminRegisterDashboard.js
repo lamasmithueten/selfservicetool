@@ -71,7 +71,7 @@ const AdminRegisterDashboard = () => {
           headers: headers,
         }
       );
-
+      message.success("Anfrage wurde bearbeitet");
       console.log("Request successful:", response.data);
       fetchData();
     } catch (error) {
