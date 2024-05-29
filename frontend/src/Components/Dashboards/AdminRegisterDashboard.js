@@ -19,7 +19,7 @@ const AdminRegisterDashboard = () => {
         "x-api-key": "keyTest",
       };
       const response = await axios.get(
-        "https://api.mwerr.de/api/v1/RegistrationApplication",
+        "https://api.mwerr.de/api/v1/RegistrationApplications",
         {
           headers: headers,
         }
@@ -62,7 +62,7 @@ const AdminRegisterDashboard = () => {
       };
 
       const response = await axios.post(
-        "https://api.mwerr.de/api/v1/RegistrationApplication",
+        "https://api.mwerr.de/api/v1/RegistrationApplications",
         requestBody,
         {
           headers: headers,

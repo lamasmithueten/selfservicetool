@@ -23,9 +23,12 @@ const EmployeeRequestsDashboard = () => {
         Authorization: `Bearer ${token}`,
         "x-api-key": "keyTest",
       };
-      const response = await axios.get("https://api.mwerr.de/api/v1/Vacation", {
-        headers: headers,
-      });
+      const response = await axios.get(
+        "https://api.mwerr.de/api/v1/Vacations",
+        {
+          headers: headers,
+        }
+      );
 
       setPendingApplications(response.data.pending_applications);
       setAcceptedApplications(response.data.accepted_applications);

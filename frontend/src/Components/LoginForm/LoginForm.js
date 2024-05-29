@@ -31,13 +31,16 @@ function LoginForm({ toggleForm }) {
     const token = await LoginRequest(formData);
     localStorage.setItem("token", token);
     if (token != null) {
-      const userResponse = await axios.get("https://api.mwerr.de/api/v1/User", {
-        headers: {
-          accept: "*/*",
-          Authorization: `Bearer ${token}`,
-          "x-api-key": "keyTest",
-        },
-      });
+      const userResponse = await axios.get(
+        "https://api.mwerr.de/api/v1/Users",
+        {
+          headers: {
+            accept: "*/*",
+            Authorization: `Bearer ${token}`,
+            "x-api-key": "keyTest",
+          },
+        }
+      );
       if (userResponse.data.role === "admin") {
         navigate("/urlaubsantraege");
       } else {

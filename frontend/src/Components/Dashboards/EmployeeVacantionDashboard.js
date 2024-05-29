@@ -72,7 +72,7 @@ const EmployeeVacantionDashboard = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        `https://api.mwerr.de/api/v1/Vacation`,
+        `https://api.mwerr.de/api/v1/Vacations`,
         {
           first_day: startDateString,
           last_day: endDateString,

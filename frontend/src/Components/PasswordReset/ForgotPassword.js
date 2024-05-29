@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { CiUser } from "react-icons/ci";
+import { message } from "react-message-popup";
 
 function ForgotPassword({ toggleForm }) {
   const [formData, setFormData] = useState({
-    usernameOrEmail: "",
-    password: "",
+    email: "",
   });
-  const [error] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setFormData({
@@ -15,7 +15,49 @@ function ForgotPassword({ toggleForm }) {
     });
   };
 
-  const handleSubmit = () => {};
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newErrors = {};
+    if (!formData.email) {
+      newErrors.email = "E-Mail darf nicht leer sein";
+      message.error(newErrors.email, 2000);
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = "Ungültige Email-Adresse";
+      message.error(newErrors.email, 2000);
+    }
+
+    // check if validation failed
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+
+    setErrors({});
+
+    const url = `https://api.mwerr.de/api/v1/Passwords?email=${encodeURIComponent(
+      formData.email
+    )}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "*/*",
+          "x-api-key": "keyTest",
+        },
+      });
+
+      if (response.status === 204) {
+        message.success("Der Code wurde gesendet", 2000);
+      }
+    } catch (error) {
+      message.error("Es gab ein Fehler", 2000);
+    }
+  };
 
   return (
     <div className="wrapper">
@@ -23,15 +65,16 @@ function ForgotPassword({ toggleForm }) {
         <h1>Passwort Rücksetzen</h1>
         <p className="reset-info">
           Gib deine E-Mail-Adresse ein, mit der du dich registriert hast. Wir
-          senden dir einen Code zum Zurücksetzen des Passworts.
+          senden dir einen Code zum Zurücksetzen des Passworts. Bitte auch Spam
+          Ordner schauen.
         </p>
-        {error && <p className="error">{error}</p>}
+        {errors.email && <p className="error">{errors.email}</p>}
         <div className="input-box">
           <input
             type="text"
             name="email"
             placeholder="E-Mail"
-            value={formData.usernameOrEmail}
+            value={formData.email}
             onChange={handleChange}
           />
           <CiUser className="icon" />
