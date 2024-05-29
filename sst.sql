@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: database
--- Erstellungszeit: 29. Mai 2024 um 13:39
+-- Erstellungszeit: 29. Mai 2024 um 14:18
 -- Server-Version: 11.3.2-MariaDB-1:11.3.2+maria~ubu2204
 -- PHP-Version: 8.2.19
 
@@ -27,6 +27,7 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `existing_environment`
 --
 
+DROP TABLE IF EXISTS `existing_environment`;
 CREATE TABLE `existing_environment` (
   `ID` uuid NOT NULL,
   `ID_user` uuid NOT NULL,
@@ -43,6 +44,7 @@ CREATE TABLE `existing_environment` (
 -- Tabellenstruktur für Tabelle `hardware`
 --
 
+DROP TABLE IF EXISTS `hardware`;
 CREATE TABLE `hardware` (
   `ID` uuid NOT NULL,
   `ID_ENV` uuid DEFAULT NULL,
@@ -58,6 +60,7 @@ CREATE TABLE `hardware` (
 -- Tabellenstruktur für Tabelle `number_of_vacation_days`
 --
 
+DROP TABLE IF EXISTS `number_of_vacation_days`;
 CREATE TABLE `number_of_vacation_days` (
   `ID` uuid NOT NULL,
   `ID_User` uuid NOT NULL,
@@ -70,6 +73,7 @@ CREATE TABLE `number_of_vacation_days` (
 -- Tabellenstruktur für Tabelle `password_reset`
 --
 
+DROP TABLE IF EXISTS `password_reset`;
 CREATE TABLE `password_reset` (
   `id` uuid NOT NULL,
   `user_id` uuid NOT NULL,
@@ -90,6 +94,7 @@ INSERT INTO `password_reset` (`id`, `user_id`, `reset_token`, `expires`) VALUES
 -- Tabellenstruktur für Tabelle `provisioning_declined`
 --
 
+DROP TABLE IF EXISTS `provisioning_declined`;
 CREATE TABLE `provisioning_declined` (
   `ID` uuid NOT NULL,
   `ID_user` uuid NOT NULL,
@@ -104,6 +109,7 @@ CREATE TABLE `provisioning_declined` (
 -- Tabellenstruktur für Tabelle `provisioning_request`
 --
 
+DROP TABLE IF EXISTS `provisioning_request`;
 CREATE TABLE `provisioning_request` (
   `ID` uuid NOT NULL,
   `ID_user` uuid NOT NULL,
@@ -117,6 +123,7 @@ CREATE TABLE `provisioning_request` (
 -- Tabellenstruktur für Tabelle `registration_application`
 --
 
+DROP TABLE IF EXISTS `registration_application`;
 CREATE TABLE `registration_application` (
   `ID` uuid NOT NULL,
   `role` varchar(255) NOT NULL,
@@ -134,6 +141,7 @@ CREATE TABLE `registration_application` (
 -- Tabellenstruktur für Tabelle `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `ID` uuid NOT NULL,
   `role` varchar(255) NOT NULL,
@@ -162,6 +170,7 @@ INSERT INTO `user` (`ID`, `role`, `email`, `username`, `password`, `firstname`, 
 -- Tabellenstruktur für Tabelle `vacation_days`
 --
 
+DROP TABLE IF EXISTS `vacation_days`;
 CREATE TABLE `vacation_days` (
   `ID` uuid NOT NULL,
   `ID_user` uuid NOT NULL,
@@ -188,6 +197,7 @@ INSERT INTO `vacation_days` (`ID`, `ID_user`, `total_days`, `used_days`, `planne
 -- Tabellenstruktur für Tabelle `vacation_request`
 --
 
+DROP TABLE IF EXISTS `vacation_request`;
 CREATE TABLE `vacation_request` (
   `ID` uuid NOT NULL,
   `ID_user` uuid NOT NULL,
@@ -211,6 +221,7 @@ INSERT INTO `vacation_request` (`ID`, `ID_user`, `first_day`, `number_of_days`, 
 -- Tabellenstruktur für Tabelle `virtualenvexamples`
 --
 
+DROP TABLE IF EXISTS `virtualenvexamples`;
 CREATE TABLE `virtualenvexamples` (
   `ID` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
@@ -220,7 +231,7 @@ CREATE TABLE `virtualenvexamples` (
 -- Daten für Tabelle `virtualenvexamples`
 --
 
-INSERT INTO `virtualenvexamples` (`id`, `name`) VALUES
+INSERT INTO `virtualenvexamples` (`ID`, `name`) VALUES
 (1, 'Microsoft Windows Server 2012'),
 (2, 'Microsoft Windows Server 2016'),
 (3, 'Microsoft Windows Server 2019'),
@@ -303,7 +314,7 @@ ALTER TABLE `vacation_request`
 -- Indizes für die Tabelle `virtualenvexamples`
 --
 ALTER TABLE `virtualenvexamples`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -313,7 +324,7 @@ ALTER TABLE `virtualenvexamples`
 -- AUTO_INCREMENT für Tabelle `virtualenvexamples`
 --
 ALTER TABLE `virtualenvexamples`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints der exportierten Tabellen

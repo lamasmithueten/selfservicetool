@@ -61,20 +61,25 @@ namespace sstWebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public ActionResult CreateProvisioningApplications(ProvisioningRequestCreationModel model)
         {
             ProvisioningRequestModel request = new();
 
-            if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
+            //if (!GetJwtDataHelper.GetUserIdFromJwt(out var user_id, HttpContext))
+            //{
+            //    return Unauthorized();
+            //}
+
+            if (!_context.virtualenvexamples.Select(x => x.name).ToList().Contains(model.VirtualEnvironment))
             {
-                return Unauthorized();
+                return BadRequest("Virtual environment not valid");
             }
 
             request.ID = Guid.NewGuid();
-            request.ID_user = user_id;
+            request.ID_user = _context.user.FirstOrDefault().ID ;//user_id;
             request.purpose = model.Purpose;
             request.virtual_environment = model.VirtualEnvironment;
+            
 
             _context.provisioning_request.Add(request);
             _context.SaveChanges();
