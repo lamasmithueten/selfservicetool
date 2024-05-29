@@ -19,7 +19,7 @@ const EmployeeVMList = () => {
         Authorization: `Bearer ${token}`,
       };
       const response = await axios.get(
-        "https://api.mwerr.de/api/v1/Provisioning",
+        "https://api.mwerr.de/api/v1/Provisionings",
         {
           headers: headers,
         }
@@ -66,29 +66,23 @@ const EmployeeVMList = () => {
       <table border="1" className="table">
         <thead>
           <tr>
-            <th>Antrags-ID</th>
             <th>Vorname</th>
             <th>Nachname</th>
             <th>Art der Umgebung</th>
-            <th>Zweck</th>
-            <th>Status</th>
-            <th>IP</th>
             <th>Nutzername</th>
             <th>Passwort</th>
+            <th>IP</th>
           </tr>
         </thead>
         <tbody>
           {acceptedApplications.map((application, index) => (
             <tr key={index}>
-              <td>{application.antrags_id}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.art}</td>
-              <td>{application.zweck}</td>
-              <td>{application.state}</td>
-              <td>{application.ip}</td>
+              <td>{application.virtual_environment}</td>
               <td>{application.username}</td>
               <td>{application.password}</td>
+              <td>{application.iP_address}</td>
             </tr>
           ))}
         </tbody>

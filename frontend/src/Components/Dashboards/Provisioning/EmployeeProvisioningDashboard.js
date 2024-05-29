@@ -25,7 +25,7 @@ const EmployeeProvisioningDashboard = () => {
         Authorization: `Bearer ${token}`,
       };
       const response = await axios.get(
-        "https://api.mwerr.de/api/v1/Provisioning",
+        "https://api.mwerr.de/api/v1/Provisionings",
         {
           headers: headers,
         }
@@ -81,18 +81,16 @@ const EmployeeProvisioningDashboard = () => {
             <th>Nachname</th>
             <th>Art der Umgebung</th>
             <th>Zweck</th>
-            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {pendingApplications.map((application, index) => (
             <tr key={index}>
-              <td>{application.antrags_id}</td>
+              <td>{application.id}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.art}</td>
-              <td>{application.zweck}</td>
-              <td>{application.state}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.purpose}</td>
             </tr>
           ))}
         </tbody>
@@ -113,18 +111,17 @@ const EmployeeProvisioningDashboard = () => {
             <th>Vorname</th>
             <th>Nachname</th>
             <th>Art der Umgebung</th>
-            <th>Zweck</th>
-            <th>Status</th>
+            <th>Antwort</th>
           </tr>
         </thead>
         <tbody>
           {acceptedApplications.map((application, index) => (
             <tr key={index}>
-              <td>{application.antrags_id}</td>
+              <td>{application.id}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.art}</td>
-              <td>{application.zweck}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.answer}</td>
             </tr>
           ))}
         </tbody>
@@ -152,12 +149,12 @@ const EmployeeProvisioningDashboard = () => {
         <tbody>
           {declinedApplications.map((application, index) => (
             <tr key={index}>
-              <td>{application.antrags_id}</td>
+              <td>{application.id}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.art}</td>
-              <td>{application.zweck}</td>
-              <td>{application.reason}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.purpose}</td>
+              <td>{application.answer}</td>
             </tr>
           ))}
         </tbody>

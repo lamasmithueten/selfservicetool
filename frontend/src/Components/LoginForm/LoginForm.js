@@ -42,9 +42,9 @@ function LoginForm({ toggleForm }) {
         }
       );
       if (userResponse.data.role === "admin") {
-        navigate("/urlaubsantraege");
+        navigate("/vacantion-requests");
       } else {
-        navigate("/employee");
+        navigate("/my-vacation-requests");
       }
     }
   };

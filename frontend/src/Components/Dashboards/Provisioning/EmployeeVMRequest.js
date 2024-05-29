@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function EmployeeVMRequest({ toggleForm }) {
   const [formData, setFormData] = useState({
     purpose: "",
-    environmentType: "",
+    virtualEnvironment: "",
   });
   const [error, setError] = useState(null);
   const [environments, setEnvironments] = useState([]); // State to store environments
@@ -51,7 +51,7 @@ function EmployeeVMRequest({ toggleForm }) {
     try {
       const token = localStorage.getItem("token");
       const requestResponse = await axios.post(
-        "https://api.mwerr.de/api/v1/VMRequest",
+        "https://api.mwerr.de/api/v1/Provisionings",
         formData,
         {
           headers: {
@@ -108,8 +108,8 @@ function EmployeeVMRequest({ toggleForm }) {
           </div>
           <div className="input-select">
             <select
-              name="environmentType"
-              value={formData.environmentType}
+              name="virtualEnvironment"
+              value={formData.virtualEnvironment}
               onChange={handleChange}
             >
               <option value="">Art der virtuellen Umgebung auswählen</option>

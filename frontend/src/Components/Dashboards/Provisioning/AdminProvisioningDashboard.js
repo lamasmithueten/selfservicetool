@@ -26,7 +26,7 @@ const AdminProvisioningDashboard = () => {
         Authorization: `Bearer ${token}`,
       };
       const response = await axios.get(
-        "https://api.mwerr.de/api/v1/Provisioning",
+        "https://api.mwerr.de/api/v1/Provisionings/management",
         {
           headers: headers,
         }
@@ -38,13 +38,13 @@ const AdminProvisioningDashboard = () => {
 
       const reasonsObj = {};
       response.data.pending_applications.forEach((application) => {
-        reasonsObj[application.application_ID] = application.reason || "";
+        reasonsObj[application.id] = application.reason || "";
       });
       response.data.accepted_applications.forEach((application) => {
-        reasonsObj[application.application_ID] = application.reason || "";
+        reasonsObj[application.id] = application.reason || "";
       });
       response.data.declined_applications.forEach((application) => {
-        reasonsObj[application.application_ID] = application.reason || "";
+        reasonsObj[application.id] = application.reason || "";
       });
       setReasons(reasonsObj);
     } catch (error) {
@@ -54,6 +54,7 @@ const AdminProvisioningDashboard = () => {
 
   useEffect(() => {
     fetchData();
+    setSelectedState({});
   }, []);
 
   const handleButtonClick = async (applicationId) => {
@@ -66,15 +67,22 @@ const AdminProvisioningDashboard = () => {
         "Content-Type": "application/json",
       };
 
+      let acceptOrDecline = selectedState[applicationId];
+      if (acceptOrDecline === "accepted") {
+        acceptOrDecline = true;
+      } else if (acceptOrDecline === "declined") {
+        acceptOrDecline = false;
+      }
+
       const requestBody = {
-        application_id: applicationId,
-        state: selectedState[applicationId] || "accepted",
-        reason: reasons[applicationId],
+        applicationId: applicationId,
+        acceptOrDecline: acceptOrDecline,
+        answer: reasons[applicationId],
       };
 
       console.log(requestBody);
-      const response = await axios.patch(
-        "https://api.mwerr.de/api/v1/Provisioning",
+      const response = await axios.put(
+        "https://api.mwerr.de/api/v1/Provisionings",
         requestBody,
         {
           headers: headers,
@@ -147,20 +155,18 @@ const AdminProvisioningDashboard = () => {
         <tbody>
           {pendingApplications.map((application, index) => (
             <tr key={index}>
-              <td>{application.antrags_id}</td>
-              <td>{application.nutzer_id}</td>
+              <td>{application.id}</td>
+              <td>{application.iD_user}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.art}</td>
-              <td>{application.zweck}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.purpose}</td>
               <td>
                 <input
                   type="text"
                   placeholder={application.reason}
-                  value={reasons[application.application_ID]}
-                  onChange={(e) =>
-                    handleChangeReason(e, application.application_ID)
-                  }
+                  value={reasons[application.id]}
+                  onChange={(e) => handleChangeReason(e, application.id)}
                   className="textfield"
                   maxLength={100}
                 />
@@ -168,12 +174,8 @@ const AdminProvisioningDashboard = () => {
               <td>
                 <select
                   className="select"
-                  onChange={(e) =>
-                    handleChangeState(e, application.application_ID)
-                  }
-                  value={
-                    selectedState[application.application_ID] || "accepted"
-                  }
+                  onChange={(e) => handleChangeState(e, application.id)}
+                  value={selectedState[application.id] || "accepted"}
                 >
                   <option className="select-items" value="accepted">
                     accept
@@ -184,7 +186,7 @@ const AdminProvisioningDashboard = () => {
               <td>
                 <button
                   className="send"
-                  onClick={() => handleButtonClick(application.application_ID)}
+                  onClick={() => handleButtonClick(application.id)}
                 >
                   Send
                 </button>
@@ -207,25 +209,25 @@ const AdminProvisioningDashboard = () => {
           <tr>
             <th>Antrags-ID</th>
             <th>Nutzer-ID</th>
-            <th>Username</th>
             <th>Vorname</th>
             <th>Nachname</th>
             <th>Art der Umgebung</th>
-            <th>Zweck</th>
+            <th>Username</th>
+            <th>Passwort</th>
             <th>IP</th>
           </tr>
         </thead>
         <tbody>
           {acceptedApplications.map((application, index) => (
             <tr key={index}>
-              <td>{application.antrags_id}</td>
-              <td>{application.nutzer_id}</td>
-              <td>{application.username}</td>
+              <td>{application.id}</td>
+              <td>{application.iD_user}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.art}</td>
-              <td>{application.zweck}</td>
-              <td>{application.ip}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.username}</td>
+              <td>{application.password}</td>
+              <td>{application.iP_address}</td>
             </tr>
           ))}
         </tbody>
@@ -254,13 +256,13 @@ const AdminProvisioningDashboard = () => {
         <tbody>
           {declinedApplications.map((application, index) => (
             <tr key={index}>
-              <td>{application.antrags_id}</td>
-              <td>{application.nutzer_id}</td>
+              <td>{application.id}</td>
+              <td>{application.iD_user}</td>
               <td>{application.first_name}</td>
               <td>{application.last_name}</td>
-              <td>{application.art}</td>
-              <td>{application.zweck}</td>
-              <td>{application.reason}</td>
+              <td>{application.virtual_environment}</td>
+              <td>{application.purpose}</td>
+              <td>{application.answer}</td>
             </tr>
           ))}
         </tbody>
