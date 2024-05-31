@@ -3,7 +3,7 @@ import axios from "axios";
 import "../Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { message } from "react-message-popup";
-import { CiSettings, CiUser } from "react-icons/ci";
+import UserHeaderBar from "../../HeaderBar/UserHeaderBar";
 
 const EmployeeVMRequests = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
@@ -11,7 +11,6 @@ const EmployeeVMRequests = () => {
   const [declinedApplications, setDeclinedApplications] = useState([]);
   const [error] = useState(null);
   const [activeTab, setActiveTab] = useState("pending");
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -49,35 +48,11 @@ const EmployeeVMRequests = () => {
     fetchData();
   }, [fetchData]);
 
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleUserOption = (option) => {
-    if (option === "vacantion") {
-      navigate("/my-vacation-requests");
-    } else if (option === "vacantion-new") {
-      navigate("/vacation-request/new");
-    } else if (option === "provision") {
-      navigate("/my-provisioning-requests");
-    } else if (option === "provision-new") {
-      navigate("/provisioning-request/new");
-    } else if (option === "environments") {
-      navigate("/my-environments");
-    } else if (option === "logout") {
-      message.success("Sie wurden ausgelogt", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
   const renderPendingTable = () => (
-    <div className="dashboard">
+    <div
+      className="dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
       <h2>Ausstehend</h2>
       <table border="1" className="table">
         <thead>
@@ -105,7 +80,10 @@ const EmployeeVMRequests = () => {
   );
 
   const renderAcceptedTable = () => (
-    <div className="dashboard">
+    <div
+      className="dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
       <h2>Genehmigt</h2>
       <table border="1" className="table">
         <thead>
@@ -133,7 +111,10 @@ const EmployeeVMRequests = () => {
   );
 
   const renderDeclinedTable = () => (
-    <div className="dashboard">
+    <div
+      className="dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
       <h2>Abgelehnt</h2>
       <table border="1" className="table">
         <thead>
@@ -164,7 +145,7 @@ const EmployeeVMRequests = () => {
 
   return (
     <div>
-      <h1>Umgebungsanträge</h1>
+      <UserHeaderBar title="Meine Umgebungsanträge" />
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
@@ -190,35 +171,6 @@ const EmployeeVMRequests = () => {
       {activeTab === "pending" && renderPendingTable()}
       {activeTab === "accepted" && renderAcceptedTable()}
       {activeTab === "declined" && renderDeclinedTable()}
-
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion-new")}>
-              Urlaub beantragen
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision-new")}>
-              Umgebung beantragen
-            </button>
-            <button onClick={() => handleUserOption("environments")}>
-              Meine Umgebungen
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import axios from "axios";
 import "../Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { message } from "react-message-popup";
-import { CiSettings, CiUser } from "react-icons/ci";
+import AdminHeaderBar from "../../HeaderBar/AdminHeaderBar";
 
 const AdminProvisioningDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
@@ -11,9 +11,7 @@ const AdminProvisioningDashboard = () => {
   const [declinedApplications, setDeclinedApplications] = useState([]);
   const [error] = useState(null);
   const [reasons, setReasons] = useState({});
-  const [selectedState, setSelectedState] = useState({});
   const [activeTab, setActiveTab] = useState("pending");
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -68,10 +66,9 @@ const AdminProvisioningDashboard = () => {
 
   useEffect(() => {
     fetchData();
-    setSelectedState({});
   }, [fetchData]);
 
-  const handleButtonClick = async (applicationId) => {
+  const handleButtonClick = async (applicationId, acceptOrDeclineValue) => {
     try {
       const token = localStorage.getItem("token");
       const headers = {
@@ -80,9 +77,6 @@ const AdminProvisioningDashboard = () => {
         "x-api-key": "keyTest",
         "Content-Type": "application/json",
       };
-
-      const acceptOrDeclineValue =
-        selectedState[applicationId] === "declined" ? false : true;
 
       const requestBody = {
         applicationId: applicationId,
@@ -98,7 +92,6 @@ const AdminProvisioningDashboard = () => {
         }
       );
 
-      setSelectedState({});
       fetchData();
       message.success("Anfrage wurde bearbeitet");
     } catch (error) {}
@@ -110,37 +103,6 @@ const AdminProvisioningDashboard = () => {
       ...prevState,
       [applicationId]: value,
     }));
-  };
-
-  const handleChangeState = (e, applicationId) => {
-    const { value } = e.target;
-    setSelectedState((prevState) => ({
-      ...prevState,
-      [applicationId]: value,
-    }));
-  };
-
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
-  const handleUserOption = (option) => {
-    if (option === "register") {
-      navigate("/registration-requests");
-    } else if (option === "vacantion") {
-      navigate("/vacantion-requests");
-    } else if (option === "provision") {
-      navigate("/provisioning-requests");
-    } else if (option === "logout") {
-      message.success("You have been logged out", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
   };
 
   const renderPendingTable = () => (
@@ -160,7 +122,6 @@ const AdminProvisioningDashboard = () => {
             <th>Zweck</th>
             <th>Grund</th>
             <th>Bearbeite</th>
-            <th>Update</th>
           </tr>
         </thead>
         <tbody>
@@ -183,23 +144,17 @@ const AdminProvisioningDashboard = () => {
                 />
               </td>
               <td>
-                <select
-                  className="select"
-                  onChange={(e) => handleChangeState(e, application.id)}
-                  value={selectedState[application.id] || "accepted"}
-                >
-                  <option className="select-items" value="accepted">
-                    accept
-                  </option>
-                  <option value="declined">decline</option>
-                </select>
-              </td>
-              <td>
                 <button
-                  className="send"
-                  onClick={() => handleButtonClick(application.id)}
+                  className="accept-button"
+                  onClick={() => handleButtonClick(application.id, true)}
                 >
-                  Send
+                  Ja
+                </button>
+                <button
+                  className="decline-button"
+                  onClick={() => handleButtonClick(application.id, false)}
+                >
+                  Nein
                 </button>
               </td>
             </tr>
@@ -283,7 +238,7 @@ const AdminProvisioningDashboard = () => {
 
   return (
     <div>
-      <h1>Umgebungsanträge</h1>
+      <AdminHeaderBar title="Umgebungsanträge" />
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
@@ -309,29 +264,6 @@ const AdminProvisioningDashboard = () => {
       {activeTab === "pending" && renderPendingTable()}
       {activeTab === "accepted" && renderAcceptedTable()}
       {activeTab === "declined" && renderDeclinedTable()}
-
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("register")}>
-              Registrierungsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };

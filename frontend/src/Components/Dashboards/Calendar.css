@@ -88,7 +88,7 @@
 .react-datepicker__day--selected,
 .react-datepicker__day--in-selecting-range,
 .react-datepicker__day--in-range {
-  background-color: rgba(0, 123, 255, 0.5) !important;
+  background-color: #e1a838 !important;
   color: white !important;
 }
 
@@ -96,7 +96,7 @@
   margin-top: 30px;
   width: 150px;
   height: 25px;
-  background: white;
+  background: #e1a838;
   border: none;
   outline: none;
   border-radius: 40px;
@@ -117,6 +117,7 @@
   align-items: center;
   padding: 20px;
   border-radius: 10px;
+  color: white;
 }
 
 .vacation-days-info {

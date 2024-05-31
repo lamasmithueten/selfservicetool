@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "../Dashboard.css";
 import { useNavigate } from "react-router-dom";
-import { CiSettings, CiUser } from "react-icons/ci";
 import { message } from "react-message-popup";
+import AdminHeaderBar from "../../HeaderBar/AdminHeaderBar";
 
 const AdminVacationDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
@@ -12,7 +12,6 @@ const AdminVacationDashboard = () => {
   const [error] = useState(null);
   const [reasons, setReasons] = useState({});
   const [activeTab, setActiveTab] = useState("pending");
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -108,31 +107,11 @@ const AdminVacationDashboard = () => {
     }));
   };
 
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleUserOption = (option) => {
-    if (option === "register") {
-      navigate("/registration-requests");
-    } else if (option === "vacation") {
-      navigate("/vacation-requests");
-    } else if (option === "provision") {
-      navigate("/provisioning-requests");
-    } else if (option === "logout") {
-      message.success("You have been logged out", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
   const renderTable = (applications, title) => (
-    <div className="dashboard">
+    <div
+      className="dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
       <h2>{title}</h2>
       <table border="1" className="table">
         <thead>
@@ -197,7 +176,7 @@ const AdminVacationDashboard = () => {
 
   return (
     <div>
-      <h1>Urlaubsanträge</h1>
+      <AdminHeaderBar title="Urlaubsanträge" />
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
@@ -226,29 +205,6 @@ const AdminVacationDashboard = () => {
         renderTable(acceptedApplications, "Genehmigte Anfragen")}
       {activeTab === "declined" &&
         renderTable(declinedApplications, "Abgelehnte Anfragen")}
-
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("register")}>
-              Registrierungsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacation")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };

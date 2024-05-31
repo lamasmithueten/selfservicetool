@@ -1,0 +1,92 @@
+.header-bar {
+  background-color: #41663a;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 55px;
+}
+
+h1 {
+  font-size: 40px;
+  color: #ebd9b4;
+  text-decoration: underline;
+}
+
+.title-container {
+  flex: 1;
+  margin-top: 25px;
+}
+
+.left-buttons,
+.right-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.buttons-container button {
+  margin-left: 10px;
+}
+
+.first-button,
+.second-button {
+  width: 45px;
+  height: 45px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #e1a838;
+  font-weight: 700;
+  font-size: 30px;
+  padding-top: 5px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.second-button {
+  font-size: 28px;
+  padding-bottom: 10px;
+}
+
+/* Dropdown Menu */
+.settings-dropdown-menu,
+.user-dropdown-menu {
+  position: absolute;
+  top: 60px;
+  width: 200px;
+  max-height: 300px;
+  background-color: transparent;
+  backdrop-filter: blur(20px);
+  border-radius: 5px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+.settings-dropdown-menu {
+  left: 10px;
+}
+.user-dropdown-menu {
+  right: 10px;
+}
+
+.settings-dropdown-menu button,
+.user-dropdown-menu button {
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  backdrop-filter: blur(30px);
+  cursor: pointer;
+  text-align: left;
+  font-size: 17px;
+  padding: 10px;
+  color: white;
+}
+
+.settings-dropdown-menu button:hover,
+.user-dropdown-menu button:hover {
+  background-color: #fcaf3c;
+}

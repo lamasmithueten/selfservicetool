@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { CiUser } from "react-icons/ci";
-import { GoArrowLeft } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import "./UserProfile.css";
+import UserHeaderBar from "../HeaderBar/UserHeaderBar";
 
 const UserProfile = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -37,18 +36,11 @@ const UserProfile = () => {
     fetchUserInfo();
   }, [navigate]);
 
-  const handleBack = () => {
-    navigate(-1);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
   return (
     <div>
+      <UserHeaderBar title="Profil" />
+
       <div className="user-info">
-        <h1>User Profile</h1>
         {loading && <p>Loading user information...</p>}
         {userInfo && (
           <div className="content">
@@ -75,12 +67,6 @@ const UserProfile = () => {
           </div>
         )}
       </div>
-      <button className="first-button" onClick={handleBack}>
-        <GoArrowLeft />
-      </button>
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };

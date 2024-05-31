@@ -16,7 +16,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url("./Components/Assets/background.svg");
+  background: url("./Components/Assets/Hexagon.svg");
   background-size: cover;
   background-position: center;
 }

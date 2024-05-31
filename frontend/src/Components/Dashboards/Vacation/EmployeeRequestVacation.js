@@ -6,47 +6,19 @@ import "../Calendar.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { message } from "react-message-popup";
-import { CiSettings, CiUser } from "react-icons/ci";
+import UserHeaderBar from "../../HeaderBar/UserHeaderBar";
 
 const EmployeeRequestVacation = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [workdays, setWorkdays] = useState(null);
   const [vacationDays, setVacationDays] = useState(null);
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSelect = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
-  };
-
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleUserOption = (option) => {
-    if (option === "vacantion") {
-      navigate("/my-vacation-requests");
-    } else if (option === "vacantion-new") {
-      navigate("/vacation-request/new");
-    } else if (option === "provision") {
-      navigate("/my-provisioning-requests");
-    } else if (option === "provision-new") {
-      navigate("/provisioning-request/new");
-    } else if (option === "environments") {
-      navigate("/my-environments");
-    } else if (option === "logout") {
-      message.success("Sie wurden ausgelogt", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
   };
 
   const fetchVacationDays = useCallback(async () => {
@@ -116,7 +88,11 @@ const EmployeeRequestVacation = () => {
         message.success("Antrag gesendet", 2000);
       }
     } catch (error) {
-      message.error("Antrag wurde nicht gesendet", 2000);
+      if (error.response && error.response.status === 409) {
+        message.error("Sie haben bereits ein Antrag für diese Tage", 2000);
+      } else if (error.response && error.response.status === 422) {
+        message.error("Die gewählte Tage sind Feiertage", 2000);
+      }
     }
   };
 
@@ -162,10 +138,9 @@ const EmployeeRequestVacation = () => {
 
   return (
     <div className="container">
+      <UserHeaderBar title="Neue Urlaubsantrag" />
       <div className="calendar-info-container">
         <div className="calendar-container">
-          <h1>Neue Urlaubsantrag</h1>
-
           <DatePicker
             selected={startDate}
             onChange={handleSelect}
@@ -196,34 +171,6 @@ const EmployeeRequestVacation = () => {
           )}
         </div>
       </div>
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion-new")}>
-              Urlaub beantragen
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision-new")}>
-              Umgebung beantragen
-            </button>
-            <button onClick={() => handleUserOption("environments")}>
-              Meine Umgebungen
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };

@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "react-message-popup";
-import { CiSettings, CiUser } from "react-icons/ci";
 import axios from "axios";
 import "../Dashboard.css";
+import AdminHeaderBar from "../../HeaderBar/AdminHeaderBar";
 
 const AdminRegisterDashboard = () => {
   const [applications, setApplications] = useState([]);
   const [error] = useState(null);
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -92,34 +91,14 @@ const AdminRegisterDashboard = () => {
     }
   };
 
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleUserOption = (option) => {
-    if (option === "register") {
-      navigate("/registration-requests");
-    } else if (option === "vacantion") {
-      navigate("/vacation-requests");
-    } else if (option === "provision") {
-      navigate("/provisioning-requests");
-    } else if (option === "logout") {
-      message.success("You have been logged out", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
   return (
     <div>
-      <h1>Registrierungsanträge</h1>
+      <AdminHeaderBar title="Registrierungsanträge" />
       {error && <p>{error}</p>}
-      <div className="dashboard">
+      <div
+        className="dashboard"
+        style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+      >
         <h2>Ausstehende Registrierungsanträge</h2>
         <table border="1" className="table">
           <thead>
@@ -165,28 +144,6 @@ const AdminRegisterDashboard = () => {
           </tbody>
         </table>
       </div>
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("register")}>
-              Registrierungsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };

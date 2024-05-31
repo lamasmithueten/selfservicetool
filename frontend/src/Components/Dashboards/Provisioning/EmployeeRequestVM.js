@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { message } from "react-message-popup";
-import { CiSettings, CiUser } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import UserHeaderBar from "../../HeaderBar/UserHeaderBar";
 
 function EmployeeRequestVM({ toggleForm }) {
   const [formData, setFormData] = useState({
@@ -12,7 +12,6 @@ function EmployeeRequestVM({ toggleForm }) {
   const [error] = useState(null);
   const [environments, setEnvironments] = useState([]);
   const navigate = useNavigate();
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
     async function fetchEnvironments() {
@@ -74,39 +73,11 @@ function EmployeeRequestVM({ toggleForm }) {
     }
   };
 
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleUserOption = (option) => {
-    // TODO: switch case
-    if (option === "vacantion") {
-      navigate("/my-vacation-requests");
-    } else if (option === "vacantion-new") {
-      navigate("/vacation-request/new");
-    } else if (option === "provision") {
-      navigate("/my-provisioning-requests");
-    } else if (option === "provision-new") {
-      navigate("/provisioning-request/new");
-    } else if (option === "environments") {
-      navigate("/my-environments");
-    } else if (option === "logout") {
-      message.success("Sie wurden ausgelogt", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
   return (
     <div>
+      <UserHeaderBar title="Umgebung beantragen" />
       <div className="wrapper">
         <form onSubmit={handleSubmit}>
-          <h1>VM Beantragen</h1>
           {error && <p className="error">{error}</p>}
           <div className="input-box">
             <input
@@ -138,34 +109,6 @@ function EmployeeRequestVM({ toggleForm }) {
           </button>
         </form>
       </div>
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion-new")}>
-              Urlaub beantragen
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision-new")}>
-              Umgebung beantragen
-            </button>
-            <button onClick={() => handleUserOption("environments")}>
-              Meine Umgebungen
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 }

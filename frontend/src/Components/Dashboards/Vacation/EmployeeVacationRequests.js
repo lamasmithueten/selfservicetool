@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../Dashboard.css";
 import { message } from "react-message-popup";
-import { CiSettings, CiUser } from "react-icons/ci";
+import UserHeaderBar from "../../HeaderBar/UserHeaderBar";
 
 const EmployeeVacationRequests = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
@@ -11,7 +11,6 @@ const EmployeeVacationRequests = () => {
   const [declinedApplications, setDeclinedApplications] = useState([]);
   const [error] = useState(null);
   const [activeTab, setActiveTab] = useState("pending");
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -48,35 +47,11 @@ const EmployeeVacationRequests = () => {
     fetchData();
   }, [fetchData]);
 
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleUserOption = (option) => {
-    if (option === "vacantion") {
-      navigate("/my-vacation-requests");
-    } else if (option === "vacantion-new") {
-      navigate("/vacation-request/new");
-    } else if (option === "provision") {
-      navigate("/my-provisioning-requests");
-    } else if (option === "provision-new") {
-      navigate("/provisioning-request/new");
-    } else if (option === "environments") {
-      navigate("/my-environments");
-    } else if (option === "logout") {
-      message.success("Sie wurden ausgelogt", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
   const renderTable = (applications, title) => (
-    <div className="dashboard">
+    <div
+      className="dashboard"
+      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+    >
       <div>
         <h3>{title}</h3>
         <table border="1" className="table">
@@ -111,7 +86,7 @@ const EmployeeVacationRequests = () => {
 
   return (
     <div>
-      <h1>Urlaubsanträge</h1>
+      <UserHeaderBar title="Meine Urlaubsanträge" />
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
@@ -140,35 +115,6 @@ const EmployeeVacationRequests = () => {
         renderTable(acceptedApplications, "Genehmigte Anfragen")}
       {activeTab === "declined" &&
         renderTable(declinedApplications, "Abgelehnte Anfragen")}
-
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion-new")}>
-              Urlaub beantragen
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision-new")}>
-              Umgebung beantragen
-            </button>
-            <button onClick={() => handleUserOption("environments")}>
-              Meine Umgebungen
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };
