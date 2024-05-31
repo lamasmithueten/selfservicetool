@@ -1,17 +1,17 @@
 import React, { useState } from "react";
+import { CiLock, CiUser } from "react-icons/ci";
+import { message } from "react-message-popup";
+import { useNavigate } from "react-router-dom";
 import "./LoginForm.css";
-import { CiUser, CiLock } from "react-icons/ci";
 import LoginRequest from "./LoginRequest";
-import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
-import axios from "axios";
 
 function LoginForm({ toggleForm }) {
   const [formData, setFormData] = useState({
     usernameOrEmail: "",
     password: "",
   });
-  const [error] = useState(null); // State to store login error
-  const navigate = useNavigate(); // Initialize navigate
+  const [error] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -28,24 +28,32 @@ function LoginForm({ toggleForm }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = await LoginRequest(formData);
-    localStorage.setItem("token", token);
-    if (token != null) {
-      const userResponse = await axios.get(
-        "https://api.mwerr.de/api/v1/Users",
-        {
+    try {
+      const token = await LoginRequest(formData);
+      if (token) {
+        localStorage.setItem("token", token);
+
+        const response = await fetch("https://api.mwerr.de/api/v1/Users", {
+          method: "GET",
           headers: {
             accept: "*/*",
             Authorization: `Bearer ${token}`,
             "x-api-key": "keyTest",
           },
+        });
+
+        const userData = await response.json();
+        if (userData.role === "admin") {
+          navigate("/vacation-requests");
+        } else {
+          navigate("/my-vacation-requests");
         }
-      );
-      if (userResponse.data.role === "admin") {
-        navigate("/vacantion-requests");
-      } else {
-        navigate("/my-vacation-requests");
       }
+    } catch (error) {
+      message.error(
+        "Ein Fehler ist aufgetreten, bitte versuchen Sie erneut.",
+        2000
+      );
     }
   };
 
@@ -75,7 +83,7 @@ function LoginForm({ toggleForm }) {
           <CiLock
             className="password-icon icon"
             onClick={togglePasswordVisibility}
-          />{" "}
+          />
         </div>
         <div className="forgot">
           <a href="forgotPassword">Passwort vergessen?</a>

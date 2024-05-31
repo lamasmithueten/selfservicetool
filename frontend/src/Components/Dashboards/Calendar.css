@@ -11,7 +11,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 50px; /* 50 pixels gap between calendar and vacation days info */
+  gap: 50px;
   width: 100%;
 }
 
@@ -88,20 +88,15 @@
 .react-datepicker__day--selected,
 .react-datepicker__day--in-selecting-range,
 .react-datepicker__day--in-range {
-  background-color: rgba(0, 123, 255, 0.5) !important;
+  background-color: #e1a838 !important;
   color: white !important;
-}
-
-h2 {
-  color: white;
-  margin-bottom: 20px;
 }
 
 .antrag-button {
   margin-top: 30px;
   width: 150px;
   height: 25px;
-  background: white;
+  background: #e1a838;
   border: none;
   outline: none;
   border-radius: 40px;
@@ -122,23 +117,7 @@ h2 {
   align-items: center;
   padding: 20px;
   border-radius: 10px;
-}
-
-.meine-antrage {
-  position: fixed;
-  top: 20px;
-  right: 130px;
-  width: 100px;
-  height: 45px;
-  background: #fcaf3c;
-  border: none;
-  outline: none;
-  border-radius: 40px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  font-size: 16px;
-  color: #333;
-  font-weight: 700;
+  color: white;
 }
 
 .vacation-days-info {
@@ -156,4 +135,5 @@ h2 {
 .vacation-days-info h3 {
   color: white;
   margin-bottom: 10px;
+  text-decoration: underline;
 }

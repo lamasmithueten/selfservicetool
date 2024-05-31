@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "./EmployeeVacantionDashboard.css";
+import "../Dashboard.css";
+import "../Calendar.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { message } from "react-message-popup";
-import { CiSettings, CiUser } from "react-icons/ci";
+import UserHeaderBar from "../../HeaderBar/UserHeaderBar";
 
-const EmployeeVacantionDashboard = () => {
+const EmployeeRequestVacation = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [workdays, setWorkdays] = useState(null);
   const [vacationDays, setVacationDays] = useState(null);
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSelect = (dates) => {
@@ -21,36 +21,11 @@ const EmployeeVacantionDashboard = () => {
     setEndDate(end);
   };
 
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleUserOption = (option) => {
-    // TODO: switch case
-    if (option === "vacantion") {
-      navigate("/my-vacation-requests");
-    } else if (option === "vacantion-new") {
-      navigate("/vacation-request/new");
-    } else if (option === "provision") {
-      navigate("/my-provisioning-requests");
-    } else if (option === "provision-new") {
-      navigate("/provisioning-request/new");
-    } else if (option === "environments") {
-      navigate("/my-environments");
-    } else if (option === "logout") {
-      message.success("Sie wurden ausgelogt", 1500);
-      localStorage.removeItem("token");
+  const fetchVacationDays = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
       navigate("/login");
     }
-    setUserMenuOpen(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
-  const fetchVacationDays = async () => {
-    const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
         `https://api.mwerr.de/api/v1/VacationDays`,
@@ -64,13 +39,15 @@ const EmployeeVacantionDashboard = () => {
       );
       setVacationDays(response.data);
     } catch (error) {
-      console.error("Error fetching vacation days:", error);
+      if (error.response && error.response.status === 401) {
+        navigate("/login");
+      }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchVacationDays();
-  }, []);
+  }, [fetchVacationDays]);
 
   const handleVacRequest = async () => {
     try {
@@ -111,12 +88,15 @@ const EmployeeVacantionDashboard = () => {
         message.success("Antrag gesendet", 2000);
       }
     } catch (error) {
-      console.error("Error sending vacation request:", error);
-      message.error("Antrag wurde nicht gesendet", 2000);
+      if (error.response && error.response.status === 409) {
+        message.error("Sie haben bereits ein Antrag für diese Tage", 2000);
+      } else if (error.response && error.response.status === 422) {
+        message.error("Die gewählte Tage sind Feiertage", 2000);
+      }
     }
   };
 
-  const fetchWorkdays = async (start, end) => {
+  const fetchWorkdays = useCallback(async (start, end) => {
     const startDateString = start
       .toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -134,7 +114,6 @@ const EmployeeVacantionDashboard = () => {
       .split("/")
       .join("-");
     const token = localStorage.getItem("token");
-    console.log(startDateString);
     try {
       const response = await axios.get(`https://api.mwerr.de/api/v1/Workdays`, {
         params: {
@@ -148,23 +127,20 @@ const EmployeeVacantionDashboard = () => {
         },
       });
       setWorkdays(response.data);
-    } catch (error) {
-      console.error("Error fetching workdays:", error);
-    }
-  };
+    } catch (error) {}
+  }, []);
 
   useEffect(() => {
     if (startDate && endDate) {
       fetchWorkdays(startDate, endDate);
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, fetchWorkdays]);
 
   return (
     <div className="container">
+      <UserHeaderBar title="Neue Urlaubsantrag" />
       <div className="calendar-info-container">
         <div className="calendar-container">
-          <h1>Neue Urlaubsantrag</h1>
-
           <DatePicker
             selected={startDate}
             onChange={handleSelect}
@@ -195,36 +171,8 @@ const EmployeeVacantionDashboard = () => {
           )}
         </div>
       </div>
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion-new")}>
-              Urlaub beantragen
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision-new")}>
-              Umgebung beantragen
-            </button>
-            <button onClick={() => handleUserOption("environments")}>
-              Meine Umgebungen
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };
 
-export default EmployeeVacantionDashboard;
+export default EmployeeRequestVacation;

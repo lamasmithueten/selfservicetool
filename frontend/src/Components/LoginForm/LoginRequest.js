@@ -2,7 +2,6 @@ import axios from "axios";
 import { message } from "react-message-popup";
 
 const LoginRequest = async (formData) => {
-
   try {
     const headers = {
       accept: "*/*",
@@ -22,8 +21,7 @@ const LoginRequest = async (formData) => {
     message.success("Anemldung Erfolgreich", 2000);
     return response.data;
   } catch (error) {
-    console.error("Login failed:", error);
-    message.error("Anmeldung nicht erfolgreich", 4000);
+    message.error("Benutzername oder Passwort sind falsch", 2000);
   }
 };
 

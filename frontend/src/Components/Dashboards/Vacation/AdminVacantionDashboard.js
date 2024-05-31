@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import "./AdminVacantionDashboard.css";
+import "../Dashboard.css";
 import { useNavigate } from "react-router-dom";
-import { CiSettings, CiUser } from "react-icons/ci";
 import { message } from "react-message-popup";
+import AdminHeaderBar from "../../HeaderBar/AdminHeaderBar";
 
-const AdminVacantionDashboard = () => {
+const AdminVacationDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
   const [acceptedApplications, setAcceptedApplications] = useState([]);
   const [declinedApplications, setDeclinedApplications] = useState([]);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
   const [reasons, setReasons] = useState({});
-  const [selectedState, setSelectedState] = useState({});
   const [activeTab, setActiveTab] = useState("pending");
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
+      if (token === null) {
+        navigate("/login");
+        return null;
+      }
       const headers = {
         accept: "*/*",
         "x-api-key": "keyTest",
@@ -31,6 +33,10 @@ const AdminVacantionDashboard = () => {
         }
       );
 
+      if (response.status === 401 || response.status === 403) {
+        navigate("/login");
+        return null;
+      }
       setPendingApplications(response.data.pending_applications);
       setAcceptedApplications(response.data.accepted_applications);
       setDeclinedApplications(response.data.declined_applications);
@@ -47,15 +53,22 @@ const AdminVacantionDashboard = () => {
       });
       setReasons(reasonsObj);
     } catch (error) {
-      setError("Failed to fetch data");
+      if (
+        (error.response && error.response.status === 401) ||
+        (error.response && error.response.status === 403)
+      ) {
+        navigate("/login");
+      } else {
+        message.error("Etwas ist schief gelaufen", 1500);
+      }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
-  const handleButtonClick = async (applicationId) => {
+  const handleButtonClick = async (applicationId, state) => {
     try {
       const token = localStorage.getItem("token");
       const headers = {
@@ -67,13 +80,11 @@ const AdminVacantionDashboard = () => {
 
       const requestBody = {
         application_id: applicationId,
-        state: selectedState[applicationId] || "accepted",
+        state: state,
         reason: reasons[applicationId],
       };
 
-      message.success("Anfrage wurde bearbeitet");
-      console.log(requestBody);
-      const response = await axios.patch(
+      await axios.patch(
         "https://api.mwerr.de/api/v1/VacationManagement",
         requestBody,
         {
@@ -81,11 +92,10 @@ const AdminVacantionDashboard = () => {
         }
       );
 
-      console.log("Request successful:", response.data);
-      setSelectedState({});
+      message.success("Anfrage wurde bearbeitet", 1500);
       fetchData();
     } catch (error) {
-      console.error("Error while sending PATCH request:", error);
+      message.error("Anfrage wurde nicht bearbeitet", 1500);
     }
   };
 
@@ -97,40 +107,9 @@ const AdminVacantionDashboard = () => {
     }));
   };
 
-  const handleChangeState = (e, applicationId) => {
-    const { value } = e.target;
-    setSelectedState((prevState) => ({
-      ...prevState,
-      [applicationId]: value,
-    }));
-  };
-
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleUserOption = (option) => {
-    if (option === "register") {
-      navigate("/registration-requests");
-    } else if (option === "vacantion") {
-      navigate("/vacantion-requests");
-    } else if (option === "provision") {
-      navigate("/provisioning-requests");
-    } else if (option === "logout") {
-      message.success("You have been logged out", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
   const renderTable = (applications, title) => (
     <div
-      className="admin-vac-dashboard"
+      className="dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
       <h2>{title}</h2>
@@ -144,8 +123,7 @@ const AdminVacantionDashboard = () => {
             <th>Länge</th>
             <th>Zustand</th>
             <th>Grund</th>
-            <th>Bearbeite</th>
-            <th>Update</th>
+            <th>Genehmige</th>
           </tr>
         </thead>
         <tbody>
@@ -170,28 +148,24 @@ const AdminVacantionDashboard = () => {
                 />
               </td>
               <td>
-                <select
-                  className="select"
-                  onChange={(e) =>
-                    handleChangeState(e, application.application_ID)
-                  }
-                  value={
-                    selectedState[application.application_ID] || "accepted"
-                  }
-                >
-                  <option className="select-items" value="accepted">
-                    accept
-                  </option>
-                  <option value="declined">decline</option>
-                </select>
-              </td>
-              <td>
-                <button
-                  className="send"
-                  onClick={() => handleButtonClick(application.application_ID)}
-                >
-                  Send
-                </button>
+                <div>
+                  <button
+                    className="accept-button"
+                    onClick={() =>
+                      handleButtonClick(application.application_ID, "accepted")
+                    }
+                  >
+                    Ja
+                  </button>
+                  <button
+                    className="decline-button"
+                    onClick={() =>
+                      handleButtonClick(application.application_ID, "declined")
+                    }
+                  >
+                    Nein
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
@@ -202,60 +176,37 @@ const AdminVacantionDashboard = () => {
 
   return (
     <div>
-      <h1>Urlaubsanträge</h1>
+      <AdminHeaderBar title="Urlaubsanträge" />
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
           onClick={() => setActiveTab("pending")}
           className={activeTab === "pending" ? "active" : ""}
         >
-          Pending Applications
+          Ausstehend
         </button>
         <button
           onClick={() => setActiveTab("accepted")}
           className={activeTab === "accepted" ? "active" : ""}
         >
-          Accepted Applications
+          Genehmigt
         </button>
         <button
           onClick={() => setActiveTab("declined")}
           className={activeTab === "declined" ? "active" : ""}
         >
-          Declined Applications
+          Abgelehnt
         </button>
       </div>
 
       {activeTab === "pending" &&
-        renderTable(pendingApplications, "Pending Applications")}
+        renderTable(pendingApplications, "Ausstehende Anfragen")}
       {activeTab === "accepted" &&
-        renderTable(acceptedApplications, "Accepted Applications")}
+        renderTable(acceptedApplications, "Genehmigte Anfragen")}
       {activeTab === "declined" &&
-        renderTable(declinedApplications, "Declined Applications")}
-
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("register")}>
-              Registrierungsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
+        renderTable(declinedApplications, "Abgelehnte Anfragen")}
     </div>
   );
 };
 
-export default AdminVacantionDashboard;
+export default AdminVacationDashboard;

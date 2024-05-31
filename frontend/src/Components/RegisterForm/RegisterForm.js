@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { CiLock, CiMail, CiUser } from "react-icons/ci";
 import { message } from "react-message-popup";
@@ -24,12 +23,17 @@ function RegistrationForm({ toggleForm }) {
     role: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false); // State to track password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+
+    setFormErrors({
+      ...formErrors,
+      [e.target.name]: "",
     });
   };
 
@@ -42,9 +46,10 @@ function RegistrationForm({ toggleForm }) {
     const errors = validateForm(formData);
     if (Object.values(errors).some((error) => error !== "")) {
       setFormErrors(errors);
-      message.error("Ein Fehler ist bei der Registrierung aufgetreten", 4000);
+      message.error("Bitte füllen Sie alle Felder richtig aus", 2000);
       return;
     }
+
     try {
       const headers = {
         accept: "*/*",
@@ -52,41 +57,35 @@ function RegistrationForm({ toggleForm }) {
         "Content-Type": "application/json",
       };
 
-      const response = await axios.post(
-        "https://api.mwerr.de/api/v1/Users",
-        formData,
-        { headers: headers }
-      );
-      console.log("User registered successfully:", response.data);
-      if (response.status === 204) {
-        message.success(
-          "Registrierung ist erfolgreich, Sie können sich jetzt anmelden",
-          4000
-        );
-      }
+      const response = await fetch("https://api.mwerr.de/api/v1/Users", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(formData),
+      });
 
-      // Reset form data and errors
-      setFormData({
-        firstname: "",
-        lastname: "",
-        username: "",
-        email: "",
-        password: "",
-        role: "employee",
-      });
-      setFormErrors({
-        firstname: "",
-        lastname: "",
-        username: "",
-        email: "",
-        password: "",
-        role: "",
-      });
-    } catch (error) {
-      console.error("Error registering user:", error);
-      if (error.response && error.response.status === 409) {
-        message.error("Benutzername oder E-Mail bereits registriert", 4000);
+      if (response.status === 204) {
+        message.success("Registrierungsantrag erfolgreich gesendet", 2000);
+        setFormData({
+          firstname: "",
+          lastname: "",
+          username: "",
+          email: "",
+          password: "",
+          role: "employee",
+        });
+        setFormErrors({
+          firstname: "",
+          lastname: "",
+          username: "",
+          email: "",
+          password: "",
+          role: "",
+        });
+      } else if (response.status === 409) {
+        message.error("Benutzername oder E-Mail bereits registriert", 2000);
       }
+    } catch (error) {
+      message.error("Fehler bei der Registrierung", 2000);
     }
   };
 
@@ -94,7 +93,6 @@ function RegistrationForm({ toggleForm }) {
     <div className="wrapper">
       <h1>Registrieren</h1>
       <form onSubmit={handleSubmit}>
-        {" "}
         <div className="names">
           <div
             className={`input-box ${formErrors.firstname && "error-message"}`}
@@ -159,7 +157,7 @@ function RegistrationForm({ toggleForm }) {
         </div>
         <div className={`input-box ${formErrors.password && "error-message"}`}>
           <input
-            type={showPassword ? "text" : "password"} // Toggle input type based on showPassword state
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="Passwort"
             value={formData.password}
@@ -170,7 +168,7 @@ function RegistrationForm({ toggleForm }) {
           <CiLock
             className="password-icon icon"
             onClick={togglePasswordVisibility}
-          />{" "}
+          />
           {formErrors.password && (
             <p className="error-message">{formErrors.password}</p>
           )}
@@ -183,7 +181,7 @@ function RegistrationForm({ toggleForm }) {
               name="role"
               onChange={handleChange}
               defaultChecked
-            />{" "}
+            />
             Mitarbeiter
           </label>
           <label>
@@ -192,7 +190,7 @@ function RegistrationForm({ toggleForm }) {
               value="admin"
               name="role"
               onChange={handleChange}
-            />{" "}
+            />
             Management
           </label>
         </div>

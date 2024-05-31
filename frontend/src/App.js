@@ -4,20 +4,21 @@ import LoginForm from "./Components/LoginForm/LoginForm";
 import RegisterForm from "./Components/RegisterForm/RegisterForm";
 import ResetPassword from "./Components/PasswordReset/PasswordReset";
 import ForgotPassword from "./Components/PasswordReset/ForgotPassword";
-import EmployeeVacantionDashboard from "./Components/Dashboards/EmployeeVacantionDashboard";
-import AdminVacantionDashboard from "./Components/Dashboards/AdminVacantionDashboard";
-import AdminRegisterDashboard from "./Components/Dashboards/AdminRegisterDashboard";
-import EmployeeRequestsDashboard from "./Components/Dashboards/EmployeeRequestsDashboard";
 import AdminProvisioningDashboard from "./Components/Dashboards/Provisioning/AdminProvisioningDashboard";
-import EmployeeProvisioningDashboard from "./Components/Dashboards/Provisioning/EmployeeProvisioningDashboard";
-import EmployeeVMList from "./Components/Dashboards/Provisioning/EmployeeVMList";
-import EmployeeVMRequest from "./Components/Dashboards/Provisioning/EmployeeVMRequest";
-import UserProfile from "./Components/Dashboards/UserProfile";
+import AvailableVMs from "./Components/Dashboards/Provisioning/AvailableVMs";
+import EmployeeRequestVM from "./Components/Dashboards/Provisioning/EmployeeRequestVM";
+import EmployeeVMRequests from "./Components/Dashboards/Provisioning/EmployeeVMRequests";
+import AdminRegisterDashboard from "./Components/Dashboards/Vacation/AdminRegisterDashboard";
+import AdminVacationDashboard from "./Components/Dashboards/Vacation/AdminVacantionDashboard";
+import EmployeeRequestVacation from "./Components/Dashboards/Vacation/EmployeeRequestVacation";
+import EmployeeVacationRequests from "./Components/Dashboards/Vacation/EmployeeVacationRequests";
+import UserProfile from "./Components/UserProfile/UserProfile";
 
 const App = () => {
   return (
     <Router>
       <Routes>
+        {/*general routes*/}
         <Route path="/" element={<LoginForm />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
@@ -28,26 +29,23 @@ const App = () => {
         {/*employee routes*/}
         <Route
           path="/vacation-request/new"
-          element={<EmployeeVacantionDashboard />}
+          element={<EmployeeRequestVacation />}
         />
         <Route
           path="/provisioning-request/new"
-          element={<EmployeeVMRequest />}
+          element={<EmployeeRequestVM />}
         />
         <Route
           path="/my-vacation-requests"
-          element={<EmployeeRequestsDashboard />}
+          element={<EmployeeVacationRequests />}
         />
         <Route
           path="/my-provisioning-requests"
-          element={<EmployeeProvisioningDashboard />}
+          element={<EmployeeVMRequests />}
         />
-        <Route path="/my-environments" element={<EmployeeVMList />} />
+        <Route path="/my-environments" element={<AvailableVMs />} />
         {/*admin routes*/}
-        <Route
-          path="/vacantion-requests"
-          element={<AdminVacantionDashboard />}
-        />
+        <Route path="/vacation-requests" element={<AdminVacationDashboard />} />
         <Route
           path="/registration-requests"
           element={<AdminRegisterDashboard />}

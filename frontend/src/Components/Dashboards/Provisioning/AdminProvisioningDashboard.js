@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import "../AdminVacantionDashboard.css";
-import "../OptionButtons.css";
+import "../Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { message } from "react-message-popup";
-import { CiSettings, CiUser } from "react-icons/ci";
+import AdminHeaderBar from "../../HeaderBar/AdminHeaderBar";
 
 const AdminProvisioningDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
   const [acceptedApplications, setAcceptedApplications] = useState([]);
   const [declinedApplications, setDeclinedApplications] = useState([]);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
   const [reasons, setReasons] = useState({});
-  const [selectedState, setSelectedState] = useState({});
   const [activeTab, setActiveTab] = useState("pending");
-  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
+      if (token === null) {
+        navigate("/login");
+        return null;
+      }
       const headers = {
         accept: "*/*",
         "x-api-key": "keyTest",
@@ -32,6 +33,10 @@ const AdminProvisioningDashboard = () => {
         }
       );
 
+      if (response.status === 401 || response.status === 403) {
+        navigate("/login");
+        return null;
+      }
       setPendingApplications(response.data.pending_applications);
       setAcceptedApplications(response.data.accepted_applications);
       setDeclinedApplications(response.data.declined_applications);
@@ -48,16 +53,22 @@ const AdminProvisioningDashboard = () => {
       });
       setReasons(reasonsObj);
     } catch (error) {
-      setError("Failed to fetch data");
+      if (
+        (error.response && error.response.status === 401) ||
+        (error.response && error.response.status === 403)
+      ) {
+        navigate("/login");
+      } else {
+        message.error("Etwas ist schief gelaufen", 1500);
+      }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchData();
-    setSelectedState({});
-  }, []);
+  }, [fetchData]);
 
-  const handleButtonClick = async (applicationId) => {
+  const handleButtonClick = async (applicationId, acceptOrDeclineValue) => {
     try {
       const token = localStorage.getItem("token");
       const headers = {
@@ -67,17 +78,13 @@ const AdminProvisioningDashboard = () => {
         "Content-Type": "application/json",
       };
 
-      const acceptOrDeclineValue =
-        selectedState[applicationId] === "declined" ? false : true;
-
       const requestBody = {
         applicationId: applicationId,
         acceptOrDecline: acceptOrDeclineValue,
         answer: reasons[applicationId],
       };
 
-      console.log(requestBody);
-      const response = await axios.put(
+      await axios.put(
         "https://api.mwerr.de/api/v1/Provisionings",
         requestBody,
         {
@@ -85,13 +92,9 @@ const AdminProvisioningDashboard = () => {
         }
       );
 
-      console.log("Request successful:", response.data);
-      setSelectedState({});
       fetchData();
       message.success("Anfrage wurde bearbeitet");
-    } catch (error) {
-      console.error("Error while sending PATCH request:", error);
-    }
+    } catch (error) {}
   };
 
   const handleChangeReason = (e, applicationId) => {
@@ -102,43 +105,12 @@ const AdminProvisioningDashboard = () => {
     }));
   };
 
-  const handleChangeState = (e, applicationId) => {
-    const { value } = e.target;
-    setSelectedState((prevState) => ({
-      ...prevState,
-      [applicationId]: value,
-    }));
-  };
-
-  const handleOptionsMenu = () => {
-    setUserMenuOpen(!isUserMenuOpen);
-  };
-
-  const handleProfile = () => {
-    navigate("/my-profile");
-  };
-
-  const handleUserOption = (option) => {
-    if (option === "register") {
-      navigate("/registration-requests");
-    } else if (option === "vacantion") {
-      navigate("/vacantion-requests");
-    } else if (option === "provision") {
-      navigate("/provisioning-requests");
-    } else if (option === "logout") {
-      message.success("You have been logged out", 1500);
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    setUserMenuOpen(false);
-  };
-
   const renderPendingTable = () => (
     <div
-      className="admin-vac-dashboard"
+      className="dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <h2>Pending Applications</h2>
+      <h2>Ausstehende Anfragen</h2>
       <table border="1" className="table">
         <thead>
           <tr>
@@ -150,7 +122,6 @@ const AdminProvisioningDashboard = () => {
             <th>Zweck</th>
             <th>Grund</th>
             <th>Bearbeite</th>
-            <th>Update</th>
           </tr>
         </thead>
         <tbody>
@@ -173,23 +144,17 @@ const AdminProvisioningDashboard = () => {
                 />
               </td>
               <td>
-                <select
-                  className="select"
-                  onChange={(e) => handleChangeState(e, application.id)}
-                  value={selectedState[application.id] || "accepted"}
-                >
-                  <option className="select-items" value="accepted">
-                    accept
-                  </option>
-                  <option value="declined">decline</option>
-                </select>
-              </td>
-              <td>
                 <button
-                  className="send"
-                  onClick={() => handleButtonClick(application.id)}
+                  className="accept-button"
+                  onClick={() => handleButtonClick(application.id, true)}
                 >
-                  Send
+                  Ja
+                </button>
+                <button
+                  className="decline-button"
+                  onClick={() => handleButtonClick(application.id, false)}
+                >
+                  Nein
                 </button>
               </td>
             </tr>
@@ -201,10 +166,10 @@ const AdminProvisioningDashboard = () => {
 
   const renderAcceptedTable = () => (
     <div
-      className="admin-vac-dashboard"
+      className="dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <h2>Accepted Applications</h2>
+      <h2>Genehmigte Anfragen</h2>
       <table border="1" className="table">
         <thead>
           <tr>
@@ -238,10 +203,10 @@ const AdminProvisioningDashboard = () => {
 
   const renderDeclinedTable = () => (
     <div
-      className="admin-vac-dashboard"
+      className="dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <h2>Declined Applications</h2>
+      <h2>Abgelehnte Anfragen</h2>
       <table border="1" className="table">
         <thead>
           <tr>
@@ -273,55 +238,32 @@ const AdminProvisioningDashboard = () => {
 
   return (
     <div>
-      <h1>Umgebungsanträge</h1>
+      <AdminHeaderBar title="Umgebungsanträge" />
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
           onClick={() => setActiveTab("pending")}
           className={activeTab === "pending" ? "active" : ""}
         >
-          Pending Applications
+          Ausstehend
         </button>
         <button
           onClick={() => setActiveTab("accepted")}
           className={activeTab === "accepted" ? "active" : ""}
         >
-          Accepted Applications
+          Genehmigt
         </button>
         <button
           onClick={() => setActiveTab("declined")}
           className={activeTab === "declined" ? "active" : ""}
         >
-          Declined Applications
+          Abgelehnt
         </button>
       </div>
 
       {activeTab === "pending" && renderPendingTable()}
       {activeTab === "accepted" && renderAcceptedTable()}
       {activeTab === "declined" && renderDeclinedTable()}
-
-      <button className="first-button" onClick={handleOptionsMenu}>
-        <CiSettings />
-      </button>
-      {isUserMenuOpen && (
-        <div className="dropdown-menu">
-          <>
-            <button onClick={() => handleUserOption("register")}>
-              Registrierungsanträge
-            </button>
-            <button onClick={() => handleUserOption("vacantion")}>
-              Urlaubsanträge
-            </button>
-            <button onClick={() => handleUserOption("provision")}>
-              Umgebungsanträge
-            </button>
-            <button onClick={() => handleUserOption("logout")}>Logout</button>
-          </>
-        </div>
-      )}
-      <button className="second-button" onClick={handleProfile}>
-        <CiUser />
-      </button>
     </div>
   );
 };
