@@ -121,7 +121,7 @@ const AdminProvisioningDashboard = () => {
             <th>Art der Umgebung</th>
             <th>Zweck</th>
             <th>Grund</th>
-            <th>Bearbeite</th>
+            <th>Gehnemigen</th>
           </tr>
         </thead>
         <tbody>

@@ -109,7 +109,7 @@ const AdminRegisterDashboard = () => {
               <th>Vorname</th>
               <th>Nachname</th>
               <th>Antragsdatum</th>
-              <th>Bearbeite</th>
+              <th>Gehnemigen</th>
             </tr>
           </thead>
           <tbody>

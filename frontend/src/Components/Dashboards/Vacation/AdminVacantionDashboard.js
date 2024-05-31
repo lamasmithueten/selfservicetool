@@ -123,7 +123,7 @@ const AdminVacationDashboard = () => {
             <th>Länge</th>
             <th>Zustand</th>
             <th>Grund</th>
-            <th>Genehmige</th>
+            <th>Gehnemigen</th>
           </tr>
         </thead>
         <tbody>
