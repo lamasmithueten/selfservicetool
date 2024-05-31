@@ -1,54 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import "../AdminVacantionDashboard.css";
-import "../OptionButtons.css";
 import { useNavigate } from "react-router-dom";
+import "../Dashboard.css";
 import { message } from "react-message-popup";
 import { CiSettings, CiUser } from "react-icons/ci";
 
-const EmployeeProvisioningDashboard = () => {
+const EmployeeVacationRequests = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
   const [acceptedApplications, setAcceptedApplications] = useState([]);
   const [declinedApplications, setDeclinedApplications] = useState([]);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
   const [activeTab, setActiveTab] = useState("pending");
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
-
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
+      if (token === null) {
+        navigate("/login");
+        return null;
+      }
       const headers = {
         accept: "*/*",
-        "x-api-key": "keyTest",
         Authorization: `Bearer ${token}`,
+        "x-api-key": "keyTest",
       };
       const response = await axios.get(
-        "https://api.mwerr.de/api/v1/Provisionings",
+        "https://api.mwerr.de/api/v1/Vacations",
         {
           headers: headers,
         }
       );
-
       setPendingApplications(response.data.pending_applications);
       setAcceptedApplications(response.data.accepted_applications);
       setDeclinedApplications(response.data.declined_applications);
     } catch (error) {
-      setError("Failed to fetch data");
+      if (error.response && error.response.status === 401) {
+        navigate("/login");
+      } else {
+        message.error("Etwas ist schief gelaufen", 1500);
+      }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleOptionsMenu = () => {
     setUserMenuOpen(!isUserMenuOpen);
   };
 
   const handleUserOption = (option) => {
-    // TODO: switch case
     if (option === "vacantion") {
       navigate("/my-vacation-requests");
     } else if (option === "vacantion-new") {
@@ -71,129 +75,71 @@ const EmployeeProvisioningDashboard = () => {
     navigate("/my-profile");
   };
 
-  const renderPendingTable = () => (
-    <div
-      className="admin-vac-dashboard"
-      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
-    >
-      <h2>Pending Applications</h2>
-      <table border="1" className="table">
-        <thead>
-          <tr>
-            <th>Antrags-ID</th>
-            <th>Vorname</th>
-            <th>Nachname</th>
-            <th>Art der Umgebung</th>
-            <th>Zweck</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pendingApplications.map((application, index) => (
-            <tr key={index}>
-              <td>{application.id}</td>
-              <td>{application.first_name}</td>
-              <td>{application.last_name}</td>
-              <td>{application.virtual_environment}</td>
-              <td>{application.purpose}</td>
+  const renderTable = (applications, title) => (
+    <div className="dashboard">
+      <div>
+        <h3>{title}</h3>
+        <table border="1" className="table">
+          <thead>
+            <tr>
+              <th>Vorname</th>
+              <th>Nachname</th>
+              <th>Beginn</th>
+              <th>Ende</th>
+              <th>Anzahl Tage</th>
+              <th>Status</th>
+              <th>Grund</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-
-  const renderAcceptedTable = () => (
-    <div
-      className="admin-vac-dashboard"
-      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
-    >
-      <h2>Accepted Applications</h2>
-      <table border="1" className="table">
-        <thead>
-          <tr>
-            <th>Antrags-ID</th>
-            <th>Vorname</th>
-            <th>Nachname</th>
-            <th>Art der Umgebung</th>
-            <th>Antwort</th>
-          </tr>
-        </thead>
-        <tbody>
-          {acceptedApplications.map((application, index) => (
-            <tr key={index}>
-              <td>{application.id}</td>
-              <td>{application.first_name}</td>
-              <td>{application.last_name}</td>
-              <td>{application.virtual_environment}</td>
-              <td>{application.answer}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-
-  const renderDeclinedTable = () => (
-    <div
-      className="admin-vac-dashboard"
-      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
-    >
-      <h2>Declined Applications</h2>
-      <table border="1" className="table">
-        <thead>
-          <tr>
-            <th>Antrags-ID</th>
-            <th>Vorname</th>
-            <th>Nachname</th>
-            <th>Art der Umgebung</th>
-            <th>Zweck</th>
-            <th>Grund</th>
-          </tr>
-        </thead>
-        <tbody>
-          {declinedApplications.map((application, index) => (
-            <tr key={index}>
-              <td>{application.id}</td>
-              <td>{application.first_name}</td>
-              <td>{application.last_name}</td>
-              <td>{application.virtual_environment}</td>
-              <td>{application.purpose}</td>
-              <td>{application.answer}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {applications.map((application, index) => (
+              <tr key={index}>
+                <td>{application.first_name}</td>
+                <td>{application.last_name}</td>
+                <td>{application.first_day}</td>
+                <td>{application.last_day}</td>
+                <td>{application.number_of_days}</td>
+                <td>{application.state}</td>
+                <td>{application.reason}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 
   return (
     <div>
-      <h1>Umgebungsanträge</h1>
+      <h1>Urlaubsanträge</h1>
       {error && <p>{error}</p>}
       <div className="tab-buttons">
         <button
           onClick={() => setActiveTab("pending")}
           className={activeTab === "pending" ? "active" : ""}
         >
-          Pending Applications
+          Ausstehend
         </button>
         <button
           onClick={() => setActiveTab("accepted")}
           className={activeTab === "accepted" ? "active" : ""}
         >
-          Accepted Applications
+          Genehmigt
         </button>
         <button
           onClick={() => setActiveTab("declined")}
           className={activeTab === "declined" ? "active" : ""}
         >
-          Declined Applications
+          Abgelehnt
         </button>
       </div>
 
-      {activeTab === "pending" && renderPendingTable()}
-      {activeTab === "accepted" && renderAcceptedTable()}
-      {activeTab === "declined" && renderDeclinedTable()}
+      {activeTab === "pending" &&
+        renderTable(pendingApplications, "Ausstehende Anfragen")}
+      {activeTab === "accepted" &&
+        renderTable(acceptedApplications, "Genehmigte Anfragen")}
+      {activeTab === "declined" &&
+        renderTable(declinedApplications, "Abgelehnte Anfragen")}
 
       <button className="first-button" onClick={handleOptionsMenu}>
         <CiSettings />
@@ -227,4 +173,4 @@ const EmployeeProvisioningDashboard = () => {
   );
 };
 
-export default EmployeeProvisioningDashboard;
+export default EmployeeVacationRequests;

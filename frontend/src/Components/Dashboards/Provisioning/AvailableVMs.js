@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { message } from "react-message-popup";
 import { CiSettings, CiUser } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
-const EmployeeVMList = () => {
+const AvailableVMs = () => {
   const [acceptedApplications, setAcceptedApplications] = useState([]);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
+      if (token === null) {
+        navigate("/login");
+        return null;
+      }
       const headers = {
         accept: "*/*",
         "x-api-key": "keyTest",
@@ -27,19 +31,23 @@ const EmployeeVMList = () => {
 
       setAcceptedApplications(response.data.accepted_applications);
     } catch (error) {
-      setError("Failed to fetch data");
+      if (error.response && error.response.status === 401) {
+        navigate("/login");
+      } else {
+        message.error("Etwas ist schief gelaufen", 1500);
+      }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
+
   const handleOptionsMenu = () => {
     setUserMenuOpen(!isUserMenuOpen);
   };
 
   const handleUserOption = (option) => {
-    // TODO: switch case
     if (option === "vacantion") {
       navigate("/my-vacation-requests");
     } else if (option === "vacantion-new") {
@@ -63,11 +71,7 @@ const EmployeeVMList = () => {
   };
 
   const renderMyVms = () => (
-    <div
-      className="admin-vac-dashboard"
-      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
-    >
-      <h2>Meine Umgebungen</h2>
+    <div className="dashboard">
       <table border="1" className="table">
         <thead>
           <tr>
@@ -132,4 +136,4 @@ const EmployeeVMList = () => {
   );
 };
 
-export default EmployeeVMList;
+export default AvailableVMs;

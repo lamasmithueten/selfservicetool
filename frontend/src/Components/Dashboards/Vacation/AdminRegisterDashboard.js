@@ -1,35 +1,43 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./AdminVacantionDashboard.css";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import "./AdminRegisterDashboard.css";
 import { message } from "react-message-popup";
 import { CiSettings, CiUser } from "react-icons/ci";
+import axios from "axios";
+import "../Dashboard.css";
 
 const AdminRegisterDashboard = () => {
   const [applications, setApplications] = useState([]);
-  const [error, setError] = useState(null);
-  const [state, setState] = useState("accepted");
+  const [error] = useState(null);
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
+      if (token === null) {
+        navigate("/login");
+        return;
+      }
+
       const headers = {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
         "x-api-key": "keyTest",
       };
+
       const response = await axios.get(
         "https://api.mwerr.de/api/v1/RegistrationApplications",
-        {
-          headers: headers,
-        }
+        { headers }
       );
 
+      if (response.status === 401 || response.status === 403) {
+        navigate("/login");
+        return null;
+      }
+
+      const data = response.data;
       setApplications(
-        response.data.map((app) => ({
+        data.map((app) => ({
           username: app.username,
           role: app.role,
           email: app.email,
@@ -40,15 +48,22 @@ const AdminRegisterDashboard = () => {
         }))
       );
     } catch (error) {
-      setError("Failed to fetch data");
+      if (
+        (error.response && error.response.status === 401) ||
+        (error.response && error.response.status === 403)
+      ) {
+        navigate("/login");
+      } else {
+        message.error("Etwas ist schief gelaufen", 1500);
+      }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
-  const handleButtonClick = async (applicationId) => {
+  const handleButtonClick = async (applicationId, acceptOrDecline) => {
     try {
       const token = localStorage.getItem("token");
       const headers = {
@@ -60,27 +75,21 @@ const AdminRegisterDashboard = () => {
 
       const requestBody = {
         id: applicationId,
-        acceptOrDecline: state === "accepted" ? true : false,
+        acceptOrDecline: acceptOrDecline === "accepted" ? true : false,
         editRole: "employee",
       };
 
-      const response = await axios.post(
+      await axios.post(
         "https://api.mwerr.de/api/v1/RegistrationApplications",
         requestBody,
-        {
-          headers: headers,
-        }
+        { headers }
       );
-      message.success("Anfrage wurde bearbeitet");
-      console.log("Request successful:", response.data);
+
+      message.success("Anfrage wurde erfolgreich bearbeitet.");
       fetchData();
     } catch (error) {
-      console.error("Error while sending POST request:", error);
+      message.error("Etwas ist schief gelaufen, bitte versuchen Sie erneut.");
     }
-  };
-
-  const handleChangeState = (e) => {
-    setState(e.target.value);
   };
 
   const handleOptionsMenu = () => {
@@ -91,7 +100,7 @@ const AdminRegisterDashboard = () => {
     if (option === "register") {
       navigate("/registration-requests");
     } else if (option === "vacantion") {
-      navigate("/vacantion-requests");
+      navigate("/vacation-requests");
     } else if (option === "provision") {
       navigate("/provisioning-requests");
     } else if (option === "logout") {
@@ -110,10 +119,7 @@ const AdminRegisterDashboard = () => {
     <div>
       <h1>Registrierungsanträge</h1>
       {error && <p>{error}</p>}
-      <div
-        className="admin-reg-dashboard"
-        style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
-      >
+      <div className="dashboard">
         <h2>Ausstehende Registrierungsanträge</h2>
         <table border="1" className="table">
           <thead>
@@ -125,7 +131,6 @@ const AdminRegisterDashboard = () => {
               <th>Nachname</th>
               <th>Antragsdatum</th>
               <th>Bearbeite</th>
-              <th>Update</th>
             </tr>
           </thead>
           <tbody>
@@ -138,19 +143,21 @@ const AdminRegisterDashboard = () => {
                 <td>{application.lastname}</td>
                 <td>{application.application_date}</td>
                 <td>
-                  <select className="select" onChange={handleChangeState}>
-                    <option className="select-items" value="accepted">
-                      approve
-                    </option>
-                    <option value="declined">decline</option>
-                  </select>
-                </td>
-                <td>
                   <button
-                    className="send"
-                    onClick={() => handleButtonClick(application.id)}
+                    className="accept-button"
+                    onClick={() =>
+                      handleButtonClick(application.id, "accepted")
+                    }
                   >
-                    Send
+                    Ja
+                  </button>
+                  <button
+                    className="decline-button"
+                    onClick={() =>
+                      handleButtonClick(application.id, "declined")
+                    }
+                  >
+                    Nein
                   </button>
                 </td>
               </tr>

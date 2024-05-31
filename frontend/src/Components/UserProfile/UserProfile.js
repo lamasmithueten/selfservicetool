@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { GoArrowLeft } from "react-icons/go";
-
+import { useNavigate } from "react-router-dom";
 import "./UserProfile.css";
 
 const UserProfile = () => {
@@ -13,6 +12,10 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
+        if (localStorage.getItem("token") === null) {
+          navigate("/login");
+          return null;
+        }
         const response = await fetch("https://api.mwerr.de/api/v1/Users", {
           method: "GET",
           headers: {
@@ -21,20 +24,18 @@ const UserProfile = () => {
             "x-api-key": "keyTest",
           },
         });
-        if (!response.ok) {
-          throw new Error("Failed to fetch user information");
-        }
         const userData = await response.json();
         setUserInfo(userData);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching user information:", error);
-        setLoading(false);
+        if (error.response && error.response.status === 401) {
+          navigate("/login");
+        }
       }
     };
 
     fetchUserInfo();
-  }, []);
+  }, [navigate]);
 
   const handleBack = () => {
     navigate(-1);
@@ -72,9 +73,6 @@ const UserProfile = () => {
               <span className="info">{userInfo.lastname}</span>
             </p>
           </div>
-        )}
-        {!loading && !userInfo && (
-          <p>Error fetching user information. Please try again later.</p>
         )}
       </div>
       <button className="first-button" onClick={handleBack}>

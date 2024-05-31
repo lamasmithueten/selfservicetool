@@ -11,7 +11,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 50px; /* 50 pixels gap between calendar and vacation days info */
+  gap: 50px;
   width: 100%;
 }
 
@@ -92,11 +92,6 @@
   color: white !important;
 }
 
-h2 {
-  color: white;
-  margin-bottom: 20px;
-}
-
 .antrag-button {
   margin-top: 30px;
   width: 150px;
@@ -124,23 +119,6 @@ h2 {
   border-radius: 10px;
 }
 
-.meine-antrage {
-  position: fixed;
-  top: 20px;
-  right: 130px;
-  width: 100px;
-  height: 45px;
-  background: #fcaf3c;
-  border: none;
-  outline: none;
-  border-radius: 40px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  font-size: 16px;
-  color: #333;
-  font-weight: 700;
-}
-
 .vacation-days-info {
   display: flex;
   flex-direction: column;
@@ -156,4 +134,5 @@ h2 {
 .vacation-days-info h3 {
   color: white;
   margin-bottom: 10px;
+  text-decoration: underline;
 }

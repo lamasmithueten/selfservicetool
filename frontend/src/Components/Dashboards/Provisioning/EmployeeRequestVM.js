@@ -4,13 +4,13 @@ import { message } from "react-message-popup";
 import { CiSettings, CiUser } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
-function EmployeeVMRequest({ toggleForm }) {
+function EmployeeRequestVM({ toggleForm }) {
   const [formData, setFormData] = useState({
     purpose: "",
     virtualEnvironment: "",
   });
-  const [error, setError] = useState(null);
-  const [environments, setEnvironments] = useState([]); // State to store environments
+  const [error] = useState(null);
+  const [environments, setEnvironments] = useState([]);
   const navigate = useNavigate();
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
 
@@ -18,6 +18,11 @@ function EmployeeVMRequest({ toggleForm }) {
     async function fetchEnvironments() {
       try {
         const token = localStorage.getItem("token");
+        if (token === null) {
+          navigate("/login");
+          return null;
+        }
+
         const response = await axios.get(
           "https://api.mwerr.de/api/VirtualEnvironments",
           {
@@ -28,16 +33,19 @@ function EmployeeVMRequest({ toggleForm }) {
             },
           }
         );
+
         setEnvironments(response.data);
-        console.log(response.data);
       } catch (error) {
-        console.error("Error fetching environments:", error);
-        setError("An error occurred while fetching environments.");
+        if (error.response && error.response.status === 401) {
+          navigate("/login");
+        } else {
+          message.error("Etwas ist schief gelaufen", 1500);
+        }
       }
     }
 
     fetchEnvironments();
-  }, []);
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -50,21 +58,19 @@ function EmployeeVMRequest({ toggleForm }) {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const requestResponse = await axios.post(
-        "https://api.mwerr.de/api/v1/Provisionings",
-        formData,
-        {
-          headers: {
-            accept: "*/*",
-            Authorization: `Bearer ${token}`,
-            "x-api-key": "keyTest",
-          },
-        }
-      );
-      console.log("VM request submitted:", requestResponse.data);
+      await axios.post("https://api.mwerr.de/api/v1/Provisionings", formData, {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+          "x-api-key": "keyTest",
+        },
+      });
+      message.success("Antrag wurde gesendet", 1500);
     } catch (error) {
-      console.error("There was an error submitting the request:", error);
-      message.error("Fehler", 2000);
+      message.error(
+        "Bitte geben Sie den Zweck und wählen Sie ein Art aus der Liste",
+        3000
+      );
     }
   };
 
@@ -109,6 +115,7 @@ function EmployeeVMRequest({ toggleForm }) {
               placeholder="Zweck der virtuellen Umgebung"
               value={formData.purpose}
               onChange={handleChange}
+              maxLength={100}
             />
           </div>
           <div className="input-select">
@@ -163,4 +170,4 @@ function EmployeeVMRequest({ toggleForm }) {
   );
 }
 
-export default EmployeeVMRequest;
+export default EmployeeRequestVM;

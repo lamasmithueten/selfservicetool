@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import "../AdminVacantionDashboard.css";
-import "../OptionButtons.css";
+import "../Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { message } from "react-message-popup";
 import { CiSettings, CiUser } from "react-icons/ci";
@@ -10,16 +9,20 @@ const AdminProvisioningDashboard = () => {
   const [pendingApplications, setPendingApplications] = useState([]);
   const [acceptedApplications, setAcceptedApplications] = useState([]);
   const [declinedApplications, setDeclinedApplications] = useState([]);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
   const [reasons, setReasons] = useState({});
   const [selectedState, setSelectedState] = useState({});
   const [activeTab, setActiveTab] = useState("pending");
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
+      if (token === null) {
+        navigate("/login");
+        return null;
+      }
       const headers = {
         accept: "*/*",
         "x-api-key": "keyTest",
@@ -32,6 +35,10 @@ const AdminProvisioningDashboard = () => {
         }
       );
 
+      if (response.status === 401 || response.status === 403) {
+        navigate("/login");
+        return null;
+      }
       setPendingApplications(response.data.pending_applications);
       setAcceptedApplications(response.data.accepted_applications);
       setDeclinedApplications(response.data.declined_applications);
@@ -48,14 +55,21 @@ const AdminProvisioningDashboard = () => {
       });
       setReasons(reasonsObj);
     } catch (error) {
-      setError("Failed to fetch data");
+      if (
+        (error.response && error.response.status === 401) ||
+        (error.response && error.response.status === 403)
+      ) {
+        navigate("/login");
+      } else {
+        message.error("Etwas ist schief gelaufen", 1500);
+      }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchData();
     setSelectedState({});
-  }, []);
+  }, [fetchData]);
 
   const handleButtonClick = async (applicationId) => {
     try {
@@ -76,8 +90,7 @@ const AdminProvisioningDashboard = () => {
         answer: reasons[applicationId],
       };
 
-      console.log(requestBody);
-      const response = await axios.put(
+      await axios.put(
         "https://api.mwerr.de/api/v1/Provisionings",
         requestBody,
         {
@@ -85,13 +98,10 @@ const AdminProvisioningDashboard = () => {
         }
       );
 
-      console.log("Request successful:", response.data);
       setSelectedState({});
       fetchData();
       message.success("Anfrage wurde bearbeitet");
-    } catch (error) {
-      console.error("Error while sending PATCH request:", error);
-    }
+    } catch (error) {}
   };
 
   const handleChangeReason = (e, applicationId) => {
@@ -135,10 +145,10 @@ const AdminProvisioningDashboard = () => {
 
   const renderPendingTable = () => (
     <div
-      className="admin-vac-dashboard"
+      className="dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <h2>Pending Applications</h2>
+      <h2>Ausstehende Anfragen</h2>
       <table border="1" className="table">
         <thead>
           <tr>
@@ -201,10 +211,10 @@ const AdminProvisioningDashboard = () => {
 
   const renderAcceptedTable = () => (
     <div
-      className="admin-vac-dashboard"
+      className="dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <h2>Accepted Applications</h2>
+      <h2>Genehmigte Anfragen</h2>
       <table border="1" className="table">
         <thead>
           <tr>
@@ -238,10 +248,10 @@ const AdminProvisioningDashboard = () => {
 
   const renderDeclinedTable = () => (
     <div
-      className="admin-vac-dashboard"
+      className="dashboard"
       style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
     >
-      <h2>Declined Applications</h2>
+      <h2>Abgelehnte Anfragen</h2>
       <table border="1" className="table">
         <thead>
           <tr>
@@ -280,19 +290,19 @@ const AdminProvisioningDashboard = () => {
           onClick={() => setActiveTab("pending")}
           className={activeTab === "pending" ? "active" : ""}
         >
-          Pending Applications
+          Ausstehend
         </button>
         <button
           onClick={() => setActiveTab("accepted")}
           className={activeTab === "accepted" ? "active" : ""}
         >
-          Accepted Applications
+          Genehmigt
         </button>
         <button
           onClick={() => setActiveTab("declined")}
           className={activeTab === "declined" ? "active" : ""}
         >
-          Declined Applications
+          Abgelehnt
         </button>
       </div>
 
