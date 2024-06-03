@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SelfServiceWebAPI;
 using sstWebAPI.Constants;
 using sstWebAPI.Helpers;
@@ -34,12 +35,20 @@ namespace sstWebAPI.Controllers
 
             if (model.AcceptOrDecline)
             {
+                if (string.IsNullOrWhiteSpace(request.virtual_environment))
+                {
+                    return BadRequest("Check if type correctly");
+                }
                 try
                 {
                     var reponse = await ProvisionServiceRequest(new ProvisioningServiceRequestModel(request.ID.ToString(), request.virtual_environment));
                     if (reponse == null || !reponse.verificationSuccessful)
                     {
-                        return BadRequest("Check if you set id and type correctly");
+                        reponse = await ProvisionServiceRequest(new ProvisioningServiceRequestModel(request.ID.ToString(), request.virtual_environment));
+                        if (reponse == null || !reponse.verificationSuccessful)
+                        {
+                            return BadRequest("Check if type and ID are set correctly");
+                        }
                     }
 
                     var virtualEnvironment = new VirtualEnvironmentModel(request.ID, request.ID_user, request.virtual_environment,
