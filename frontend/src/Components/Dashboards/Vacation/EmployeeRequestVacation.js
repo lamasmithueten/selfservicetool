@@ -138,7 +138,7 @@ const EmployeeRequestVacation = () => {
 
   return (
     <div className="container">
-      <UserHeaderBar title="Neue Urlaubsantrag" />
+      <UserHeaderBar title="Neuer Urlaubsantrag" />
       <div className="calendar-info-container">
         <div className="calendar-container">
           <DatePicker
