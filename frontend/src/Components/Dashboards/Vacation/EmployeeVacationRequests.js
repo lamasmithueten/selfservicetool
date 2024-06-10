@@ -50,7 +50,7 @@ const EmployeeVacationRequests = () => {
   const renderTable = (applications, title) => (
     <div
       className="dashboard"
-      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+      style={{ overflowY: "auto", maxHeight: "700px", marginBottom: "20px" }}
     >
       <div>
         <h3>{title}</h3>
