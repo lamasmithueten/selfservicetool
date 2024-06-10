@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using sstWebAPI.Constants;
 
 namespace sstWebAPI.Models.DTO.AuthenticationUser
@@ -70,9 +71,16 @@ namespace sstWebAPI.Models.DTO.AuthenticationUser
             }
 
             //checks if the email is a valid email
-            if (!IsEmailValid(out string isEmailValidMessage))
+            if (!IsEmailValid())
             {
-                alertMessage = isEmailValidMessage;
+                alertMessage = "The email is not valid.";
+                return false;
+            }
+
+            //checks if the password is a valid password
+            if (!IsPasswordValid())
+            {
+                alertMessage = "The password is not valid.";
                 return false;
             }
 
@@ -98,12 +106,11 @@ namespace sstWebAPI.Models.DTO.AuthenticationUser
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        private bool IsEmailValid(out string alertMessage)
+        private bool IsEmailValid()
         {
             //check if the password is null or empty
-            if (Email == null)
+            if (String.IsNullOrEmpty(Email))
             {
-                alertMessage = "The email cannot be null.";
                 return false;
             }
 
@@ -113,12 +120,39 @@ namespace sstWebAPI.Models.DTO.AuthenticationUser
             //check if email matches the pattern
             if (!Regex.IsMatch(Email, pattern))
             {
-                alertMessage = "The email is not an email.";
                 return false;
             }
 
             //email meets all requirements
-            alertMessage = "";
+            return true;
+        }
+        public bool IsPasswordValid()
+        {
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                return false;
+            }
+
+            if (Password.Length < 8)
+            {
+                return false;
+            }
+
+            if (!Password.Any(char.IsUpper))
+            {
+                return false;
+            }
+
+            if (!Password.Any(char.IsLower))
+            {
+                return false;
+            }
+
+            if (!Password.Any(char.IsDigit))
+            {
+                return false;
+            }
+
             return true;
         }
 
