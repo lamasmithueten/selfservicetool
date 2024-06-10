@@ -96,7 +96,7 @@ const AdminRegisterDashboard = () => {
       <AdminHeaderBar title="Registrierungsanträge" />
       {error && <p>{error}</p>}
       <div
-        className="dashboard"
+        className="dashboard-notab"
         style={{ overflowY: "auto", maxHeight: "700px", marginBottom: "20px" }}
       >
         <h2>Ausstehende Registrierungsanträge</h2>
