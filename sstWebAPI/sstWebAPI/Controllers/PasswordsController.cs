@@ -54,7 +54,7 @@ namespace sstWebAPI.Controllers
 
             try
             {
-                sendEmail(userEmail, PasswordResetCreateToken.Subject, PasswordResetCreateToken.Body(token));
+                SendEmailHelper.SendEmail(_configuration, userEmail, PasswordResetCreateToken.Subject, PasswordResetCreateToken.Body(token));
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -100,7 +100,7 @@ namespace sstWebAPI.Controllers
 
             try
             {
-                sendEmail(user.email, PasswordResetSuccess.Subject, PasswordResetSuccess.Body);
+                SendEmailHelper.SendEmail(_configuration, user.email, PasswordResetSuccess.Subject, PasswordResetSuccess.Body);
             }
             catch (Exception ex)
             {
@@ -131,13 +131,6 @@ namespace sstWebAPI.Controllers
             var randValue = rand.Next(0, maxValue);
             var str = randValue.ToString($"D{maxLength}");
             return str;
-        }
-
-        private void sendEmail(string toEmail, string subject, string body)
-        {
-            var fromEmail = _configuration["ServiceEmailData:Email"] ?? throw new Exception("ServiceEmailData:Email is not found in the configuration.");
-            var appPassword = _configuration["ServiceEmailData:AppPassword"] ?? throw new Exception("ServiceEmailData:AppPassword is not found in the configuration.");
-            SendEmailHelper.SendEmail(fromEmail: fromEmail, emailAppPassword: appPassword, toEmail: toEmail, subject: subject, text: body);
         }
         #endregion
     }

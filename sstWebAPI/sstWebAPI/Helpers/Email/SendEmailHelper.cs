@@ -14,5 +14,12 @@ namespace sstWebAPI.Helpers.Email
             smtpClient.Credentials = new NetworkCredential(fromEmail, emailAppPassword);
             smtpClient.Send(mailMessage);
         }
+
+        public static void SendEmail(IConfiguration configuration, string toEmail, string subject, string body)
+        {
+            var fromEmail = configuration["ServiceEmailData:Email"] ?? throw new Exception("ServiceEmailData:Email is not found in the configuration.");
+            var appPassword = configuration["ServiceEmailData:AppPassword"] ?? throw new Exception("ServiceEmailData:AppPassword is not found in the configuration.");
+            SendEmail(fromEmail: fromEmail, emailAppPassword: appPassword, toEmail: toEmail, subject: subject, text: body);
+        }
     }
 }

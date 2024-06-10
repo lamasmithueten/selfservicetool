@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SelfServiceWebAPI;
 using SelfServiceWebAPI.Models;
 using sstWebAPI.Constants;
+using sstWebAPI.Helpers.Email;
+using sstWebAPI.Helpers.Email.Templates;
 using sstWebAPI.Models;
 using sstWebAPI.Models.DTO.AuthenticationUser;
 
@@ -15,9 +17,10 @@ namespace sstWebAPI.Controllers
     /// <param name="config"></param>
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class RegistrationApplicationsController(AppDbContext context) : ControllerBase
+    public class RegistrationApplicationsController(AppDbContext context, IConfiguration configuration) : ControllerBase
     {
         private readonly AppDbContext _context = context;
+        private readonly IConfiguration _configuration = configuration;
 
         /// <summary>
         /// get all registration applications
@@ -67,6 +70,17 @@ namespace sstWebAPI.Controllers
 
             _context.registration_application.Remove(registrationModel);
             _context.SaveChanges();
+
+            try
+            {
+                var subject = request.AcceptOrDecline ? RegistrationApplicationAccepted.Subject : RegistrationApplicationDeclined.Subject;
+                var body = request.AcceptOrDecline ? RegistrationApplicationAccepted.Body : RegistrationApplicationDeclined.Body;
+                SendEmailHelper.SendEmail(_configuration, registrationModel.email, subject, body);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             return Created();
         }
