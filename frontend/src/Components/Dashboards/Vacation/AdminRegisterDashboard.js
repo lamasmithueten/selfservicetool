@@ -97,7 +97,7 @@ const AdminRegisterDashboard = () => {
       {error && <p>{error}</p>}
       <div
         className="dashboard"
-        style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+        style={{ overflowY: "auto", maxHeight: "700px", marginBottom: "20px" }}
       >
         <h2>Ausstehende Registrierungsanträge</h2>
         <table border="1" className="table">

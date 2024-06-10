@@ -97,6 +97,7 @@ h1 {
   margin-bottom: 2px;
   width: 150px;
   max-width: 150px;
+  margin-top: 80px;
 }
 
 .tab-buttons button.active {
