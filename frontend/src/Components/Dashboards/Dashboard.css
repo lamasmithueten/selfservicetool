@@ -21,11 +21,12 @@
   margin-top: 112px;
 }
 
+.dashboard-notab::-webkit-scrollbar,
 .dashboard::-webkit-scrollbar {
   width: 8px;
   background-color: transparent;
 }
-
+.dashboard-notab::-webkit-scrollbar-thumb,
 .dashboard::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 6px;
@@ -33,6 +34,7 @@
 
 .dashboard h2,
 .dashboard-notab h2,
+.dashboard-notab h3,
 .dashboard h3 {
   text-align: center;
   margin-bottom: 20px;

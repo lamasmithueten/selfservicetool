@@ -44,8 +44,8 @@ const AvailableVMs = () => {
 
   const renderMyVms = () => (
     <div
-      className="dashboard"
-      style={{ overflowY: "auto", maxHeight: "800px", marginBottom: "20px" }}
+      className="dashboard-notab"
+      style={{ overflowY: "auto", maxHeight: "700px", marginBottom: "20px" }}
     >
       <table border="1" className="table">
         <thead>
