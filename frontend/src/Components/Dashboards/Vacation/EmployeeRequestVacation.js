@@ -84,14 +84,29 @@ const EmployeeRequestVacation = () => {
           },
         }
       );
+
       if (response.status === 204) {
         message.success("Antrag gesendet", 2000);
+        fetchVacationDays(); // update info div
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         message.error("Sie haben bereits ein Antrag für diese Tage", 2000);
       } else if (error.response && error.response.status === 422) {
         message.error("Die gewählte Tage sind Feiertage", 2000);
+      } else if (
+        error.response.status === 400 &&
+        error.response.data === "User has not enough days left"
+      ) {
+        message.error("Sie haben nicht genügend Tage übrig", 2000);
+      } else if (
+        error.response.status === 400 &&
+        error.response.data === "no requests in the past"
+      ) {
+        message.error(
+          "Sie können keine Anträge in die Vergangenheit erstellen",
+          2000
+        );
       }
     }
   };
