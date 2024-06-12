@@ -57,11 +57,12 @@ h1 {
 .table tr,
 .table td {
   min-width: 120px;
-  max-width: 150px;
+  max-width: 120px;
   text-align: center;
   padding: 10px;
   border: 1px solid #ddd;
-  overflow: hidden; /* Prevent text overflow */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .textfield {
