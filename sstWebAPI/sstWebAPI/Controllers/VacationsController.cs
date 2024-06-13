@@ -38,6 +38,10 @@ namespace sstWebAPI.Controllers
             {
                 return Unauthorized();
             }
+            if (model.first_day < DateOnly.FromDateTime(DateTime.Now))
+            {
+                return BadRequest("no requests in the past");
+            }
             var days = WordkdaysCalc.calcNumberOfWorkdays(model.first_day, model.last_day);
             if (days <= 0)
             {
