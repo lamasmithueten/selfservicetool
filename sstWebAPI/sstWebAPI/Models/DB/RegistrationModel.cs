@@ -30,7 +30,7 @@ namespace sstWebAPI.Models
             password = userRegistrationModel.Password;
             firstname = userRegistrationModel.Firstname;
             lastname = userRegistrationModel.Lastname;
-            application_date = DateTime.Now;
+            application_date = DateOnly.FromDateTime(DateTime.Now);
         }
 
         #endregion
@@ -75,7 +75,7 @@ namespace sstWebAPI.Models
         /// <summary>
         /// creation date of application
         /// </summary>
-        public DateTime application_date { get; set; }
+        public DateOnly application_date { get; set; }
 
         #endregion
     }
