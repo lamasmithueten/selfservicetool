@@ -1,5 +1,5 @@
 .dashboard {
-  width: 1300px;
+  width: 1150px;
   height: 700px;
   background: transparent;
   border: 2px solid rgba(0, 0, 0, 0.2);
@@ -9,17 +9,32 @@
   padding: 10px 10px 20px;
 }
 
+.dashboard-notab {
+  width: 1100px;
+  height: 700px;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(30px);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 10px 20px;
+  margin-top: 112px;
+}
+
+.dashboard-notab::-webkit-scrollbar,
 .dashboard::-webkit-scrollbar {
   width: 8px;
   background-color: transparent;
 }
-
+.dashboard-notab::-webkit-scrollbar-thumb,
 .dashboard::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 6px;
 }
 
 .dashboard h2,
+.dashboard-notab h2,
+.dashboard-notab h3,
 .dashboard h3 {
   text-align: center;
   margin-bottom: 20px;
@@ -42,11 +57,12 @@ h1 {
 .table tr,
 .table td {
   min-width: 120px;
-  max-width: 150px;
+  max-width: 120px;
   text-align: center;
   padding: 10px;
   border: 1px solid #ddd;
-  overflow: hidden; /* Prevent text overflow */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .textfield {
@@ -97,6 +113,7 @@ h1 {
   margin-bottom: 2px;
   width: 150px;
   max-width: 150px;
+  margin-top: 70px;
 }
 
 .tab-buttons button.active {
