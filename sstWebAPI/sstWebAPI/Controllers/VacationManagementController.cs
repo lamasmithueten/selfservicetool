@@ -57,6 +57,11 @@ namespace sstWebAPI.Controllers
                 return NotFound("No vacation days found");
             }
 
+            if (application.first_day < DateOnly.FromDateTime(DateTime.Now))
+            {
+                return BadRequest("cant edit applications in the past");
+            }
+
             if (model.state == VacationApplicationStates.Pending)
             {
                 if(application.state == VacationApplicationStates.Accepted)
